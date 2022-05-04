@@ -80,9 +80,9 @@ NODISCARD static error find_exedit_filter(FILTER const **const exedit_fp, bool *
       return eok();
     }
   }
-  *exedit_fp = NULL;
+  *exedit_fp = p;
   *is_enpatched = false;
-  return err(err_type_ptk, err_ptk_exedit_not_found);
+  return eok();
 }
 
 NODISCARD static error verify_aviutl_version(void) {

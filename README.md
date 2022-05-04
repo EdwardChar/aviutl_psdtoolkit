@@ -15,6 +15,8 @@ https://github.com/oov/aviutl_psdtoolkit/blob/master/CHANGELOG.md
 注意事項
 --------
 
+This fork contains a temp fix for extension detection. May cause unknown errors. 
+
 PSDToolKit は無保証で提供されます。  
 PSDToolKit を使用したこと及び使用しなかったことによるいかなる損害について、開発者は何も保証しません。
 
