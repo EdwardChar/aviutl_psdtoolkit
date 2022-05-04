@@ -346,12 +346,12 @@ static void error_message_box(error e, HWND const window, wchar_t const *const m
 cleanup:
   ereport(sfree(&errmsg));
   if (efailed(err)) {
-    ereportmsg(err, &native_unmanaged(NSTR("エラーダイアログの表示に失敗しました。")));
+    ereportmsg(err, &native_unmanaged(NSTR("错误对话框显示失败。")));
   }
   efree(&e);
 }
 
-#define ERRMSG_INIT L"PSDToolKit の初期化中にエラーが発生しました。"
+#define ERRMSG_INIT L"PSDToolKit初始化出错。"
 static BOOL filter_init(FILTER *const fp) {
   SYSTEM_INFO si = {0};
   GetNativeSystemInfo(&si);
@@ -359,7 +359,7 @@ static BOOL filter_init(FILTER *const fp) {
     error_message_box(eok(),
                       fp->hwnd,
                       ERRMSG_INIT L"\r\n\r\n"
-                                  L"PSDToolKit を使うには 64bit 版の Windows が必要です。");
+                                  L"PSDToolKit仅支持64位Windows。");
     return FALSE;
   }
 
@@ -371,20 +371,20 @@ static BOOL filter_init(FILTER *const fp) {
     wchar_t const *msg = NULL;
     if (eis(err, err_type_ptk, err_ptk_unsupported_aviutl_version)) {
       msg = ERRMSG_INIT L"\r\n\r\n"
-                        L"PSDToolKit を使うには AviUtl version 1.00 以降が必要です。";
+                        L"PSDToolKit仅支持1.00版本以上的AviUtl。";
       efree(&err);
     } else if (eis(err, err_type_ptk, err_ptk_exedit_not_found)) {
       msg = ERRMSG_INIT L"\r\n\r\n"
-                        L"拡張編集プラグインが見つかりません。";
+                        L"未找到扩展编辑插件。";
       efree(&err);
     } else if (eis(err, err_type_ptk, err_ptk_exedit_not_found_in_same_dir)) {
       msg = ERRMSG_INIT L"\r\n\r\n"
-                        L"インストール状態が正しくありません。\r\n"
-                        L"付属のドキュメントに従ってインストールしてください。";
+                        L"安装状态不正确。\r\n"
+                        L"请按照附属文档安装。";
       efree(&err);
     } else if (eis(err, err_type_ptk, err_ptk_unsupported_exedit_version)) {
       msg = ERRMSG_INIT L"\r\n\r\n"
-                        L"PSDToolKit を使うには 拡張編集 version 0.92 以降が必要です。";
+                        L"PSDToolKit仅支持0.92版本以上的扩展编辑。";
       efree(&err);
     } else {
       msg = ERRMSG_INIT;
@@ -419,9 +419,9 @@ static BOOL filter_init(FILTER *const fp) {
     wchar_t const *msg = NULL;
     if (eis(err, err_type_ptk, err_ptk_bridge_cannot_load)) {
       msg = ERRMSG_INIT L"\r\n\r\n"
-                        L"PSDToolKitBridge.dll の読み込みに失敗しました。\r\n"
-                        L"インストール状態が正しくありません。\r\n"
-                        L"付属のドキュメントに従ってインストールしてください。";
+                        L"PSDToolKitBridge.dll读取失败。\r\n"
+                        L"安装状态不正确\r\n"
+                        L"请按照附属文档安装。";
       efree(&err);
     } else {
       msg = ERRMSG_INIT;
@@ -429,13 +429,13 @@ static BOOL filter_init(FILTER *const fp) {
     error_message_box(err, fp->hwnd, msg);
     return FALSE;
   }
-  err = aviutl_add_menu_item(&wstr_unmanaged_const(L"ウィンドウを表示"), fp->hwnd, 1, 'W', ADD_MENU_ITEM_FLAG_KEY_CTRL);
+  err = aviutl_add_menu_item(&wstr_unmanaged_const(L"显示窗口"), fp->hwnd, 1, 'W', ADD_MENU_ITEM_FLAG_KEY_CTRL);
   if (efailed(err)) {
-    ereportmsg(errg(err_fail), &native_unmanaged(NSTR("メニュー項目「ウィンドウを表示」の登録に失敗しました。")));
+    ereportmsg(errg(err_fail), &native_unmanaged(NSTR("菜单项“显示窗口”注册失败。")));
   }
-  err = aviutl_add_menu_item(&wstr_unmanaged_const(L"環境設定"), fp->hwnd, 2, 0, 0);
+  err = aviutl_add_menu_item(&wstr_unmanaged_const(L"首选项"), fp->hwnd, 2, 0, 0);
   if (efailed(err)) {
-    ereportmsg(errg(err_fail), &native_unmanaged(NSTR("メニュー項目「環境設定」の登録に失敗しました。")));
+    ereportmsg(errg(err_fail), &native_unmanaged(NSTR("菜单项“首选项”注册失败。")));
   }
   return TRUE;
 }
@@ -443,15 +443,15 @@ static BOOL filter_init(FILTER *const fp) {
 static void ipc_friendly_error_message_box(error e, HWND const window, wchar_t const *msg) {
   if (eis(e, err_type_ptk, err_ptk_ipc_target_not_found)) {
     efree(&e);
-    msg = L"PSDToolKit.exe が見つかりませんでした。\r\n\r\n"
-          L"インストールファイルが破損している可能性があります。\r\n"
-          L"PSDToolKit を再インストールしてみてください。";
+    msg = L"未找到PSDToolKit.exe。\r\n\r\n"
+          L"安装文件可能已经损坏。。\r\n"
+          L"请尝试重新安装PSDToolKit。";
   } else if (eis(e, err_type_ptk, err_ptk_ipc_target_access_denied)) {
     efree(&e);
-    msg = L"PSDToolKit.exe へのアクセスが拒否されました。\r\n\r\n"
-          L"このエラーはアンチウィルスソフトが PSDToolKit.exe を\r\n"
-          L"誤ブロックしているのが原因で発生することがあります。\r\n\r\n"
-          L"アンチウィルスソフトがプログラム実行を阻害していないか確認してください。";
+    msg = L"PSDToolKit.exe访问被拒绝。\r\n\r\n"
+          L"此错误可能是由于您的杀毒软件\r\n"
+          L"意外拦截了PSDToolKit.exe。\r\n\r\n"
+          L"请检查杀毒软件是否拦截了此程序。";
   }
 
   error_message_box(e, window, msg);
@@ -469,7 +469,7 @@ static BOOL filter_exit(FILTER *const fp) {
   bridge_dll_exit();
   ereport(sfree(&g_current_project_path));
   if (aviutl_initalized()) {
-    ereportmsg(aviutl_exit(), &native_unmanaged(NSTR("終了処理に失敗しました。")));
+    ereportmsg(aviutl_exit(), &native_unmanaged(NSTR("结束处理失败。")));
   }
   return TRUE;
 }
@@ -488,7 +488,7 @@ static BOOL wndproc_command(HWND window, WPARAM wparam) {
     break;
   }
   if (efailed(err)) {
-    ipc_friendly_error_message_box(err, window, L"エラーが発生しました。");
+    ipc_friendly_error_message_box(err, window, L"发生错误。");
   }
   return TRUE;
 }
@@ -506,7 +506,7 @@ static void reset(HWND window) {
   }
 cleanup:
   if (efailed(err)) {
-    ipc_friendly_error_message_box(err, window, L"エラーが発生しました。");
+    ipc_friendly_error_message_box(err, window, L"发生错误。");
   }
 }
 
@@ -518,7 +518,7 @@ static void wndproc_update_current_project_path(HWND window) {
   }
 cleanup:
   if (efailed(err)) {
-    ipc_friendly_error_message_box(err, window, L"エラーが発生しました。");
+    ipc_friendly_error_message_box(err, window, L"发生错误。");
   }
 }
 
@@ -629,12 +629,12 @@ static void wndproc_receive_update_editing_image_state(struct ipc_update_editing
   }
   if (wcscmp(old_file_path.ptr, file_path.ptr) != 0) {
     err = scpym(&tmp2,
-                L"送り先には別のPSDファイルが割り当てられています。\r\n"
-                L"本当に続行しますか？\r\n\r\n"
-                L"現在のPSDファイルオブジェクト:\r\n",
+                L"传送目标已被分配给其他PSD文件。\r\n"
+                L"确定要继续吗？\r\n\r\n"
+                L"当前PSD文件物件:\r\n",
                 old_file_path.ptr,
                 L"\r\n\r\n"
-                L"割り当てられるPSDファイル:\r\n",
+                L"分配的PSD文件:\r\n",
                 file_path.ptr);
     if (efailed(err)) {
       err = ethru(err);
@@ -647,7 +647,7 @@ static void wndproc_receive_update_editing_image_state(struct ipc_update_editing
       goto cleanup;
     }
     int const r = MessageBoxW(
-        g_ptk_window, tmp2.ptr, L"確認 - PSDToolKit " VERSION_WIDE, MB_ICONWARNING | MB_OKCANCEL | MB_DEFBUTTON2);
+        g_ptk_window, tmp2.ptr, L"确定 - PSDToolKit " VERSION_WIDE, MB_ICONWARNING | MB_OKCANCEL | MB_DEFBUTTON2);
     restore_disabled_family_windows(disabled_windows);
     if (r == IDCANCEL) {
       goto cleanup;
@@ -670,19 +670,19 @@ cleanup:
   if (efailed(err)) {
     wchar_t const *msg = NULL;
     if (eis(err, err_type_ptk, err_ptk_target_psd_file_object_not_found)) {
-      msg = L"設定の送信先になるテキスト入力欄が見つかりませんでした。\r\n\r\n"
-            L"「送る」ボタンを使用するにはPSDファイルオブジェクトの\r\n"
-            L"複数行テキスト入力欄を見える状態にしておく必要があります。\r\n\r\n"
-            L"詳しくは付属マニュアルのチュートリアルを参照してください。";
+      msg = L"未找到设定传送的目标 - 文本输入栏。\r\n\r\n"
+            L"要使用“传送”按钮，PSD文件物件的\r\n"
+            L"多行文本栏必须可见。\r\n\r\n"
+            L"详细信息，请参阅附属文档中的教程。";
       efree(&err);
     } else if (eis(err, err_type_ptk, err_ptk_target_variable_not_found)) {
-      msg = L"テキスト入力欄から書き換え対象テキストが見つかりませんでした。\r\n\r\n"
-            L"PSDファイルオブジェクトに最初から含まれている\r\n"
-            L"「ptkf=\"～\"」や「ptkl=\"～\"」などのテキストは\r\n"
-            L"削除してしまうと正しく動作しなくなります。";
+      msg = L"文本输入栏中找不到需要改写的文本。\r\n\r\n"
+            L"若从头删除了包含在PSD文件物件中的\r\n"
+            L"“ptkf=\"～\"”和“ptkl=\"～\"”等文本\r\n"
+            L"将无法正常工作。";
       efree(&err);
     } else {
-      msg = L"「送る」ボタンで画像を送信する際にエラーが発生しました。";
+      msg = L"使用“传送”按钮传送图像时出错。";
     }
     ipc_friendly_error_message_box(err, g_ptk_window, msg);
   }
@@ -720,7 +720,7 @@ wndproc_receive_export_faview_slider(HWND const window, struct ipc_export_faview
     err = ethru(err);
     goto cleanup;
   }
-  err = scpym(&tmp, L"\"", name.ptr, L"\" をクリップボードにコピー");
+  err = scpym(&tmp, L"将\"", name.ptr, L"\"复制到剪贴板");
   if (efailed(err)) {
     err = ethru(err);
     goto cleanup;
@@ -742,7 +742,7 @@ wndproc_receive_export_faview_slider(HWND const window, struct ipc_export_faview
       err = ethru(err);
       goto cleanup;
     }
-    err = scpym(&tmp, L"\"", name.ptr, L"\" を「", tmp2.ptr, L"」に割り当て");
+    err = scpym(&tmp, L"将\"", name.ptr, L"\" 分配给“", tmp2.ptr, L"”");
     if (efailed(err)) {
       err = ethru(err);
       goto cleanup;
@@ -766,7 +766,7 @@ wndproc_receive_export_faview_slider(HWND const window, struct ipc_export_faview
     err = ethru(err);
     goto cleanup;
   }
-  err = scpym(&tmp, L"スライダー \"", name.ptr, L"\" 全体をクリップボードにコピー");
+  err = scpym(&tmp, L"将滑块\"", name.ptr, L"\"整体复制到剪贴板");
   if (efailed(err)) {
     err = ethru(err);
     goto cleanup;
@@ -777,7 +777,7 @@ wndproc_receive_export_faview_slider(HWND const window, struct ipc_export_faview
     goto cleanup;
   }
   tmp = (struct wstr){0};
-  err = scpym(&tmp, L"スライダー \"", name.ptr, L"\" 全体をファイルにエクスポート");
+  err = scpym(&tmp, L"将滑块 \"", name.ptr, L"\"将整体导出为文件");
   if (efailed(err)) {
     err = ethru(err);
     goto cleanup;
@@ -844,7 +844,7 @@ cleanup:
   }
   if (efailed(err)) {
     wchar_t const *msg = NULL;
-    msg = L"シンプルビューのエクスポート中にエラーが発生しました。";
+    msg = L"导出简略视图时出错。";
     ipc_friendly_error_message_box(err, g_ptk_window, msg);
   }
 }
@@ -880,7 +880,7 @@ wndproc_receive_export_layer_names(HWND const window, struct ipc_export_layer_na
     err = ethru(err);
     goto cleanup;
   }
-  err = scpym(&tmp, L"\"", name.ptr, L"\" をクリップボードにコピー");
+  err = scpym(&tmp, L"将\"", name.ptr, L"\"复制到剪贴板");
   if (efailed(err)) {
     err = ethru(err);
     goto cleanup;
@@ -902,7 +902,7 @@ wndproc_receive_export_layer_names(HWND const window, struct ipc_export_layer_na
       err = ethru(err);
       goto cleanup;
     }
-    err = scpym(&tmp, L"\"", name.ptr, L"\" を「", tmp2.ptr, L"」に割り当て");
+    err = scpym(&tmp, L"将\"", name.ptr, L"\"分配给“", tmp2.ptr, L"”");
     if (efailed(err)) {
       err = ethru(err);
       goto cleanup;
@@ -921,7 +921,7 @@ wndproc_receive_export_layer_names(HWND const window, struct ipc_export_layer_na
       goto cleanup;
     }
   }
-  err = scpym(&tmp, L"\"", name.ptr, L"\" と同じ階層のレイヤー全てをクリップボードにコピー");
+  err = scpym(&tmp, L"将与\"", name.ptr, L"\"同级的所有图层复制到剪贴板");
   if (efailed(err)) {
     err = ethru(err);
     goto cleanup;
@@ -932,7 +932,7 @@ wndproc_receive_export_layer_names(HWND const window, struct ipc_export_layer_na
     goto cleanup;
   }
   tmp = (struct wstr){0};
-  err = scpym(&tmp, L"\"", name.ptr, L"\" と同じ階層のレイヤー全てをファイルにエクスポート");
+  err = scpym(&tmp, L"将与\"", name.ptr, L"\"同级的所有图层导出为文件");
   if (efailed(err)) {
     err = ethru(err);
     goto cleanup;
@@ -998,7 +998,7 @@ cleanup:
   }
   if (efailed(err)) {
     wchar_t const *msg = NULL;
-    msg = L"レイヤー名のエクスポート中にエラーが発生しました。";
+    msg = L"导出图层名称时出错。";
     ipc_friendly_error_message_box(err, g_ptk_window, msg);
   }
 }
@@ -1024,7 +1024,7 @@ static BOOL filter_project_load(FILTER *const fp, void *const editp, void *const
   }
 cleanup:
   if (efailed(err)) {
-    ereportmsg(err, &native_unmanaged_const(NSTR("データの読み込み中にエラーが発生しました。")));
+    ereportmsg(err, &native_unmanaged_const(NSTR("读取数据时出错。")));
     return FALSE;
   }
   return TRUE;
@@ -1049,7 +1049,7 @@ static BOOL filter_project_save(FILTER *const fp, void *const editp, void *const
 cleanup:
   ereport(sfree(&tmp));
   if (efailed(err)) {
-    ereportmsg(err, &native_unmanaged_const(NSTR("データの保存中にエラーが発生しました。")));
+    ereportmsg(err, &native_unmanaged_const(NSTR("保存数据时出错。")));
     return FALSE;
   }
   return TRUE;
@@ -1068,7 +1068,7 @@ static BOOL wndproc(HWND const window,
   case WM_FILTER_INIT:
     CreateWindowExW(0,
                     L"STATIC",
-                    L"まずは説明書を読みましょう。",
+                    L"请先阅读说明。",
                     WS_CHILD | WS_VISIBLE | ES_LEFT,
                     0,
                     0,
@@ -1152,7 +1152,7 @@ static BOOL main_init(HINSTANCE const inst) {
     return FALSE;
   }
   error_register_reporter(error_reporter);
-  ereportmsg(error_ptk_init(), &native_unmanaged(NSTR("エラーメッセージマッパーの登録に失敗しました。")));
+  ereportmsg(error_ptk_init(), &native_unmanaged(NSTR("错误消息映射器注册失败。")));
   set_hinstance(inst);
   return TRUE;
 }

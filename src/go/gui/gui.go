@@ -264,11 +264,11 @@ func (g *GUI) update() {
 				}
 				nk.NkLayoutRowBegin(ctx, nk.Dynamic, float32(topPaneHeight-padding), 4)
 				nk.NkLayoutRowPush(ctx, 0.3)
-				if nk.NkButtonLabel(ctx, "送る") != 0 || nkhelper.IsPressed(ctx, 19) { // 19 = ^S
+				if nk.NkButtonLabel(ctx, "传送") != 0 || nkhelper.IsPressed(ctx, 19) { // 19 = ^S
 					g.sendEditingImage()
 				}
 				nk.NkLayoutRowPush(ctx, 0.3)
-				if nk.NkButtonLabel(ctx, "取り込む") != 0 {
+				if nk.NkButtonLabel(ctx, "收取") != 0 {
 					modified = g.loadEditingImage() || modified
 				}
 				nk.NkLayoutRowPush(ctx, 0.2)

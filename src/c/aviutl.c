@@ -267,7 +267,7 @@ HWND aviutl_get_exedit_window_must(void) {
   HWND h = NULL;
   error err = aviutl_get_exedit_window(&h);
   if (efailed(err)) {
-    ereportmsg(err, &native_unmanaged(NSTR("拡張編集のウィンドウハンドルが取得できませんでした。")));
+    ereportmsg(err, &native_unmanaged(NSTR("无法获取扩展编辑窗口句柄。")));
     h = GetDesktopWindow();
   }
   return h;
@@ -288,7 +288,7 @@ HWND aviutl_get_my_window_must(void) {
   HWND h = NULL;
   error err = aviutl_get_my_window(&h);
   if (efailed(err)) {
-    ereportmsg(err, &native_unmanaged(NSTR("フィルターのウィンドウハンドルが取得できませんでした。")));
+    ereportmsg(err, &native_unmanaged(NSTR("无法获取滤镜窗口句柄。")));
     h = GetDesktopWindow();
   }
   return h;

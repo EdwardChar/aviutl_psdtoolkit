@@ -1,11 +1,7 @@
 PSDToolKit
 ==========
 
-Test build for extension purpose. Should automatically release.
-
-v0.0.1: fixed the worng permission
-
-==========
+Chinese translation by nsYW. This fork is mantained by EdwardChar.
 
 PSDToolKit は AviUtl の拡張編集プラグイン上で PSD ファイルを扱えるようにするためのツールキットです。
 

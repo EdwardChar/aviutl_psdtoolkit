@@ -1,10 +1,10 @@
--- 悵偺墲棃
+-- 雀の往来
 
-@岥僷僋弨旛
---track0:儘乕僇僢僩,0,16000,0,1
---track1:僴僀僇僢僩,0,16000,0,1
---track2:偟偒偄抣,0,2000,0,1
---track3:姶搙,0,15,0,1
+@对口型预备
+--track0:低切,0,16000,0,1
+--track1:高切,0,16000,0,1
+--track2:阈值,0,2000,0,1
+--track3:灵敏度,0,15,0,1
 --file:
 tonumber(nil)
 if file ~= nil and file ~= "" then
@@ -12,7 +12,7 @@ if file ~= nil and file ~= "" then
   file = nil
 end
 
-@懡栚揑僗儔僀僟乕
+@眼部组件滑块
 --track0:,0,100,0,1
 --track1:,0,100,0,1
 --track2:,0,100,0,1

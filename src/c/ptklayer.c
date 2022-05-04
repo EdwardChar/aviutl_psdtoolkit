@@ -117,7 +117,7 @@ NODISCARD static error show_save_dialog(HWND const owner,
       .hInstance = get_hinstance(),
       .hwndOwner = owner,
       .lpstrTitle = title->ptr,
-      .lpstrFilter = L"AviUtl アニメーション効果スクリプト(*.anm)\0*.anm\0CSV ファイル(*.csv)\0*.csv\0",
+      .lpstrFilter = L"AviUtl动画效果脚本(*.anm)\0*.anm\0CSV文件(*.csv)\0*.csv\0",
       .nFilterIndex = 1,
       .lpstrDefExt = L"anm",
       .lpstrInitialDir = dir.ptr,
@@ -753,7 +753,7 @@ NODISCARD error ptklayer_save_to_file_siblings(struct ptklayer *const pi, HWND c
     err = ethru(err);
     goto cleanup;
   }
-  err = show_save_dialog(window, &wstr_unmanaged_const(L"ファイルに保存"), &tmp, &path);
+  err = show_save_dialog(window, &wstr_unmanaged_const(L"保存在文件中"), &tmp, &path);
   restore_disabled_family_windows(disabled_windows);
   if (efailed(err)) {
     if (eisg(err, err_abort)) {

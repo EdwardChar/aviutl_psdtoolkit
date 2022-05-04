@@ -126,16 +126,16 @@ func (lv *LayerView) Render(ctx *nk.Context, img *img.Image) bool {
 		if (img.PFV == nil) || (lv.layerFavSelectedIndex == 1 && len(img.PFV.FaviewRoot.Children) == 0) {
 			lv.layerFavSelectedIndex = 0
 		}
-		if nk.NkSelectLabel(ctx, "レイヤー", nk.TextAlignCentered|nk.TextAlignMiddle, b2i(lv.layerFavSelectedIndex == 0)) != b2i(lv.layerFavSelectedIndex == 0) {
+		if nk.NkSelectLabel(ctx, "图层", nk.TextAlignCentered|nk.TextAlignMiddle, b2i(lv.layerFavSelectedIndex == 0)) != b2i(lv.layerFavSelectedIndex == 0) {
 			lv.layerFavSelectedIndex = 0
 		}
 		if img.PFV != nil && len(img.PFV.FaviewRoot.Children) > 0 {
-			if nk.NkSelectLabel(ctx, "シンプルV", nk.TextAlignCentered|nk.TextAlignMiddle, b2i(lv.layerFavSelectedIndex == 1)) != b2i(lv.layerFavSelectedIndex == 1) {
+			if nk.NkSelectLabel(ctx, "简约V", nk.TextAlignCentered|nk.TextAlignMiddle, b2i(lv.layerFavSelectedIndex == 1)) != b2i(lv.layerFavSelectedIndex == 1) {
 				lv.layerFavSelectedIndex = 1
 			}
 		}
 		if img.PFV != nil {
-			if nk.NkSelectLabel(ctx, "お気に入り", nk.TextAlignCentered|nk.TextAlignMiddle, b2i(lv.layerFavSelectedIndex == 2)) != b2i(lv.layerFavSelectedIndex == 2) {
+			if nk.NkSelectLabel(ctx, "收藏夹", nk.TextAlignCentered|nk.TextAlignMiddle, b2i(lv.layerFavSelectedIndex == 2)) != b2i(lv.layerFavSelectedIndex == 2) {
 				lv.layerFavSelectedIndex = 2
 			}
 		}
