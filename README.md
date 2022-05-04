@@ -1,7 +1,7 @@
 PSDToolKit
 ==========
 
-Test build for extension purpose.
+Test build for extension purpose. Should automatically release.
 
 ==========
 
