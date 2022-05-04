@@ -122,8 +122,7 @@ jobs:
 
             ### ダウンロード
             
-            - [psdtoolkit_${{ steps.get_version.outputs.tag }}.zip](https://github.com/oov/aviutl_psdtoolkit/releases/download/${{ steps.get_version.outputs.tag }}/psdtoolkit_${{ steps.get_version.outputs.tag }}.zip)
-            - [psdtoolkit_${{ steps.get_version.outputs.tag }}_enpatched.zip](https://github.com/oov/aviutl_psdtoolkit/releases/download/${{ steps.get_version.outputs.tag }}/psdtoolkit_${{ steps.get_version.outputs.tag }}_enpatched.zip) (for English patched AviUtl)
+            See "Assets" section below.
             
             ### バージョンアップ手順
             
