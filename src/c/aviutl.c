@@ -55,7 +55,7 @@ cleanup:
 }
 
 NODISCARD static error find_exedit_filter(FILTER const **const exedit_fp, bool *const is_enpatched) {
-  static TCHAR const exedit_name_mbcs[] = "\x8a\x67\x92\xa3\x95\xd2\x8f\x57"; // "拡張編集"
+  static TCHAR const exedit_name_mbcs[] = "扩展编辑"; // "拡張編集"
   static TCHAR const enpatched_exedit_name_mbcs[] = "Advanced Editing";
 
   *exedit_fp = NULL;

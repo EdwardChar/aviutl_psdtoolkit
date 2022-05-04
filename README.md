@@ -1,8 +1,6 @@
 PSDToolKit
 ==========
 
-Chinese translation by nsYW. This fork is mantained by EdwardChar.
-
 PSDToolKit は AviUtl の拡張編集プラグイン上で PSD ファイルを扱えるようにするためのツールキットです。
 
 動作には 64bit 版の Windows 7 以降が、快適な動作には十分な CPU 速度とメモリが必要です。  
