@@ -3,6 +3,8 @@ PSDToolKit
 
 Test build for extension purpose. Should automatically release.
 
+v0.0.1: fixed the worng permission
+
 ==========
 
 PSDToolKit は AviUtl の拡張編集プラグイン上で PSD ファイルを扱えるようにするためのツールキットです。
