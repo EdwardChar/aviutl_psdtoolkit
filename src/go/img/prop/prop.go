@@ -4,10 +4,10 @@ import (
 	"encoding/base64"
 
 	"github.com/pkg/errors"
-	"golang.org/x/text/encoding/japanese"
+	"golang.org/x/text/encoding/simplifiedchinese"
 )
 
-var encoder = japanese.ShiftJIS.NewEncoder()
+var encoder = simplifiedchinese.GBK.NewEncoder()
 
 var damemoji = map[rune]int{
 	'―': 0, 'ソ': 1, 'Ы': 2, 'Ⅸ': 3, '噂': 4, '浬': 5, '欺': 6, '圭': 7,

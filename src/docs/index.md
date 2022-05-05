@@ -38,7 +38,7 @@ GCMZDrops/_entrypoint.lua
 GCMZDrops/avoiddup.lua  
 GCMZDrops/example.lua  
 GCMZDrops/generic.lua  
-GCMZDrops/textgbk.lua  
+GCMZDrops/textsjis.lua  
 GCMZDrops/wmvmask.lua  
 GCMZDrops/dropper/example.lua  
 GCMZDrops/dropper/clipboard.lua  

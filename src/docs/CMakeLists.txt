@@ -31,7 +31,7 @@ execute_process(COMMAND ${DATE_EXECUTABLE} "+%Y-%m-%d %H:%M:%S" OUTPUT_VARIABLE 
 
 add_custom_target(make_doc
   COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${EXPORT_DIR}/PSDToolKitDocs/assets"
-  COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/rootindex.html" "${EXPORT_DIR}/PSDToolKit説明書.html"
+  COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/rootindex.html" "${EXPORT_DIR}/PSDToolKit说明书.html"
 )
 
 find_program(PANDOC_EXECUTABLE pandoc CMAKE_FIND_ROOT_PATH_BOTH)

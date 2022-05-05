@@ -12,7 +12,7 @@ package nkhelper
 #include "nuklear.h"
 #include <stdio.h>
 
-#include "jprange.h"
+#include "cnrange.h"
 void set_japanese_glyph_ranges(void *p) {
 	struct nk_font_config *fc = p;
 	fc->range = &nk_font_japanese_glyph_ranges[0];
@@ -91,8 +91,8 @@ import (
 	"github.com/golang-ui/nuklear/nk"
 )
 
-func SetJapaneseGlyphRanges(fc *nk.FontConfig) {
-	C.set_japanese_glyph_ranges(unsafe.Pointer(fc.Ref()))
+func SetChineseGlyphRanges(fc *nk.FontConfig) {
+	C.set_chinese_glyph_ranges(unsafe.Pointer(fc.Ref()))
 }
 
 func GetStyleTextColorPtr(ctx *nk.Context) *nk.Color {

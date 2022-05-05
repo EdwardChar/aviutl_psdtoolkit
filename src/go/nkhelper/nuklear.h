@@ -9634,7 +9634,7 @@ enum { /* encodingID for NK_TT_PLATFORM_ID_UNICODE */
 enum { /* encodingID for NK_TT_PLATFORM_ID_MICROSOFT */
    NK_TT_MS_EID_SYMBOL        =0,
    NK_TT_MS_EID_UNICODE_BMP   =1,
-   NK_TT_MS_EID_SHIFTJIS      =2,
+   NK_TT_MS_EID_GBK      =2,
    NK_TT_MS_EID_UNICODE_FULL  =10
 };
 

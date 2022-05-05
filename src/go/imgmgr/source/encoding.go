@@ -6,7 +6,7 @@ package source
 
 import (
 	"golang.org/x/text/encoding"
-	"golang.org/x/text/encoding/japanese"
+	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/encoding/unicode"
 )
 
@@ -14,9 +14,9 @@ func autoDetect(bs []byte) encoding.Encoding {
 	var (
 		suspiciousBytes = 0
 		likelyUtf8      = 0
-		likelyEucjp     = 0
-		likelyShiftjis  = 0
-		likelyIso2022jp = 0
+		likelyGb2312     = 0
+		likelyGbk  = 0
+		likelyGb18030 = 0
 	)
 
 	var length = len(bs)
@@ -69,25 +69,25 @@ func autoDetect(bs []byte) encoding.Encoding {
 			if bs[i] == 142 && i+1 < length {
 				i++
 				if bs[i] > 160 && bs[i] < 224 {
-					likelyEucjp++
+					likelyGb2312++
 					continue
 				}
 			} else if bs[i] > 160 && bs[i] < 255 && i+1 < length {
 				i++
 				if bs[i] > 160 && bs[i] < 255 {
-					likelyEucjp++
+					likelyGb2312++
 					continue
 				}
 			}
 
 			/* Shift-JIS detection */
 			if bs[i] > 160 && bs[i] < 224 {
-				likelyShiftjis++
+				likelyGbk++
 				continue
 			} else if ((bs[i] > 128 && bs[i] < 160) || (bs[i] > 223 && bs[i] < 240)) && i+1 < length {
 				i++
 				if (bs[i] > 63 && bs[i] < 127) || (bs[i] > 127 && bs[i] < 253) {
-					likelyShiftjis++
+					likelyGbk++
 					continue
 				}
 			}
@@ -99,13 +99,13 @@ func autoDetect(bs []byte) encoding.Encoding {
 				case 36:
 					i++
 					if bs[i] == 64 || bs[i] == 66 || bs[i] == 68 {
-						likelyIso2022jp++
+						likelyGb18030++
 						continue
 					}
 				case 40:
 					i++
 					if bs[i] == 66 || bs[i] == 73 || bs[i] == 74 {
-						likelyIso2022jp++
+						likelyGb18030++
 						continue
 					}
 				}
@@ -125,16 +125,16 @@ func autoDetect(bs []byte) encoding.Encoding {
 
 	// fmt.Printf("Detected points[utf8/eucjp/shiftjis] is %d/%d/%d.\n", likelyUtf8, likelyEucjp, likelyShiftjis)
 
-	if likelyUtf8 == 0 && likelyEucjp == 0 && likelyShiftjis == 0 && likelyIso2022jp == 0 {
+	if likelyUtf8 == 0 && likelyGb2312 == 0 && likelyGbk == 0 && likelyGb18030 == 0 {
 		return encoding.Nop // ASCII
-	} else if likelyUtf8 >= likelyEucjp && likelyUtf8 >= likelyShiftjis && likelyUtf8 >= likelyIso2022jp {
+	} else if likelyUtf8 >= likelyGb2312 && likelyUtf8 >= likelyGbk && likelyUtf8 >= likelyGb18030 {
 		return encoding.Nop // UTF-8
-	} else if likelyEucjp >= likelyUtf8 && likelyEucjp >= likelyShiftjis && likelyEucjp >= likelyIso2022jp {
-		return japanese.EUCJP
-	} else if likelyShiftjis >= likelyUtf8 && likelyShiftjis >= likelyEucjp && likelyShiftjis >= likelyIso2022jp {
-		return japanese.ShiftJIS
-	} else if likelyIso2022jp >= likelyUtf8 && likelyIso2022jp >= likelyEucjp && likelyIso2022jp >= likelyShiftjis {
-		return japanese.ISO2022JP
+	} else if likelyGb2312 >= likelyUtf8 && likelyGb2312 >= likelyGbk && likelyGb2312 >= likelyGb18030 {
+		return simplifiedchinese.GB2312
+	} else if likelyGbk >= likelyUtf8 && likelyGbk >= likelyGb2312 && likelyGbk >= likelyGb18030 {
+		return simplifiedchinese.GBK
+	} else if likelyGb18030 >= likelyUtf8 && likelyGb18030 >= likelyGb2312 && likelyGb18030 >= likelyGbk {
+		return simplifiedchinese.GB18030
 	}
 
 	return encoding.Nop

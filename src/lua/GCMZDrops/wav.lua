@@ -357,7 +357,7 @@ function P.firetext(files, state)
   for i, v in ipairs(files) do
     if getextension(v.filepath) == ".txt" then
       local encoding = setting.wav_subtitle_encoding
-      if v.mediatype == "text/plain; charset=Shift_JIS" then
+      if v.mediatype == "text/plain; charset=GBK" then
         encoding = "gbk"
       elseif v.mediatype == "text/plain; charset=UTF-8" then
         encoding = "utf8"

@@ -1,18 +1,18 @@
 -- ============================================================
--- ��ע���
+-- ■注意■
 -- ============================================================
 --
--- ���Υե�����ˤ��O���Υǥե���Ȃ��������Ƥ���ޤ�����
--- ����ϥ�`���`�������Q���뤿��Υե�����ǤϤ���ޤ���
+-- このファイルには設定のデフォルト値が書いてありますが、
+-- これはユーザーが書き換えるためのファイルではありません。
 -- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--- �O�������������r�Ϥ��Υե����������Q����ΤǤϤʤ���
--- `setting.lua-template` �Υե��������� `setting.lua` �ˉ������
--- `setting.lua` �ڤ˱�Ҫ���O���Τߤ�����z�ळ�Ȥ��O�����Ƥ���������
+-- 設定を変更したい時はこのファイルを書き換えるのではなく、
+-- `setting.lua-template` のファイル名を `setting.lua` に変更し、
+-- `setting.lua` 内に必要な設定のみを書き込むことで設定してください。
 --
--- ��ӛ����혤�ͨ����Ф����Ȥǡ�PSDToolKit ��Щ`����󥢥åפ���r��
--- �O�����ϕ��������Τ�������Ȥ��Ǥ��ޤ���
+-- 上記の手順の通りに行うことで、PSDToolKit をバージョンアップする時に
+-- 設定が上書きされるのを防ぐことができます。
 --
--- ʹ������Ԕ�������h�ϸ����Υޥ˥奢�����դ��Ƥ���������
+-- 使い方の詳しい解説は付属のマニュアルを参照してください。
 --
 -- ============================================================
 
@@ -80,7 +80,7 @@ function P:wav_examodifler_mpslider(exa, values, modifiers)
   local mpsidx = 0
   for i = 0, self.wav_mpslider-1 do
     local key = "vo." .. i
-    exa:set(key, "_name", i == 0 and (jp and "�Զ������" or "Custom object") or (jp and "����Ч��" or "Animation effect"))
+    exa:set(key, "_name", i == 0 and (jp and "自定义物件" or "Custom object") or (jp and "动画效果" or "Animation effect"))
     exa:set(key, "track0", slidervalue(mpslidervalues[mpsidx+1]) or "0.00,0.00,3")
     exa:set(key, "track1", slidervalue(mpslidervalues[mpsidx+2]) or "0.00,0.00,3")
     exa:set(key, "track2", slidervalue(mpslidervalues[mpsidx+3]) or "0.00,0.00,3")
@@ -89,17 +89,17 @@ function P:wav_examodifler_mpslider(exa, values, modifiers)
     exa:set(key, "check0", "0")
     exa:set(key, "type", "0")
     exa:set(key, "filter", "2")
-    exa:set(key, "name", "�۲��������@PSDToolKit")
+    exa:set(key, "name", "眼部组件滑块@PSDToolKit")
     exa:set(key, "param", "")
   end
   local key = "vo." .. self.wav_mpslider
-  exa:set(key, "_name", jp and "��׼����" or "Standard drawing")
+  exa:set(key, "_name", jp and "标准属性" or "Standard drawing")
   exa:set(key, "X", "0.0")
   exa:set(key, "Y", "0.0")
   exa:set(key, "Z", "0.0")
-  exa:set(key, jp and "������" or "Zoom%", "100.00")
-  exa:set(key, jp and "͸����" or "Clearness", "100.0")
-  exa:set(key, jp and "��ת" or "Rotation", "0.00")
+  exa:set(key, jp and "缩放率" or "Zoom%", "100.00")
+  exa:set(key, jp and "透明度" or "Clearness", "100.0")
+  exa:set(key, jp and "旋转" or "Rotation", "0.00")
   exa:set(key, "blend", "0")
 end
 function P:wav_examodifler_subtitle(exa, values, modifiers)
@@ -107,7 +107,7 @@ function P:wav_examodifler_subtitle(exa, values, modifiers)
   exa:set("vo", "end", values.SUBTITLE_END)
   exa:set("vo", "group", self.wav_subtitle_group)
   local text = values.SUBTITLE_TEXT
-  -- wav_subtitle �� 2 �Εr�ϥƥ����Ȥ򥹥���ץȤȤ������Τ���
+  -- wav_subtitle が 2 の時はテキストをスクリプトとして整形する
   if self.wav_subtitle == 2 then
     text = self:wav_subtitle_scripter(text)
   end
@@ -120,12 +120,12 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
   exa:set("vo", "group", "1")
   local idx = 0
   local key = "vo." .. idx
-  exa:set(key, "_name", jp and "�ı�" or "Text")
-  exa:set(key, jp and "��С" or "Size", "1")
-  exa:set(key, jp and "��ʾ�ٶ�" or "vDisplay", "0.0")
-  exa:set(key, jp and "���ֵ�һ����" or "1char1obj", "0")
-  exa:set(key, jp and "��·������" or "Show on motion coordinate", "0")
-  exa:set(key, jp and "�Զ�����" or "Automatic scrolling", "0")
+  exa:set(key, "_name", jp and "文本" or "Text")
+  exa:set(key, jp and "大小" or "Size", "1")
+  exa:set(key, jp and "显示速度" or "vDisplay", "0.0")
+  exa:set(key, jp and "文字单一独立" or "1char1obj", "0")
+  exa:set(key, jp and "沿路径排列" or "Show on motion coordinate", "0")
+  exa:set(key, jp and "自动滚动" or "Automatic scrolling", "0")
   exa:set(key, "B", "0")
   exa:set(key, "I", "0")
   exa:set(key, "type", "0")
@@ -138,7 +138,7 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
   exa:set(key, "precision", "0")
   exa:set(key, "color", "ffffff")
   exa:set(key, "color2", "000000")
-  exa:set(key, "font", jp and "����" or "����")
+  exa:set(key, "font", jp and "黑体" or "等线")
   exa:set(key, "text", modifiers.ENCODE_TEXT(self:wav_mergedprep_scripter(self.wav_subtitle == 2 and values.SUBTITLE_TEXT or "", {
     st_mgl = values.SUBTITLE_START - 1,
     st_mgr = endlen - values.SUBTITLE_END,
@@ -151,7 +151,7 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
 
   if self.wav_lipsync == 1 and values.LIPSYNC_PATH ~= nil then
     key = "vo." .. idx
-    exa:set(key, "_name", jp and "����Ч��" or "Animation effect")
+    exa:set(key, "_name", jp and "动画效果" or "Animation effect")
     exa:set(key, "track0", "0.00")
     exa:set(key, "track1", "0.00")
     exa:set(key, "track2", "0.00")
@@ -159,7 +159,7 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
     exa:set(key, "check0", "0")
     exa:set(key, "type", "0")
     exa:set(key, "filter", "2")
-    exa:set(key, "name", "�Կ���ͬ��@PSDToolKit")
+    exa:set(key, "name", "对口型同步@PSDToolKit")
     exa:set(key, "param", "file=" .. modifiers.ENCODE_LUA_STRING(values.LIPSYNC_PATH))
     idx = idx + 1
   end
@@ -168,7 +168,7 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
   local mpsidx = 0
   for i = 0, self.wav_mpslider-1 do
     key = "vo." .. idx
-    exa:set(key, "_name", jp and "����Ч��" or "Animation effect")
+    exa:set(key, "_name", jp and "动画效果" or "Animation effect")
     exa:set(key, "track0", slidervalue(mpslidervalues[mpsidx+1]) or "0.00,0.00,3")
     exa:set(key, "track1", slidervalue(mpslidervalues[mpsidx+2]) or "0.00,0.00,3")
     exa:set(key, "track2", slidervalue(mpslidervalues[mpsidx+3]) or "0.00,0.00,3")
@@ -177,18 +177,18 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
     exa:set(key, "check0", "0")
     exa:set(key, "type", "0")
     exa:set(key, "filter", "2")
-    exa:set(key, "name", "�۲��������@PSDToolKit")
+    exa:set(key, "name", "眼部组件滑块@PSDToolKit")
     exa:set(key, "param", "")
     idx = idx + 1
   end
   key = "vo." .. idx
-  exa:set(key, "_name", jp and "��׼����" or "Standard drawing")
+  exa:set(key, "_name", jp and "标准属性" or "Standard drawing")
   exa:set(key, "X", "0.0")
   exa:set(key, "Y", "0.0")
   exa:set(key, "Z", "0.0")
-  exa:set(key, jp and "������" or "Zoom%", "100.00")
-  exa:set(key, jp and "͸����" or "Clearness", "100.0")
-  exa:set(key, jp and "��ת" or "Rotation", "0.00")
+  exa:set(key, jp and "缩放率" or "Zoom%", "100.00")
+  exa:set(key, jp and "透明度" or "Clearness", "100.0")
+  exa:set(key, jp and "旋转" or "Rotation", "0.00")
   exa:set(key, "blend", "0")
 end
 

@@ -13,9 +13,9 @@ import (
 	"sort"
 )
 
-var source = `#ifndef JPRANGE_H____
-#define JPRANGE_H____
-const nk_rune nk_font_japanese_glyph_ranges[] = {
+var source = `#ifndef CNRANGE_H____
+#define CNRANGE_H____
+const nk_rune nk_font_chinese_glyph_ranges[] = {
 {{range .ranges}}{{printf "0x%04x, 0x%04x,\n" (index . 0) (index . 1)}}{{end}}0
 };
 #endif
@@ -24,8 +24,8 @@ const nk_rune nk_font_japanese_glyph_ranges[] = {
 func main() {
 	m := map[uint32]struct{}{}
 	for _, url := range []string{
-		"https://encoding.spec.whatwg.org/index-jis0208.txt",
-		"https://encoding.spec.whatwg.org/index-jis0212.txt",
+		"https://encoding.spec.whatwg.org/index-gb18030.txt",
+		"https://encoding.spec.whatwg.org/index-big5.txt",
 	} {
 		resp, err := http.Get(url)
 		if err != nil {
@@ -86,7 +86,7 @@ func main() {
 	}
 	ranges = append(ranges, [2]uint32{l, prev})
 
-	f, err := os.Create("jprange.h")
+	f, err := os.Create("cnrange.h")
 	if err != nil {
 		log.Fatal(err)
 	}

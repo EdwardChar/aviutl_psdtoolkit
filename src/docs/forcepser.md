@@ -54,13 +54,13 @@ freshness = 5.0
 [[rule]]
 dir = '%BASEDIR%\キャラ1'
 file = '*_キャラ1_*.wav'
-encoding = 'gbk'
+encoding = 'sjis'
 layer = 1
 
 [[rule]]
 dir = '%BASEDIR%\キャラ2'
 file = '*_キャラ2_*.wav'
-encoding = 'gbk'
+encoding = 'sjis'
 layer = 6
 ```
 
