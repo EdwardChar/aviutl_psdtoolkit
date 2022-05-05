@@ -1,48 +1,54 @@
 PSDToolKit
 ==========
 
+作者:oov https://github.com/oov
+
 Chinese translation by nsYW. This fork is mantained by EdwardChar.
 
-PSDToolKit は AviUtl の拡張編集プラグイン上で PSD ファイルを扱えるようにするためのツールキットです。
+PSDToolKit工具箱，让您能在AviUtl扩展编辑中处理psd文件。
 
-動作には 64bit 版の Windows 7 以降が、快適な動作には十分な CPU 速度とメモリが必要です。  
-動作確認は AviUtl version 1.10 / 拡張編集 version 0.92 で行っています。
+所需环境
+Windows 7及以上版本的64位系统
+充足的CPU性能及内存
+AviUtl version 1.10 / 扩展编辑 version 0.92
 
-更新履歴は CHANGELOG を参照してください。
+更新日志请参考CHANGELOG(暂无中文)。
 
 https://github.com/oov/aviutl_psdtoolkit/blob/master/CHANGELOG.md
 
-注意事項
+注意事项
 --------
 
 This fork contains a temp fix for extension detection. May cause unknown errors. 
 
-PSDToolKit は無保証で提供されます。  
-PSDToolKit を使用したこと及び使用しなかったことによるいかなる損害について、開発者は何も保証しません。
+PSDToolKit不提供任何保障。  
+若因使用/未使用PSDToolKit造成任何损害，开发者概不负责。
 
-これに同意できない場合、あなたは PSDToolKit を使用することができません。
+若不同意上述事项，请勿使用PSDToolKit。
 
-ダウンロード
+下载
 ------------
 
-https://github.com/oov/aviutl_psdtoolkit/releases
+original:https://github.com/oov/aviutl_psdtoolkit/releases
 
-使い方
+chinese ver:https://github.com/EdwardChar/aviutl_psdtoolkit/releases
+
+使用方法
 ------
 
-ダウンロードしたファイルに同梱されている `PSDToolKit説明書.html` を参照してください。
+具体操作请参考压缩包内的附带文件`PSDToolKit説明書.html`(暂无中文)。
 
-また、初心者向けの使い方紹介動画が以下にあります。
+另外，下方链接为面向初学者的教学视频。
 
 https://www.nicovideo.jp/watch/sm32904901
 
-説明書内の「チュートリアル」ではこれよりも更に詳しく書いてあるので、困ったときは参照してみてください。
+说明书中的“指南”章节更为详细。如遇困难，请参考它。
 
-バイナリのビルドについて
+构建
 ------------------------
 
-[MSYS2](https://www.msys2.org/) + MINGW32/MINGW64 上で開発し、リリース用ファイルは GitHub Actions にて自動生成しています。  
-ビルド方法や必要になるパッケージなどは [GitHub Actions の設定ファイル](https://github.com/oov/aviutl_psdtoolkit/blob/main/.github/workflows/releaser.yml) を参照してください。
+使用[MSYS2](https://www.msys2.org/) + MINGW32/MINGW64平台开发，GitHub Actions 自动构建。  
+构建方法和所需库请参考 [GitHub Actions 配置文件](https://github.com/oov/aviutl_psdtoolkit/blob/main/.github/workflows/releaser.yml)。
 
 Contributors
 ------------
