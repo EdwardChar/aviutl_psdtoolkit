@@ -19,7 +19,7 @@ endif()
 if("${BUILD_PACKAGE}" STREQUAL "1")
   set(EXA_SUFFIX ".exa" CACHE STRING "suffix for *.exa file names")
 
-  set(GCMZ_VER "v0.0.1")
+  set(GCMZ_VER "v0.0.12")
   add_custom_target(extract_gcmzdrops COMMAND
     ${CMAKE_COMMAND}
     -Dlocal_dir="${PROJECT_BINARY_DIR}"
@@ -27,7 +27,7 @@ if("${BUILD_PACKAGE}" STREQUAL "1")
     -Ddir="gcmzdrops"
     -P "${CMAKE_SOURCE_DIR}/src/cmake/extract-zip.cmake"
   )
-  set(AXR_VER "v0.0.1")
+  set(AXR_VER "v0.0.12")
   add_custom_target(extract_audiomixer COMMAND
     ${CMAKE_COMMAND}
     -Dlocal_dir="${PROJECT_BINARY_DIR}"
@@ -43,11 +43,11 @@ if("${BUILD_PACKAGE}" STREQUAL "1")
     -Ddir="forcepser"
     -P "${CMAKE_SOURCE_DIR}/src/cmake/extract-zip.cmake"
   )
-  set(RAMPREVIEW_VER "v0.0.1")
+  set(RAMPREVIEW_VER "v0.3rc7")
   add_custom_target(extract_rampreview COMMAND
     ${CMAKE_COMMAND}
     -Dlocal_dir="${PROJECT_BINARY_DIR}"
-    -Durl="https://github.com/EdwardChar/aviutl_rampreview/releases/download/${RAMPREVIEW_VER}/rampreview_${RAMPREVIEW_VER}.zip"
+    -Durl="https://github.com/oov/aviutl_rampreview/releases/download/${RAMPREVIEW_VER}/rampreview_${RAMPREVIEW_VER}.zip"
     -Ddir="rampreview"
     -P "${CMAKE_SOURCE_DIR}/src/cmake/extract-zip.cmake"
   )
@@ -55,7 +55,7 @@ if("${BUILD_PACKAGE}" STREQUAL "1")
     ${CMAKE_COMMAND}
     -Dcharset="gbk"
     -Dlocal_dir="${PROJECT_BINARY_DIR}"
-    -Durl="https://github.com/EdwardChar/aviutl_cachetext/releases/download/v0.8/CacheText20210119.zip"
+    -Durl="https://github.com/oov/aviutl_cachetext/releases/download/v0.8/CacheText20210119.zip"
     -Ddir="cachetext"
     -P "${CMAKE_SOURCE_DIR}/src/cmake/extract-zip.cmake"
   )
