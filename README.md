@@ -5,7 +5,7 @@ PSDToolKit
 
 Chinese translation by nsYW. This fork is mantained by EdwardChar.
 
-PSDToolKit工具箱，让您能在AviUtl的扩展编辑插件上处理psd文件。
+PSDToolKit工具箱，让您能在AviUtl扩展编辑中处理psd文件。
 
 所需环境
 Windows 7及以上版本的64位系统
@@ -24,25 +24,25 @@ This fork contains a temp fix for extension detection. May cause unknown errors.
 PSDToolKit不提供任何保障。  
 若因使用/未使用PSDToolKit造成任何损害，开发者概不负责。
 
-若不同意上述事项，您就无权使用PSDToolKit。
+若不同意上述事项，请勿使用PSDToolKit。
 
 下载
 ------------
 
 original:https://github.com/oov/aviutl_psdtoolkit/releases
 
-chinese ver:https://github.com/EdwardChar/aviutl_psdtoolkit
+chinese ver:https://github.com/EdwardChar/aviutl_psdtoolkit/releases
 
 使用方法
 ------
 
 具体操作请参考压缩包内的附带文件`PSDToolKit説明書.html`(暂无中文)。
 
-另外，下方为面向初学者的教学视频。
+另外，下方链接为面向初学者的教学视频。
 
 https://www.nicovideo.jp/watch/sm32904901
 
-说明书中的“指南”章节更为详细，若遇到任何困难，请参考。
+说明书中的“指南”章节更为详细。如遇困难，请参考它。
 
 构建
 ------------------------
