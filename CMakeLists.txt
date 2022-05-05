@@ -19,35 +19,35 @@ endif()
 if("${BUILD_PACKAGE}" STREQUAL "1")
   set(EXA_SUFFIX ".exa" CACHE STRING "suffix for *.exa file names")
 
-  set(GCMZ_VER "v0.4.0beta4")
+  set(GCMZ_VER "v0.0.1")
   add_custom_target(extract_gcmzdrops COMMAND
     ${CMAKE_COMMAND}
     -Dlocal_dir="${PROJECT_BINARY_DIR}"
-    -Durl="https://github.com/oov/aviutl_gcmzdrops/releases/download/${GCMZ_VER}/gcmzdrops_${GCMZ_VER}.zip"
+    -Durl="https://github.com/EdwardChar/aviutl_gcmzdrops/releases/download/${GCMZ_VER}/gcmzdrops_${GCMZ_VER}.zip"
     -Ddir="gcmzdrops"
     -P "${CMAKE_SOURCE_DIR}/src/cmake/extract-zip.cmake"
   )
-  set(AXR_VER "v0.3.0beta8")
+  set(AXR_VER "v0.0.1")
   add_custom_target(extract_audiomixer COMMAND
     ${CMAKE_COMMAND}
     -Dlocal_dir="${PROJECT_BINARY_DIR}"
-    -Durl="https://github.com/oov/aviutl_audiomixer/releases/download/${AXR_VER}/AudioMixer_${AXR_VER}.zip"
+    -Durl="https://github.com/EdwardChar/aviutl_audiomixer/releases/download/${AXR_VER}/AudioMixer_${AXR_VER}.zip"
     -Ddir="audiomixer"
     -P "${CMAKE_SOURCE_DIR}/src/cmake/extract-zip.cmake"
   )
-  set(FORCEPSER_VER "v1.5.5")
+  set(FORCEPSER_VER "v0.0.1")
   add_custom_target(extract_forcepser COMMAND
     ${CMAKE_COMMAND}
     -Dlocal_dir="${PROJECT_BINARY_DIR}"
-    -Durl="https://github.com/oov/forcepser/releases/download/${FORCEPSER_VER}/forcepser_${FORCEPSER_VER}.zip"
+    -Durl="https://github.com/EdwardChar/forcepser/releases/download/${FORCEPSER_VER}/forcepser_${FORCEPSER_VER}.zip"
     -Ddir="forcepser"
     -P "${CMAKE_SOURCE_DIR}/src/cmake/extract-zip.cmake"
   )
-  set(RAMPREVIEW_VER "v0.3rc7")
+  set(RAMPREVIEW_VER "v0.0.1")
   add_custom_target(extract_rampreview COMMAND
     ${CMAKE_COMMAND}
     -Dlocal_dir="${PROJECT_BINARY_DIR}"
-    -Durl="https://github.com/oov/aviutl_rampreview/releases/download/${RAMPREVIEW_VER}/rampreview_${RAMPREVIEW_VER}.zip"
+    -Durl="https://github.com/EdwardChar/aviutl_rampreview/releases/download/${RAMPREVIEW_VER}/rampreview_${RAMPREVIEW_VER}.zip"
     -Ddir="rampreview"
     -P "${CMAKE_SOURCE_DIR}/src/cmake/extract-zip.cmake"
   )
@@ -55,7 +55,7 @@ if("${BUILD_PACKAGE}" STREQUAL "1")
     ${CMAKE_COMMAND}
     -Dcharset="gbk"
     -Dlocal_dir="${PROJECT_BINARY_DIR}"
-    -Durl="https://github.com/oov/aviutl_cachetext/releases/download/v0.8/CacheText20210119.zip"
+    -Durl="https://github.com/EdwardChar/aviutl_cachetext/releases/download/v0.8/CacheText20210119.zip"
     -Ddir="cachetext"
     -P "${CMAKE_SOURCE_DIR}/src/cmake/extract-zip.cmake"
   )
