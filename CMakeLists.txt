@@ -19,7 +19,7 @@ endif()
 if("${BUILD_PACKAGE}" STREQUAL "1")
   set(EXA_SUFFIX ".exa" CACHE STRING "suffix for *.exa file names")
 
-  set(GCMZ_VER "v0.0.12")
+  set(GCMZ_VER "v0.0.2")
   add_custom_target(extract_gcmzdrops COMMAND
     ${CMAKE_COMMAND}
     -Dlocal_dir="${PROJECT_BINARY_DIR}"
