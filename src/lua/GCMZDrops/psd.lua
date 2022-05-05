@@ -1,6 +1,6 @@
 local P = {}
 
-P.name = "PSDÎÄ¼ş×ªexo"
+P.name = "PSDï¿½Ä¼ï¿½×ªexo"
 
 P.priority = 0
 
@@ -8,7 +8,7 @@ function P.ondragenter(files, state)
   for i, v in ipairs(files) do
     local ext = v.filepath:match("[^.]+$"):lower()
     if ext == "psd" or ext == "psb" then
-      -- ¥Õ¥¡¥¤¥ë¤Î’ˆˆ×Ó¤¬ psd ¤« psb ¤Î¥Õ¥¡¥¤¥ë¤¬¤¢¤Ã¤¿¤é„IÀí¤Ç¤­¤½¤¦¤Ê¤Î¤Ç true
+      -- ï¿½Õ¥ï¿½ï¿½ï¿½ï¿½ï¿½Î’ï¿½ï¿½ï¿½ï¿½Ó¤ï¿½ psd ï¿½ï¿½ psb ï¿½Î¥Õ¥ï¿½ï¿½ï¿½ï¿½ë¤¬ï¿½ï¿½ï¿½Ã¤ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½Ç¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¤Î¤ï¿½ true
       return true
     end
   end
@@ -16,7 +16,7 @@ function P.ondragenter(files, state)
 end
 
 function P.ondragover(files, state)
-  -- ondragenter ¤Ç„IÀí¤Ç¤­¤½¤¦¤Ê¤â¤Î¤Ï ondragover ¤Ç¤â„IÀí¤Ç¤­¤½¤¦¤Ê¤Î¤ÇÕ{¤Ù¤º true
+  -- ondragenter ï¿½Ç„Iï¿½ï¿½ï¿½Ç¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¤ï¿½Î¤ï¿½ ondragover ï¿½Ç¤ï¿½Iï¿½ï¿½ï¿½Ç¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¤Î¤ï¿½ï¿½{ï¿½Ù¤ï¿½ true
   return true
 end
 
@@ -24,37 +24,37 @@ function P.ondragleave()
 end
 
 function P.encodelua(s)
-  s = GCMZDrops.convertencoding(s, "sjis", "utf8")
+  s = GCMZDrops.convertencoding(s, "gbk", "utf8")
   s = GCMZDrops.encodeluastring(s)
-  s = GCMZDrops.convertencoding(s, "utf8", "sjis")
+  s = GCMZDrops.convertencoding(s, "utf8", "gbk")
   return s
 end
 
 function P.ondrop(files, state)
   for i, v in ipairs(files) do
-    -- ¥Õ¥¡¥¤¥ë¤Î’ˆˆ×Ó¤¬ psd ¤« psb ¤À¤Ã¤¿¤é
+    -- ï¿½Õ¥ï¿½ï¿½ï¿½ï¿½ï¿½Î’ï¿½ï¿½ï¿½ï¿½Ó¤ï¿½ psd ï¿½ï¿½ psb ï¿½ï¿½ï¿½Ã¤ï¿½ï¿½ï¿½
     local ext = v.filepath:match("[^.]+$"):lower()
     if ext == "psd" or ext == "psb" then
       local filepath = v.filepath
       local filename = filepath:match("[^/\\]+$")
 
-      -- Ò»¾w¤Ë pfv ¥Õ¥¡¥¤¥ë¤òŞâ¤ó¤Ç¤¤¤Ê¤¤¤«Õ{¤Ù¤ë
+      -- Ò»ï¿½wï¿½ï¿½ pfv ï¿½Õ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¤ï¿½ï¿½Ê¤ï¿½ï¿½ï¿½ï¿½{ï¿½Ù¤ï¿½
       local psddir = filepath:sub(1, #filepath-#filename)
       for i2, v2 in ipairs(files) do
         if v2.filepath:match("[^.]+$"):lower() == "pfv" then
           local pfv = v2.filepath:match("[^/\\]+$")
           local pfvdir = v2.filepath:sub(1, #v2.filepath-#pfv)
           if psddir == pfvdir then
-            -- Í¬¤¸¥Õ¥©¥ë¥À©`ÄÚ¤Î pfv ¥Õ¥¡¥¤¥ë¤òÒ»¾w¤ËÍ¶¤²Şz¤ó¤Ç¤¤¤¿¤Î¤ÇßB½Y
+            -- Í¬ï¿½ï¿½ï¿½Õ¥ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Ú¤ï¿½ pfv ï¿½Õ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½wï¿½ï¿½Í¶ï¿½ï¿½ï¿½zï¿½ï¿½Ç¤ï¿½ï¿½ï¿½ï¿½Î¤ï¿½ï¿½Bï¿½Y
             filepath = filepath .. "|" .. pfv
-            -- ¤³¤Î pfv ¥Õ¥¡¥¤¥ë¤Ï¥É¥í¥Ã¥×¤µ¤ì¤ë¥Õ¥¡¥¤¥ë¤«¤é¤ÏÈ¡¤ê³ı¤¤¤Æ¤ª¤¯
+            -- ï¿½ï¿½ï¿½ï¿½ pfv ï¿½Õ¥ï¿½ï¿½ï¿½ï¿½ï¿½Ï¥É¥ï¿½ï¿½Ã¥×¤ï¿½ï¿½ï¿½ï¿½Õ¥ï¿½ï¿½ï¿½ï¿½ë¤«ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¤ï¿½ï¿½ï¿½
             table.remove(files, i2)
             break
           end
         end
       end
 
-      -- ¥Õ¥¡¥¤¥ë¤òÖ±½ÓÕi¤ßŞz¤à´ú¤ï¤ê¤Ë exo ¥Õ¥¡¥¤¥ë¤ò½M¤ßÁ¢¤Æ¤ë
+      -- ï¿½Õ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ exo ï¿½Õ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½Æ¤ï¿½
       math.randomseed(os.time())
       local tag = math.floor(math.random()*0x7fffffff + 1)
       local proj = GCMZDrops.getexeditfileinfo()
@@ -75,12 +75,12 @@ layer=1
 overlay=1
 camera=0
 [0.0]
-_name=]] .. (jp and [[ÎÄ±¾]] or [[Text]]) .. "\r\n" .. [[
-]] .. (jp and [[´óĞ¡]] or [[Size]]) .. [[=1
-]] .. (jp and [[ÏÔÊ¾ËÙ¶È]] or [[vDisplay]]) .. [[=0.0
-]] .. (jp and [[ÎÄ×Öµ¥Ò»¶ÀÁ¢]] or [[1char1obj]]) .. [[=0
-]] .. (jp and [[ÑØÂ·¾¶ÅÅÁĞ]] or [[Show on motion coordinate]]) .. [[=0
-]] .. (jp and [[×Ô¶¯¹ö¶¯]] or [[Automatic scrolling]]) .. [[=0
+_name=]] .. (jp and [[ï¿½Ä±ï¿½]] or [[Text]]) .. "\r\n" .. [[
+]] .. (jp and [[ï¿½ï¿½Ğ¡]] or [[Size]]) .. [[=1
+]] .. (jp and [[ï¿½ï¿½Ê¾ï¿½Ù¶ï¿½]] or [[vDisplay]]) .. [[=0.0
+]] .. (jp and [[ï¿½ï¿½ï¿½Öµï¿½Ò»ï¿½ï¿½ï¿½ï¿½]] or [[1char1obj]]) .. [[=0
+]] .. (jp and [[ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]] or [[Show on motion coordinate]]) .. [[=0
+]] .. (jp and [[ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½]] or [[Automatic scrolling]]) .. [[=0
 B=0
 I=0
 type=0
@@ -93,10 +93,10 @@ spacing_y=0
 precision=0
 color=ffffff
 color2=000000
-font=]] .. (jp and [[ºÚÌå]] or [[µÈÏß]]) .. "\r\n" .. [[
-text=]] .. GCMZDrops.encodeexotext("<?-- " .. filename .. " \r\n\r\no={ -- Ñ¡ÏîÉè¶¨\r\nlipsync = 0    ,-- ¶Ô¿ÚĞÍÔ¤±¸Í¼²ãºÅ\r\nmpslider = 0    ,-- ÑÛ²¿×é¼ş»¬¿éÍ¼²ãºÅ\r\nscene = 0    ,-- ´ÎºÏ³ÉĞòºÅ\r\ntag = " .. tag .. "    ,-- Ê¶±ğÓÃ±ê¼Ç\r\n\r\n-- ¶Ô¿ÚĞÍÔ¤±¸Ä¬ÈÏÉè¶¨\r\nls_locut = 100    ,-- µÍÇĞ\r\nls_hicut = 1000    ,-- ¸ßÇĞ\r\nls_threshold = 20    ,-- ãĞÖµ\r\nls_sensitivity = 1    ,-- ÁéÃô¶È\r\n\r\n-- Çë²»Òª¸ÄĞ´ÒÔÏÂÄÚÈİ\r\nptkf=" .. P.encodelua(filepath) .. ",ptkl=\"\"}PSD,subobj=require(\"PSDToolKit\").PSDState.init(obj,o)?>") .. "\r\n" .. [[
+font=]] .. (jp and [[ï¿½ï¿½ï¿½ï¿½]] or [[ï¿½ï¿½ï¿½ï¿½]]) .. "\r\n" .. [[
+text=]] .. GCMZDrops.encodeexotext("<?-- " .. filename .. " \r\n\r\no={ -- Ñ¡ï¿½ï¿½ï¿½è¶¨\r\nlipsync = 0    ,-- ï¿½Ô¿ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½Í¼ï¿½ï¿½ï¿½\r\nmpslider = 0    ,-- ï¿½Û²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½\r\nscene = 0    ,-- ï¿½ÎºÏ³ï¿½ï¿½ï¿½ï¿½\r\ntag = " .. tag .. "    ,-- Ê¶ï¿½ï¿½ï¿½Ã±ï¿½ï¿½\r\n\r\n-- ï¿½Ô¿ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½Ä¬ï¿½ï¿½ï¿½è¶¨\r\nls_locut = 100    ,-- ï¿½ï¿½ï¿½ï¿½\r\nls_hicut = 1000    ,-- ï¿½ï¿½ï¿½ï¿½\r\nls_threshold = 20    ,-- ï¿½ï¿½Öµ\r\nls_sensitivity = 1    ,-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\r\n\r\n-- ï¿½ë²»Òªï¿½ï¿½Ğ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\r\nptkf=" .. P.encodelua(filepath) .. ",ptkl=\"\"}PSD,subobj=require(\"PSDToolKit\").PSDState.init(obj,o)?>") .. "\r\n" .. [[
 [0.1]
-_name=]] .. (jp and [[¶¯»­Ğ§¹û]] or [[Animation effect]]) .. "\r\n" .. [[
+_name=]] .. (jp and [[ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½]] or [[Animation effect]]) .. "\r\n" .. [[
 track0=-1.00
 track1=100.00
 track2=0.00
@@ -104,24 +104,24 @@ track3=0.00
 check0=100
 type=0
 filter=2
-name=Ãè»­@PSD
+name=ï¿½è»­@PSD
 param=
 [0.2]
-_name=]] .. (jp and [[±ê×¼ÊôĞÔ]] or [[Standard drawing]]) .. "\r\n" .. [[
+_name=]] .. (jp and [[ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½]] or [[Standard drawing]]) .. "\r\n" .. [[
 X=0.0
 Y=0.0
 Z=0.0
-]] .. (jp and [[Ëõ·ÅÂÊ]] or [[Zoom%]]) .. [[=100.00
-]] .. (jp and [[Í¸Ã÷¶È]] or [[Clearness]]) .. [[=0.0
-]] .. (jp and [[Ğı×ª\]] or [[Rotation]]) .. [[=0.00
+]] .. (jp and [[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]] or [[Zoom%]]) .. [[=100.00
+]] .. (jp and [[Í¸ï¿½ï¿½ï¿½ï¿½]] or [[Clearness]]) .. [[=0.0
+]] .. (jp and [[ï¿½ï¿½×ª\]] or [[Rotation]]) .. [[=0.00
 blend=0
 ]]
 
-      -- PSDToolKit ¥¦¥£¥ó¥É¥¦¤Ë¥É¥í¥Ã¥×¤µ¤ì¤¿¥Õ¥¡¥¤¥ë¤ò×·¼Ó¤¹¤ë
-      -- Ò»•rµÄ¤Ë package.cpath ¤ò•ø¤­“Q¤¨ PSDToolKitBridge.dll ¤òÕi¤ßŞz¤ó¤Ç addfile ¤òºô¤Ö
+      -- PSDToolKit ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¥ï¿½ï¿½Ë¥É¥ï¿½ï¿½Ã¥×¤ï¿½ï¿½ì¤¿ï¿½Õ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×·ï¿½Ó¤ï¿½ï¿½ï¿½
+      -- Ò»ï¿½rï¿½Ä¤ï¿½ package.cpath ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½ï¿½ PSDToolKitBridge.dll ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½zï¿½ï¿½ï¿½ addfile ï¿½ï¿½ï¿½ï¿½ï¿½
       local origcpath = package.cpath
       package.cpath = GCMZDrops.scriptdir() .. "..\\script\\PSDToolKit\\?.dll"
-      require('PSDToolKitBridge').addfile(GCMZDrops.convertencoding(filepath, "sjis", "utf8"), tag)
+      require('PSDToolKitBridge').addfile(GCMZDrops.convertencoding(filepath, "gbk", "utf8"), tag)
       package.cpath = origcpath
 
       local filepath = GCMZDrops.createtempfile("psd", ".exo")
@@ -131,11 +131,11 @@ blend=0
       end
       f:write(exo)
       f:close()
-      debug_print("["..P.name.."] ÓÃexoÎÄ¼şÌæ»»ÁË " .. v.filepath .. " ¡£Ô­ÎÄ¼ş¿ÉÒÔÍ¨¹ıorgfilepath»ñÈ¡¡£")
+      debug_print("["..P.name.."] ï¿½ï¿½exoï¿½Ä¼ï¿½ï¿½æ»»ï¿½ï¿½ " .. v.filepath .. " ï¿½ï¿½Ô­ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½orgfilepathï¿½ï¿½È¡ï¿½ï¿½")
       files[i] = {filepath=filepath, orgfilepath=v.filepath}
     end
   end
-  -- Ëû¤Î¥¤¥Ù¥ó¥È¥Ï¥ó¥É¥é©`¤Ë¤â„IÀí¤ò¤µ¤»¤¿¤¤¤Î¤Ç¤³¤³¤Ï³£¤Ë false
+  -- ï¿½ï¿½ï¿½Î¥ï¿½ï¿½Ù¥ï¿½È¥Ï¥ï¿½É¥ï¿½`ï¿½Ë¤ï¿½Iï¿½ï¿½ï¿½ò¤µ¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¤Ç¤ï¿½ï¿½ï¿½ï¿½Ï³ï¿½ï¿½ï¿½ false
   return false
 end
 

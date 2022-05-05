@@ -79,7 +79,7 @@ exe = 'C:\Program Files (x86)\AHS\VOICEROID2\VoiceroidEditor.exe'
 format = 'ボイロ2_*.wav'
 
 [[rule]]
-encoding = 'sjis'
+encoding = 'gbk'
 file = 'ボイロ2_*.wav'
 text = '''^東北きりたん\(v1\)＞'''
 layer = 4
@@ -106,7 +106,7 @@ exe = 'C:\Program Files (x86)\AHS\VOICEROID+\KiritanEX\VOICEROID.exe'
 format = 'きりたん_*.wav'
 
 [[rule]]
-encoding = 'sjis'
+encoding = 'gbk'
 file = 'きりたん_*.wav'
 layer = 1
 modifier = '''
@@ -143,7 +143,7 @@ flags = 0 # 「名前を付けて保存」ダイアログの自動処理は無�
 [[rule]]
 dir = 'C:\Users\YourName\Documents\VoiceroidWaveFiles'
 file = '*_東北きりたん(v1)_*.wav'
-encoding = 'sjis'
+encoding = 'gbk'
 layer = 1
 ```
 
@@ -178,7 +178,7 @@ exe = 'C:\Users\YourName\Documents\BouyomiChan\BouyomiChan.exe'
 flags = 0 # 「名前を付けて保存」ダイアログの自動処理は無効
 
 [[rule]]
-encoding = 'sjis'
+encoding = 'gbk'
 file = '*_女性１_*.wav'
 layer = 1
 modifier = '''
@@ -219,7 +219,7 @@ exe = 'C:\Users\YourName\Documents\YukkuriChoseiKun\YukkuriChoseiKun.exe'
 flags = 0
 
 [[rule]]
-encoding = 'sjis'
+encoding = 'gbk'
 dir = 'C:\Users\YourName\ゆっくり調声くんプロジェクト'
 file = '*_霊夢_*.wav'
 layer = 1
@@ -251,7 +251,7 @@ deletetext = true
 exe = 'C:\Program Files\CeVIO\CeVIO Creative Studio (64bit)\CeVIO Creative Studio.exe'
 
 [[rule]]
-encoding = 'sjis'
+encoding = 'gbk'
 file = '*_さとうささら_*.wav'
 layer = 1
 modifier = '''

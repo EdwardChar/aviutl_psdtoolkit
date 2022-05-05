@@ -246,12 +246,12 @@ P.wav_subtitle_margin_after = 0
 `字幕準備` が文字化けする場合はこの設定を変更するか、この設定に合わせてテキストファイル側を変更する必要があります。
 
 ```lua
-P.wav_subtitle_encoding = "sjis"
+P.wav_subtitle_encoding = "gbk"
 ```
 
 値|説明
 ---|---
-`"sjis"`|文字エンコーディングが `Shift_JIS` であるものとして読み込みます
+`"gbk"`|文字エンコーディングが `Shift_JIS` であるものとして読み込みます
 `"utf8"`|文字エンコーディングが `UTF-8` であるものとして読み込みます
 
 ### `P:wav_subtitle_replacer`
@@ -558,7 +558,7 @@ P.srt_encoding = "utf8"
 
 値|説明
 ---|---
-`"sjis"`|文字エンコーディングが `Shift_JIS` であるものとして読み込みます
+`"gbk"`|文字エンコーディングが `Shift_JIS` であるものとして読み込みます
 `"utf8"`|文字エンコーディングが `UTF-8` であるものとして読み込みます
 
 ### `P.srt_subtitle_margin_before`
@@ -668,7 +668,7 @@ P.wav_subtitle_replacer = require("replacer")
 
 ```lua
 function P:wav_subtitle_replacer(s)
-  s = s:gsub(GCMZDrops.convertencoding("こんにちは", "sjis", "utf8"), "Hello")
+  s = s:gsub(GCMZDrops.convertencoding("こんにちは", "gbk", "utf8"), "Hello")
   return s
 end
 ```
