@@ -1,4 +1,3 @@
-
 typedef struct {
   short y;
   short cb;
