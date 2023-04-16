@@ -1,7 +1,7 @@
--- 偙偺僼傽僀儖偼 AviUtl 偺僥僉僗僩僆僽僕僃僋僩傗僗僋儕僾僩惂屼僼傿儖僞偱
--- require("PSDToolKit") 傪偟偨帪偵撉傒崬傑傟傞僼傽僀儖
--- 偙偺僼傽僀儖偑撉傒崬傑傟傞偲偄偆偙偲偼惓偟偄僼傽僀儖偑撉傒崬傔偰偄側偄偺偱丄
--- 堦扷僉儍僢僔儏傪柍岠壔偟僷僗傪捠偟偨忋偱夵傔偰撉傒崬傓
+-- このファイルは AviUtl のテキストオブジェクトやスクリプト制御フィルタで
+-- require("PSDToolKit") をした時に読み込まれるファイル
+-- このファイルが読み込まれるということは正しいファイルが読み込めていないので、
+-- 一旦キャッシュを無効化しパスを通した上で改めて読み込む
 package.loaded["PSDToolKit"] = nil
 local origpath = package.path
 local origcpath = package.cpath

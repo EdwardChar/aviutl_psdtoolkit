@@ -5,10 +5,10 @@ local function print(obj, msg)
   obj.load("figure", "\148\119\140\105", 0, 1, 1)
   obj.alpha = 0.75
   obj.draw()
-  obj.setfont("MS UI Gothic", 16, 0, "0xffffff", "0x000000")
+  obj.setfont("黑体", 16, 0, "0xffffff", "0x000000")
   obj.load("text", "<s,,B>" .. msg)
   obj.draw()
-  -- 僥僉僗僩偺傏傗偗杊巭
+  -- テキストのぼやけ防止
   obj.ox = obj.w % 2 == 1 and 0.5 or 0
   obj.oy = obj.h % 2 == 1 and 0.5 or 0
 end
@@ -53,7 +53,7 @@ end
 
 local PSDState = {}
 
--- 僗僋儕僾僩偐傜屇傃弌偡梡
+-- スクリプトから呼び出す用
 function PSDState.init(obj, o)
   local r = PSDState.new(
     (o.scene or 0)*1000+obj.layer,
@@ -70,8 +70,8 @@ function PSDState.init(obj, o)
       ls_sensitivity = o.ls_sensitivity ~= nil and o.ls_sensitivity or 1,
     }
   )
-  -- 壗傕弌椡偟側偄偲捈屻偺傾僯儊乕僔儑儞岠壥埲奜揔梡偝傟側偄偨傔
-  -- 偦傟偵懳偡傞儚乕僋傾儔僂儞僪
+  -- 何も出力しないと直後のアニメーション効果以外適用されないため
+  -- それに対するワークアラウンド
   mes(" ")
 
   local subobj
@@ -87,14 +87,14 @@ end
 
 PSDState.cachekeys = {}
 
--- PSD僆僽僕僃僋僩
--- id - 屌桳幆暿斣崋
--- file - PSD僼傽僀儖傊偺僷僗
--- tag - 屌桳幆暿斣崋(PSDToolKit 僂傿儞僪僂梡)
--- opt - 捛壛偺愝掕崁栚
--- opt 偵偼埲壓偺傛偆側僆僽僕僃僋僩傪搉偡
+-- PSDオブジェクト
+-- id - 固有識別番号
+-- file - PSDファイルへのパス
+-- tag - 固有識別番号(PSDToolKit ウィンドウ用)
+-- opt - 追加の設定項目
+-- opt には以下のようなオブジェクトを渡す
 -- {
---   layer = "儗僀儎乕偺弶婜忬懺",
+--   layer = "レイヤーの初期状態",
 --   lipsync = 2,
 --   mpslider = 3,
 -- }
@@ -131,8 +131,8 @@ function PSDState.new(id, file, tag, opt)
 end
 
 function PSDState:addstate(layer, index)
-  -- index 偑巜掕偝傟偰偄側偄応崌偼 layer 偺撪梕傪捈愙捛壛
-  -- (layer 偺 type 偑 暥帤楍)
+  -- index が指定されていない場合は layer の内容を直接追加
+  -- (layer の type が 文字列)
   if index == nil then
     if layer ~= nil and layer ~= "" then
       table.insert(self.layer, layer)
@@ -140,13 +140,13 @@ function PSDState:addstate(layer, index)
     return
   end
 
-  -- index 偑巜掕偝傟偰偄傞応崌偼 layer 撪偺崁栚偺傂偲偮傪妱傝摉偰傞偑丄
-  -- 傕偟 valueholder 偑懚嵼偡傞応崌偼 index 傪忋彂偒偡傞
+  -- index が指定されている場合は layer 内の項目のひとつを割り当てるが、
+  -- もし valueholder が存在する場合は index を上書きする
   if self.valueholder ~= nil then
     index = self.valueholder:get(index, self.valueholderindex, 0)
     self.valueholderindex = self.valueholderindex + 1
   end
-  -- 抣偑斖埻奜偱側偗傟偽妱傝摉偰
+  -- 値が範囲外でなければ割り当て
   if 0 < index and index <= #layer then
     table.insert(self.layer, layer[index])
   end
@@ -204,16 +204,16 @@ end
 
 local Blinker = {}
 
--- 弖偒傾僯儊乕僞乕
--- patterns - {'暵偠', '傎傏暵偠', '敿奐偒', '傎傏奐偒', '奐偒'} 偺僷僞乕儞偑擖偭偨攝楍乮傎傏暵偠丄敿栚丄傎傏奐偒偼徣棯壜乯
--- interval - 傾僯儊乕僔儑儞娫妘(昩)
--- speed - 傾僯儊乕僔儑儞懍搙
--- offset - 傾僯儊乕僔儑儞奐巒埵抲
+-- 瞬きアニメーター
+-- patterns - {'閉じ', 'ほぼ閉じ', '半開き', 'ほぼ開き', '開き'} のパターンが入った配列（ほぼ閉じ、半目、ほぼ開きは省略可）
+-- interval - アニメーション間隔(秒)
+-- speed - アニメーション速度
+-- offset - アニメーション開始位置
 function Blinker.new(patterns, interval, speed, offset)
   if #patterns > 3 then
-    -- 3僐儅埲忋偁傞側傜愭摢偵乽傎傏奐偒乿憡摉偺傕偺傪憓擖偟偰
-    -- 奐偒仺傎傏奐偒仺暵偠仺傎傏暵偠仺敿栚仺傎傏奐偒仺奐偒丂偺傛偆偵
-    -- 暵偠巒傔傞傾僯儊乕僔儑儞偺捈屻丄暵偠偵堏峴偡傞傛偆偵偡傞
+    -- 3コマ以上あるなら先頭に「ほぼ開き」相当のものを挿入して
+    -- 開き→ほぼ開き→閉じ→ほぼ閉じ→半目→ほぼ開き→開き　のように
+    -- 閉じ始めるアニメーションの直後、閉じに移行するようにする
     table.insert(patterns, 1, patterns[#patterns-1])
   end
   return setmetatable({
@@ -226,7 +226,7 @@ end
 
 function Blinker:getstate(psd, obj)
   if #self.patterns < 2 then
-    error("栚僷僠偵偼彮側偔偲傕乽奐偒乿乽暵偠乿偺僷僞乕儞愝掕偑昁梫偱偡")
+    error("眨眼需至少设定‘睁眼’‘闭眼’两项参数。")
   end
   local interval = self.interval * obj.framerate + self.speed * #self.patterns*2;
   local basetime = obj.frame + interval + self.offset
@@ -244,10 +244,10 @@ end
 
 local LipSyncSimple = {}
 
--- 岥僷僋乮奐暵偺傒乯
--- patterns - {'暵偠', '傎傏暵偠', '敿奐偒', '傎傏奐偒', '奐偒'} 偺僷僞乕儞偑擖偭偨攝楍乮傎傏暵偠丄敿栚丄傎傏奐偒偼徣棯壜乯
--- speed - 傾僯儊乕僔儑儞懍搙
--- alwaysapply - 岥僷僋弨旛偺僨乕僞偑側偔偰傕暵偠傪揔梡偡傞
+-- 口パク（開閉のみ）
+-- patterns - {'閉じ', 'ほぼ閉じ', '半開き', 'ほぼ開き', '開き'} のパターンが入った配列（ほぼ閉じ、半目、ほぼ開きは省略可）
+-- speed - アニメーション速度
+-- alwaysapply - 口パク準備のデータがなくても閉じを適用する
 function LipSyncSimple.new(patterns, speed, alwaysapply)
   return setmetatable({
     patterns = patterns,
@@ -260,16 +260,16 @@ LipSyncSimple.states = {}
 
 function LipSyncSimple:getstate(psd, obj)
   if #self.patterns < 2 then
-    error("岥僷僋偵偼彮側偔偲傕乽奐偒乿乽暵偠乿偺僷僞乕儞愝掕偑昁梫偱偡")
+    error("对口型需至少设定‘张开’‘闭合’两项参数。")
   end
   if psd.talkstateindex == nil then
-    error("岥僷僋弨旛偑偁傞儗僀儎乕斣崋傪巜掕偟偰偔偩偝偄")
+    error("请指定对口型预备所在图层号")
   end
 
   local stat = LipSyncSimple.states[obj.layer] or {time = obj.time, n = -1, pat = 0}
   if stat.time > obj.time or stat.time + 1 < obj.time then
-    -- 姫偒栠偭偰偄偨傝丄偁傑傝偵愭偵恑傫偱偄傞傛偆側傜傾僯儊乕僔儑儞偼儕僙僢僩偡傞
-    -- 僾儗價儏乕偱僐儅旘傃偡傞応崌偼惓偟偄嫇摦傪帵偣側偄偺偱丄1昩偺桺梊傪帩偨偣傞
+    -- 巻き戻っていたり、あまりに先に進んでいるようならアニメーションはリセットする
+    -- プレビューでコマ飛びする場合は正しい挙動を示せないので、1秒の猶予を持たせる
     stat.n = -1
     stat.pat = 0
   end
@@ -298,10 +298,10 @@ end
 
 local LipSyncLab = {}
 
--- 岥僷僋乮偁偄偆偊偍乯
--- patterns - {'a'='偁', 'e'='偊', 'i'='偄', 'o'='偍','u'='偆', 'N'='傫'}
--- mode - 巕壒偺張棟儌乕僪
--- alwaysapply - 岥僷僋弨旛偺僨乕僞偑側偔偰傕暵偠傪揔梡偡傞
+-- 口パク（あいうえお）
+-- patterns - {'a'='あ', 'e'='え', 'i'='い', 'o'='お','u'='う', 'N'='ん'}
+-- mode - 子音の処理モード
+-- alwaysapply - 口パク準備のデータがなくても閉じを適用する
 function LipSyncLab.new(patterns, mode, alwaysapply)
   if patterns.A == nil then patterns.A = patterns.a end
   if patterns.E == nil then patterns.E = patterns.e end
@@ -320,20 +320,20 @@ LipSyncLab.states = {}
 function LipSyncLab:getstate(psd, obj)
   local pat = self.patterns
   if pat.a == nil or pat.e == nil or pat.i == nil or pat.o == nil or pat.u == nil or pat.N == nil then
-    error("岥僷僋偵偼乽偁乿乽偄乿乽偆乿乽偊乿乽偍乿乽傫乿慡偰偺僷僞乕儞愝掕偑昁梫偱偡")
+    error("对口型需设定五个元音的口型组件")
   end
   if psd.talkstateindex == nil then
-    error("岥僷僋弨旛偑偁傞儗僀儎乕斣崋傪巜掕偟偰偔偩偝偄")
+    error("请指定对口型预备所在图层号")
   end
   local ts = psd.talkstate
   if ts == nil then
-    -- 僨乕僞偑尒偮偐傜側偐偭偨応崌偼暵偠忬懺偵偡傞
+    -- データが見つからなかった場合は閉じ状態にする
     return self.alwaysapply and pat.N or ""
   end
 
   if ts.cur == "" then
-    -- 壒慺忣曬偑側偄帪偼壒検偵墳偠偰乽偁乿偺宍傪巊偆
-    -- 乮lab 僼傽僀儖傪巊傢偢偵乽岥僷僋丂偁偄偆偊偍乿傪巊偭偰偄傞応崌偺慬抲乯
+    -- 音素情報がない時は音量に応じて「あ」の形を使う
+    -- （lab ファイルを使わずに「口パク　あいうえお」を使っている場合の措置）
     if ts:getvolume() >= 1.0 then
       return pat.a
     end
@@ -341,61 +341,61 @@ function LipSyncLab:getstate(psd, obj)
   end
 
   if self.mode == 0 then
-    -- 巕壒張棟僞僀僾0 -> 慡偰乽傫乿
+    -- 子音処理タイプ0 -> 全て「ん」
     if ts:curisvowel() ~= 0 then
-      -- 曣壒偼愝掕偝傟偨宍傪偦偺傑傑巊偆
+      -- 母音は設定された形をそのまま使う
       return pat[ts.cur]
     end
     return pat.N
   elseif self.mode == 1 then
-    -- 巕壒張棟僞僀僾1 -> 岥傪暵偠傞巕壒埲奜偼慜偺曣壒傪堷偒宲偖
+    -- 子音処理タイプ1 -> 口を閉じる子音以外は前の母音を引き継ぐ
     local stat = LipSyncLab.states[obj.layer] or {frame = obj.frame-1, p = "N"}
     if stat.frame >= obj.frame or stat.frame + obj.framerate < obj.frame then
-      -- 姫偒栠偭偰偄偨傝丄偁傑傝偵愭偵恑傫偱偄傞傛偆側傜傾僯儊乕僔儑儞偼儕僙僢僩偡傞
-      -- 僾儗價儏乕偱僐儅旘傃偡傞応崌偼惓偟偄嫇摦傪帵偣側偄偺偱丄1昩偺桺梊傪帩偨偣傞
+      -- 巻き戻っていたり、あまりに先に進んでいるようならアニメーションはリセットする
+      -- プレビューでコマ飛びする場合は正しい挙動を示せないので、1秒の猶予を持たせる
       stat.p = "N"
     end
     stat.frame = obj.frame
     if ts:curisvowel()  == 1 then
-      -- 曣壒偼愝掕偝傟偨宍傪偦偺傑傑巊偆乮柍惡壔曣壒偼彍奜乯
+      -- 母音は設定された形をそのまま使う（無声化母音は除外）
       stat.p = ts.cur
     elseif ts.cur == "pau" or ts.cur == "N" or ts.cur == "cl" then
-      -- pau / 傫 / 懀壒乮偭乯
+      -- pau / ん / 促音（っ）
       stat.p = "N"
     else
-      -- 偦傟埲奜偺巕壒偱偼偦偺傑傑堷偒宲偖
+      -- それ以外の子音ではそのまま引き継ぐ
     end
     LipSyncLab.states[obj.layer] = stat
     return pat[stat.p]
   elseif self.mode == 2 then
-    -- 巕壒張棟僞僀僾2 -> 岥傪暵偠傞巕壒埲奜偼慜屻偺曣壒偺宍傛傝彫偝偄傕偺偱曗娫
+    -- 子音処理タイプ2 -> 口を閉じる子音以外は前後の母音の形より小さいもので補間
     if ts:curisvowel() ~= 0 then
-      -- 曣壒偼愝掕偝傟偨宍傪偦偺傑傑巊偆
+      -- 母音は設定された形をそのまま使う
       return pat[ts.cur]
     end
     if ts.cur == "pau" or ts.cur == "N" or ts.cur == "m" or ts.cur == "p" or ts.cur == "b" or ts.cur == "v" then
-      -- pau / 傫 / 巕壒乮傑丒傁丒偽丒償峴乯
+      -- pau / ん / 子音（ま?ぱ?ば?ヴ行）
       return pat.N
     end
     if ts.cur == "cl" then
-      -- 懀壒乮偭乯
+      -- 促音（っ）
       if ts.progress < 0.5 then
-        -- 傂偲偮慜偑曣壒偱丄偐偮楢懕偟偨応強偵懚嵼偟偰偄傞側傜慜敿偼偦偺曣壒偺宍傪堷偒宲偖
+        -- ひとつ前が母音で、かつ連続した場所に存在しているなら前半はその母音の形を引き継ぐ
         if ts:previsvowel() ~= 0 and ts.prev_end == ts.cur_start then
           return pat[ts.prev]
         end
         return pat.N
       else
-        -- 屻敿偼乽偆乿偺宍偱堷偒宲偖
+        -- 後半は「う」の形で引き継ぐ
         return pat.u
       end
     end
-    -- 張棟偝傟側偐偭偨慡偰偺巕壒偺僨僼僅儖僩張棟
-    -- 椬愙偡傞慜屻偺曣壒偵埶懚偟偰宍傪寛掕偡傞
+    -- 処理されなかった全ての子音のデフォルト処理
+    -- 隣接する前後の母音に依存して形を決定する
     if ts.progress < 0.5 then
-      -- 慜敿偼慜偺曣壒傪堷偒宲偖
+      -- 前半は前の母音を引き継ぐ
       if ts:previsvowel() ~= 0 and ts.prev_end == ts.cur_start then
-        -- 慜偺曣壒傛傝側傞傋偔彫偝偄奐偗曽偵側傞傛偆偵
+        -- 前の母音よりなるべく小さい開け方になるように
         if ts.prev == "a" or ts.prev == "A" then
           return pat.o
         elseif ts.prev == "i" or ts.prev == "I" then
@@ -406,9 +406,9 @@ function LipSyncLab:getstate(psd, obj)
       end
       return pat.N
     else
-      -- 屻敿偼屻傠偺曣壒傪愭峴偝偣傞
+      -- 後半は後ろの母音を先行させる
       if ts:nextisvowel() ~= 0 and ts.next_start == ts.cur_end then
-        -- 慜偺曣壒傛傝側傞傋偔彫偝偄奐偗曽偵側傞傛偆偵
+        -- 前の母音よりなるべく小さい開け方になるように
         if ts.next == "a" or ts.next == "A" then
           return pat.o
         elseif ts.next == "i" or ts.next == "I" then
@@ -502,7 +502,7 @@ function TalkState:setphoneme(labfile, time)
     error("file not found: " .. labfile)
   end
   for line in f:lines() do
-    local st, ed, p = string.match(line, "([0-9.]+) ([0-9.]+) (.+)")
+    local st, ed, p = string.match(line, "([0-9.]+) ([0-9.]+) (%a+)")
     if st == nil then
       return nil -- unexpected format
     end
@@ -653,14 +653,6 @@ function SubtitleStates.new()
 end
 
 function SubtitleStates:set(text, obj, unescape)
-  if obj.frame > obj.totalframe then
-    -- 偙偺応崌偼僔乕儞僠僃儞僕偵傛偭偰僆僽僕僃僋僩偑嫮惂揑偵堷偒怢偽偝傟偰偄傞偲巚傢傟傞偑丄
-    -- 偍偦傜偔戝懡悢偺働乕僗偱帤枊偼堷偒怢偽偟偰昞帵偝傟傞偙偲傪堄恾偟偰偄側偄偼偢側偺偱丄偙偙偱懪偪愗傞
-    -- 偙傟偵敽偆暃嶌梡偱帤枊昞帵傪僔乕儞僠僃儞僕傪巊偭偰僼僃乕僪傾僂僩偟偨傝偱偒側偔側傞偑丄
-    -- 抧忋攇丄YouTube丄Netflix 側偳戝懡悢偺塮憸攝怣偵偍偄偰偼帤枊偼摦夋偲偼暿偺巇慻傒偱幚尰偝傟偰偍傝丄
-    -- 帤枊偲塮憸偼堦弿偵僋儘僗僼僃乕僪偟偨傝偟側偄偺偑堦斒揑偲巚傢傟傞偺偱栤戣偵側傜側偄偼偢
-    return
-  end
   self.states[obj.layer] = SubtitleState.new(
     text,
     obj.x,
@@ -839,7 +831,7 @@ function PrepObject.new()
   }, {__index = PrepObject})
 end
 
--- 僗僋儕僾僩偐傜屇傃弌偡梡
+-- スクリプトから呼び出す用
 function PrepObject.init(o, obj, text)
   P.prep:set(o, obj)
   if text ~= "" then
@@ -849,8 +841,8 @@ function PrepObject.init(o, obj, text)
     end
   end
 
-  -- 壗傕弌椡偟側偄偲捈屻偺傾僯儊乕僔儑儞岠壥埲奜揔梡偝傟側偄偨傔
-  -- 偦傟偵懳偡傞儚乕僋傾儔僂儞僪
+  -- 何も出力しないと直後のアニメーション効果以外適用されないため
+  -- それに対するワークアラウンド
   mes(" ")
 end
 

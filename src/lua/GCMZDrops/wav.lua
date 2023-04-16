@@ -1,6 +1,6 @@
 local P = {}
 
-P.name = "*.wav 僪儘僢僾帪偵捛壛偺僆僽僕僃僋僩傪惗惉"
+P.name = "拖放 *.wav 时生成额外物件"
 
 P.priority = 0
 
@@ -35,8 +35,8 @@ local function fileread(filepath)
 end
 
 local function postprocesssubtitle(subtitle, encoding, setting)
-  -- BOM 偑偁傞応崌偼偦傟傪婎弨偵僄儞僐乕僨傿儞僌愝掕傪忋彂偒偟丄
-  -- 偮偄偱偵 BOM 傕僇僢僩偡傞
+  -- BOM がある場合はそれを基準にエンコーディング設定を上書きし、
+  -- ついでに BOM もカットする
   if subtitle:sub(1, 3) == "\239\187\191" then
     encoding = "utf8"
     subtitle = subtitle:sub(4)
@@ -48,11 +48,11 @@ local function postprocesssubtitle(subtitle, encoding, setting)
     subtitle = subtitle:sub(3)
   end
   if encoding ~= "utf8" then
-    -- 撪晹偺曐帩忬懺傪 UTF-8 偵摑堦偡傞
+    -- 内部の保持状態を UTF-8 に統一する
     subtitle = GCMZDrops.convertencoding(subtitle, encoding, "utf8")
   end
 
-  -- 抲姺梡張棟傪屇傃弌偡
+  -- 置換用処理を呼び出す
   subtitle = setting:wav_subtitle_replacer(subtitle)
 
   return subtitle
@@ -135,7 +135,7 @@ function P.ondragenter(files, state)
   for i, v in ipairs(files) do
     local ext = getextension(v.filepath)
     if ext == ".wav" or ext == ".txt" or ext == ".exo" then
-      -- 僼傽僀儖偺奼挘巕偑 .wav 偐 .txt 偐 .exo 偺僼傽僀儖偑偁偭偨傜張棟偱偒傞偐傕偟傟側偄偺偱 true
+      -- ファイルの拡張子が .wav か .txt か .exo のファイルがあったら処理できるかもしれないので true
       return true
     end
   end
@@ -143,7 +143,7 @@ function P.ondragenter(files, state)
 end
 
 function P.ondragover(files, state)
-  -- ondragenter 偱張棟偱偒偦偆側傕偺偼 ondragover 偱傕張棟偱偒偦偆側偺偱挷傋偢 true
+  -- ondragenter で処理できそうなものは ondragover でも処理できそうなので調べず true
   return true
 end
 
@@ -157,7 +157,7 @@ function P.exaread(filepath, postfix)
     filepath = basepath .. filepath .. "_" .. postfix .. ".exa"
     inistr = fileread(filepath)
     if inistr == nil then
-      debug_print("撉傒崬傒幐攕: " .. filepath)
+      debug_print("读取失败: " .. filepath)
     end
   end
   if inistr == nil then
@@ -165,7 +165,7 @@ function P.exaread(filepath, postfix)
     inistr = fileread(filepath)
   end
   if inistr ~= nil then
-    debug_print("巊梡偡傞僄僀儕傾僗僼傽僀儖: " .. filepath)
+    debug_print("将要使用的exa文件。: " .. filepath)
   else
     error("cannot read: " .. filepath)
   end
@@ -225,16 +225,16 @@ function P.parseexo(filepath)
       break
     end
     if i == 10 then
-      -- 偙傟偩偗尒傟偽廫暘
+      -- これだけ見れば十分
       return nil
     end
     local name = ini:get(i .. ".0", "_name", "")
-    if wav == nil and ((name == "壒惡僼傽僀儖")or(name == "Audio file")) then
+    if wav == nil and ((name == "音频文件")or(name == "Audio file")) then
       wav = ini:get(i .. ".0", "file", nil)
       if j == nil or j == '' then
         j = ini:get(i .. ".0", "__json", nil)
       end
-    elseif txt == nil and ((name == "僥僉僗僩")or(name == "Text")) then
+    elseif txt == nil and ((name == "文本")or(name == "Text")) then
       txt = ini:get(i .. ".0", "text", nil)
       if j == nil or j == '' then
         j = ini:get(i .. ".0", "__json", nil)
@@ -255,16 +255,16 @@ end
 function P.fire(files, state)
   local setting = P.loadsetting()
 
-  -- setting.wav_firemode 偵揔崌偡傞偐僠僃僢僋
+  -- setting.wav_firemode に適合するかチェック
   for i, v in ipairs(files) do
     if getextension(v.filepath) == ".wav" then
       local firemode = setting.wav_firemode
       if v.overridefiremode ~= nil then
-        -- 懠偺僗僋儕僾僩偐傜 overridefiremode 懏惈傪捛壛偝傟偰偄偨応崌偼
-        -- 愝掕撪梕偵娭傢傜偢偦偪傜偺敪摦儌乕僪傪嵦梡偡傞
+        -- 他のスクリプトから overridefiremode 属性を追加されていた場合は
+        -- 設定内容に関わらずそちらの発動モードを採用する
         firemode = v.overridefiremode
       end
-      -- 尦僼傽僀儖偲摨偠応強偵偁傞僥僉僗僩僼傽僀儖傪撉傒崬傓乮尒偮偐傜側偗傟偽 nil乯
+      -- 元ファイルと同じ場所にあるテキストファイルを読み込む（見つからなければ nil）
       local subtitle = readsubtitle(
         trimextension(v.orgfilepath or v.filepath) .. ".txt",
         v.overridesubtitleencoding or setting.wav_subtitle_encoding,
@@ -291,7 +291,7 @@ function P.fire(files, state)
     end
   end
 
-  -- setting.wav_firemode_wavtxt 偵揔崌偡傞偐僠僃僢僋
+  -- setting.wav_firemode_wavtxt に適合するかチェック
   if setting.wav_firemode_wavtxt == 1 then
     local wav, txt = nil, nil
     for i, v in ipairs(files) do
@@ -322,7 +322,7 @@ function P.fire(files, state)
     end
   end
 
-  -- setting.wav_firemode_exo 偵揔崌偡傞偐僠僃僢僋
+  -- setting.wav_firemode_exo に適合するかチェック
   if setting.wav_firemode_exo == 1 then
     for i, v in ipairs(files) do
       if getextension(v.filepath) == ".exo" then
@@ -357,8 +357,8 @@ function P.firetext(files, state)
   for i, v in ipairs(files) do
     if getextension(v.filepath) == ".txt" then
       local encoding = setting.wav_subtitle_encoding
-      if v.mediatype == "text/plain; charset=Shift_JIS" then
-        encoding = "sjis"
+      if v.mediatype == "text/plain; charset=GBK" then
+        encoding = "gbk"
       elseif v.mediatype == "text/plain; charset=UTF-8" then
         encoding = "utf8"
       end
@@ -382,10 +382,10 @@ end
 function P.ondrop(files, state)
   local wavfilepath, subtitle, exabase, j = P.fire(files, state)
   if wavfilepath ~= nil then
-    -- 僾儘僕僃僋僩偲僼傽僀儖偺忣曬傪庢摼偡傞
+    -- プロジェクトとファイルの情報を取得する
     local proj = GCMZDrops.getexeditfileinfo()
     local fi = GCMZDrops.getfileinfo(wavfilepath)
-    -- 壒惡偑尰嵼偺僾儘僕僃僋僩偱壗僼儗乕儉暘偁傞偺偐傪寁嶼偡傞
+    -- 音声が現在のプロジェクトで何フレーム分あるのかを計算する
     local wavlen = math.ceil((fi.audio_samples * proj.rate) / (proj.audio_rate * proj.scale))
     return P.generateexo(wavfilepath, wavlen, subtitle, exabase, state, j)
   end
@@ -398,7 +398,7 @@ end
 
 function P.generateexo(wavfilepath, wavlen, subtitle, exabase, state, j)
   local setting = P.loadsetting()
-  -- 僥儞僾儗乕僩梡曄悢傪弨旛
+  -- テンプレート用変数を準備
   local values = {
     WAV_START = 1,
     WAV_END = 0,
@@ -418,20 +418,20 @@ function P.generateexo(wavfilepath, wavlen, subtitle, exabase, state, j)
       return GCMZDrops.encodeexotextutf8(v)
     end,
     ENCODE_LUA_STRING = function(v)
-      v = GCMZDrops.convertencoding(v, "sjis", "utf8")
+      v = GCMZDrops.convertencoding(v, "gbk", "utf8")
       v = GCMZDrops.encodeluastring(v)
-      v = GCMZDrops.convertencoding(v, "utf8", "sjis")
+      v = GCMZDrops.convertencoding(v, "utf8", "gbk")
       return v
     end,
   }
 
-  -- 挿偝傪斀塮
+  -- 長さを反映
   values.WAV_END = values.WAV_END + wavlen
   values.LIPSYNC_END = values.LIPSYNC_END + wavlen
   values.MPSLIDER_END = values.MPSLIDER_END + wavlen
   values.SUBTITLE_END = values.SUBTITLE_END + wavlen
 
-  -- 僆僼僙僢僩偲儅乕僕儞傪斀塮
+  -- オフセットとマージンを反映
   values.LIPSYNC_START = values.LIPSYNC_START + setting.wav_lipsync_offset
   values.LIPSYNC_END = values.LIPSYNC_END + setting.wav_lipsync_offset
   values.MPSLIDER_START = values.MPSLIDER_START - setting.wav_mpslider_margin_left
@@ -439,7 +439,7 @@ function P.generateexo(wavfilepath, wavlen, subtitle, exabase, state, j)
   values.SUBTITLE_START = values.SUBTITLE_START - setting.wav_subtitle_margin_left
   values.SUBTITLE_END = values.SUBTITLE_END + setting.wav_subtitle_margin_right
 
-  -- 儅僀僫僗曽岦偵恑傫偱偟傑偭偨暘傪栠偡
+  -- マイナス方向に進んでしまった分を戻す
   local ofs = math.min(values.LIPSYNC_START, values.MPSLIDER_START, values.SUBTITLE_START) - 1
   values.WAV_START = values.WAV_START - ofs
   values.WAV_END = values.WAV_END - ofs
@@ -450,7 +450,7 @@ function P.generateexo(wavfilepath, wavlen, subtitle, exabase, state, j)
   values.SUBTITLE_START = values.SUBTITLE_START - ofs
   values.SUBTITLE_END = values.SUBTITLE_END - ofs
 
-  -- exo 僼傽僀儖偺僿僢僟晹暘傪慻傒棫偰
+  -- exo ファイルのヘッダ部分を組み立て
   local proj = GCMZDrops.getexeditfileinfo()
   local oini = GCMZDrops.inistring("")
   local totallen = math.max(values.WAV_END, values.LIPSYNC_END, values.MPSLIDER_END, values.SUBTITLE_END)
@@ -462,10 +462,10 @@ function P.generateexo(wavfilepath, wavlen, subtitle, exabase, state, j)
   oini:set("exedit", "audio_rate", proj.audio_rate)
   oini:set("exedit", "audio_ch", proj.audio_ch)
 
-  -- 僆僽僕僃僋僩偺憓擖
+  -- オブジェクトの挿入
   local index = 0
 
-  -- 壒惡傪慻傒棫偰
+  -- 音声を組み立て
   if wavfilepath ~= nil then
     local aini = P.exaread(exabase, "wav")
     setting:wav_examodifler_wav(aini, values, modifiers)
@@ -474,13 +474,13 @@ function P.generateexo(wavfilepath, wavlen, subtitle, exabase, state, j)
   end
 
   if setting.wav_mergedprep > 0 then
-    -- 弨旛僆僽僕僃僋僩傪慻傒棫偰
+    -- 準備オブジェクトを組み立て
     local aini = GCMZDrops.inistring("")
     setting:wav_examodifler_mergedprep(aini, values, modifiers)
     P.insertexa(oini, aini, index, index + 1)
     index = index + 1
   else
-    -- 岥僷僋弨旛傪慻傒棫偰
+    -- 口パク準備を組み立て
     if wavfilepath ~= nil and setting.wav_lipsync == 1 then
       local aini = P.exaread(exabase, "lipsync")
       setting:wav_examodifler_lipsync(aini, values, modifiers)
@@ -488,7 +488,7 @@ function P.generateexo(wavfilepath, wavlen, subtitle, exabase, state, j)
       index = index + 1
     end
 
-    -- 懡栚揑僗儔僀僟乕傪慻傒棫偰
+    -- 多目的スライダーを組み立て
     if setting.wav_mpslider > 0 then
       local aini = GCMZDrops.inistring("")
       setting:wav_examodifler_mpslider(aini, values, modifiers)
@@ -496,7 +496,7 @@ function P.generateexo(wavfilepath, wavlen, subtitle, exabase, state, j)
       index = index + 1
     end
 
-    -- 帤枊弨旛傪慻傒棫偰
+    -- 字幕準備を組み立て
     if setting.wav_subtitle > 0 then
       local aini = P.exaread(exabase, "subtitle")
       setting:wav_examodifler_subtitle(aini, values, modifiers)
@@ -512,7 +512,7 @@ function P.generateexo(wavfilepath, wavlen, subtitle, exabase, state, j)
   end
   f:write(tostring(oini))
   f:close()
-  debug_print("["..P.name.."] 偑僪儘僢僾偝傟偨僼傽僀儖傪 exo 僼傽僀儖偵嵎偟懼偊傑偟偨丅")
+  debug_print("["..P.name.."] 用exo文件替换了拖放文件。")
 
   if state.frameadvance ~= nil and state.frameadvance > 0 then
     state.frameadvance = totallen

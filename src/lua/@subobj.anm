@@ -1,9 +1,9 @@
-@僼僃乕僪
---track0:懍偝(昩),0,1,0.10,0.01
---track1:娫妘(昩),0,1,0.01,0.01
---track2:奼戝棪,0,100,1,0.01
---track3:X嵗昗,-100,100,4,0.01
---check0:僼僃乕僪傾僂僩偼僔儞僾儖,1
+@淡化
+--track0:速度(秒),0,1,0.10,0.01
+--track1:间隔(秒),0,1,0.01,0.01
+--track2:缩放率,0,100,1,0.01
+--track3:X坐标,-100,100,4,0.01
+--check0:简易淡出,1
 local p, ep
 if obj.track0 > 0 then
   local eofs = obj.check0 and 0 or (obj.num-obj.index-1)*obj.track1
@@ -27,10 +27,10 @@ obj.alpha = obj.alpha * p
 obj.zoom = obj.zoom * p + (obj.zoom * obj.track2) * (1 - p)
 obj.ox = obj.ox * p + (obj.ox + obj.track3) * (1 - p)
 
-@婎杮搊応
---track0:懍偝(昩),-1,1,0.10,0.01
---track1:娫妘(昩),0,1,0.03,0.01
---track2:摟柧搙,0,1,1,0.01
+@基本入场
+--track0:速度(秒),-1,1,0.10,0.01
+--track1:间隔(秒),0,1,0.03,0.01
+--track2:透明度,0,1,1,0.01
 --dialog:x/chk,local x=1;y/chk,local y=0;rx,local rx=0;ry,local ry=0;rz,local rz=0;
 local p
 if obj.track0 > 0 then
@@ -54,11 +54,11 @@ obj.rx = obj.rx * (1 - p) + rx * p
 obj.ry = obj.ry * (1 - p) + ry * p
 obj.rz = obj.rz * (1 - p) + rz * p
 
-@憡懳堏摦
---track0:懍偝(昩),0,1,0.30,0.01
---track1:娫妘(昩),0,1,0.03,0.01
---track2:摟柧搙,0,1,1,0.01
---dialog:X,local x=50;Y,local y=0;Z,local z=0;壛懍/chk,local a=0;尭懍/chk,local b=1;搊応/chk,local ein=1;戅応/chk,local eout=1;
+@相对运动
+--track0:速度(秒),0,1,0.30,0.01
+--track1:间隔(秒),0,1,0.03,0.01
+--track2:透明度,0,1,1,0.01
+--dialog:X,local x=50;Y,local y=0;Z,local z=0;加速/chk,local a=0;减速/chk,local b=1;入场/chk,local ein=1;出场/chk,local eout=1;
 if subobj.notfound then
   obj.alpha = obj.alpha * obj.track2
   return
@@ -88,12 +88,12 @@ obj.ox = obj.ox * (1 - p) + (obj.ox + x) * p
 obj.oy = obj.oy * (1 - p) + (obj.oy + y) * p
 obj.oz = obj.oz * (1 - p) + (obj.oz + z) * p
 
-@傏傛傫
---track0:挿偝(昩),0,5,0.30,0.01
---track1:娫妘(昩),0,1,0.03,0.01
---track2:懍偝(昩),0.01,1,0.1,0.01
---track3:僒僀僘,0.01,0.5,0.05,0.01
---dialog:墶埵抲(0-2),local ax=1;廲埵抲(0-2),local ay=2;
+@弹跳
+--track0:长度(秒),0,5,0.30,0.01
+--track1:间隔(秒),0,1,0.03,0.01
+--track2:速度(秒),0.01,1,0.1,0.01
+--track3:大小,0.01,0.5,0.05,0.01
+--dialog:水平位置(0-2),local ax=1;垂直位置(0-2),local ay=2;
 local p = math.max(0, math.min(1, (obj.track0-subobj.time+obj.index*obj.track1)/obj.track0))
 if p == 0 or p == 1 then
   return
@@ -110,7 +110,7 @@ if ay ~= 1 then
   obj.oy = obj.oy + (ay == 0 and ofs or -ofs)
 end
 
-@XYZ斀塮
+@XYZ应用
 if not subobj.notfound then
   obj.ox = obj.ox + subobj.x
   obj.oy = obj.oy + subobj.y

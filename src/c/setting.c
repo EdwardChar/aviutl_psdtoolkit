@@ -94,7 +94,7 @@ static INT_PTR CALLBACK setting_dialog_wndproc(HWND const dlg,
   case WM_INITDIALOG: {
     struct setting_dialog *const sd = (void *)lparam;
     SetPropW(dlg, setting_dialog_prop, (HANDLE)sd);
-    SetWindowTextW(dlg, L"PSDToolKit 環境設定 " VERSION_WIDE);
+    SetWindowTextW(dlg, L"PSDToolKit 首选项 " VERSION_WIDE);
     set_check(dlg, ID_CHK_GENERATE_LIPSYNC, sd->generate_lipsync);
     set_check(dlg, ID_CHK_GENERATE_MPSLIDER, sd->generate_mpslider);
     set_check(dlg, ID_CHK_GENERATE_SUBTITLE, sd->generate_subtitle);
@@ -118,7 +118,7 @@ static INT_PTR CALLBACK setting_dialog_wndproc(HWND const dlg,
     set_int(dlg, ID_EDT_MPSLIDER_MARGIN_RIGHT, sd->mpslider_margin_right);
     {
       HWND const h = GetDlgItem(dlg, ID_CMB_SUBTITLE_ENCODING);
-      SendMessageW(h, CB_ADDSTRING, 0, (LPARAM)L"Shift_JIS");
+      SendMessageW(h, CB_ADDSTRING, 0, (LPARAM)L"GBK");
       SendMessageW(h, CB_ADDSTRING, 0, (LPARAM)L"UTF-8");
       RECT rect = {0};
       GetWindowRect(h, &rect);

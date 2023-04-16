@@ -1,6 +1,6 @@
 local P = {}
 
-P.name = "PSD 僼傽僀儖偺 exo 壔"
+P.name = "PSD文件exo化"
 
 P.priority = 0
 
@@ -8,7 +8,7 @@ function P.ondragenter(files, state)
   for i, v in ipairs(files) do
     local ext = v.filepath:match("[^.]+$"):lower()
     if ext == "psd" or ext == "psb" then
-      -- 僼傽僀儖偺奼挘巕偑 psd 偐 psb 偺僼傽僀儖偑偁偭偨傜張棟偱偒偦偆側偺偱 true
+      -- ファイルの拡張子が psd か psb のファイルがあったら処理できそうなので true
       return true
     end
   end
@@ -16,7 +16,7 @@ function P.ondragenter(files, state)
 end
 
 function P.ondragover(files, state)
-  -- ondragenter 偱張棟偱偒偦偆側傕偺偼 ondragover 偱傕張棟偱偒偦偆側偺偱挷傋偢 true
+  -- ondragenter で処理できそうなものは ondragover でも処理できそうなので調べず true
   return true
 end
 
@@ -24,37 +24,37 @@ function P.ondragleave()
 end
 
 function P.encodelua(s)
-  s = GCMZDrops.convertencoding(s, "sjis", "utf8")
+  s = GCMZDrops.convertencoding(s, "gbk", "utf8")
   s = GCMZDrops.encodeluastring(s)
-  s = GCMZDrops.convertencoding(s, "utf8", "sjis")
+  s = GCMZDrops.convertencoding(s, "utf8", "gbk")
   return s
 end
 
 function P.ondrop(files, state)
   for i, v in ipairs(files) do
-    -- 僼傽僀儖偺奼挘巕偑 psd 偐 psb 偩偭偨傜
+    -- ファイルの拡張子が psd か psb だったら
     local ext = v.filepath:match("[^.]+$"):lower()
     if ext == "psd" or ext == "psb" then
       local filepath = v.filepath
       local filename = filepath:match("[^/\\]+$")
 
-      -- 堦弿偵 pfv 僼傽僀儖傪捦傫偱偄側偄偐挷傋傞
+      -- 一緒に pfv ファイルを掴んでいないか調べる
       local psddir = filepath:sub(1, #filepath-#filename)
       for i2, v2 in ipairs(files) do
         if v2.filepath:match("[^.]+$"):lower() == "pfv" then
           local pfv = v2.filepath:match("[^/\\]+$")
           local pfvdir = v2.filepath:sub(1, #v2.filepath-#pfv)
           if psddir == pfvdir then
-            -- 摨偠僼僅儖僟乕撪偺 pfv 僼傽僀儖傪堦弿偵搳偘崬傫偱偄偨偺偱楢寢
+            -- 同じフォルダー内の pfv ファイルを一緒に投げ込んでいたので連結
             filepath = filepath .. "|" .. pfv
-            -- 偙偺 pfv 僼傽僀儖偼僪儘僢僾偝傟傞僼傽僀儖偐傜偼庢傝彍偄偰偍偔
+            -- この pfv ファイルはドロップされるファイルからは取り除いておく
             table.remove(files, i2)
             break
           end
         end
       end
 
-      -- 僼傽僀儖傪捈愙撉傒崬傓戙傢傝偵 exo 僼傽僀儖傪慻傒棫偰傞
+      -- ファイルを直接読み込む代わりに exo ファイルを組み立てる
       math.randomseed(os.time())
       local tag = math.floor(math.random()*0x7fffffff + 1)
       local proj = GCMZDrops.getexeditfileinfo()
@@ -75,12 +75,12 @@ layer=1
 overlay=1
 camera=0
 [0.0]
-_name=]] .. (jp and [[僥僉僗僩]] or [[Text]]) .. "\r\n" .. [[
-]] .. (jp and [[僒僀僘]] or [[Size]]) .. [[=1
-]] .. (jp and [[昞帵懍搙]] or [[vDisplay]]) .. [[=0.0
-]] .. (jp and [[暥帤枅偵屄暿僆僽僕僃僋僩]] or [[1char1obj]]) .. [[=0
-]] .. (jp and [[堏摦嵗昗忋偵昞帵偡傞]] or [[Show on motion coordinate]]) .. [[=0
-]] .. (jp and [[帺摦僗僋儘乕儖]] or [[Automatic scrolling]]) .. [[=0
+_name=]] .. (jp and [[文本]] or [[Text]]) .. "\r\n" .. [[
+]] .. (jp and [[大小]] or [[Size]]) .. [[=1
+]] .. (jp and [[显示速度]] or [[vDisplay]]) .. [[=0.0
+]] .. (jp and [[文字单一独立]] or [[1char1obj]]) .. [[=0
+]] .. (jp and [[沿路径排列]] or [[Show on motion coordinate]]) .. [[=0
+]] .. (jp and [[自动滚动]] or [[Automatic scrolling]]) .. [[=0
 B=0
 I=0
 type=0
@@ -93,10 +93,10 @@ spacing_y=0
 precision=0
 color=ffffff
 color2=000000
-font=]] .. (jp and [[MS UI Gothic]] or [[Segoe UI]]) .. "\r\n" .. [[
-text=]] .. GCMZDrops.encodeexotext("<?-- " .. filename .. " \r\n\r\no={ -- 僆僾僔儑儞愝掕\r\nlipsync = 0    ,-- 岥僷僋弨旛偺儗僀儎乕斣崋\r\nmpslider = 0    ,-- 懡栚揑僗儔僀僟乕偺儗僀儎乕斣崋\r\nscene = 0    ,-- 僔乕儞斣崋\r\ntag = " .. tag .. "    ,-- 幆暿梡僞僌\r\nsendguard = 1    ,-- 乽憲傞乿岆憲怣曐岇\r\n\r\n-- 岥僷僋弨旛偺僨僼僅儖僩愝掕\r\nls_locut = 100    ,-- 儘乕僇僢僩\r\nls_hicut = 1000    ,-- 僴僀僇僢僩\r\nls_threshold = 20    ,-- 偟偒偄抣\r\nls_sensitivity = 1    ,-- 姶搙\r\n\r\n-- 埲壓偼彂偒姺偊側偄偱偔偩偝偄\r\nptkf=" .. P.encodelua(filepath) .. ",ptkl=\"\"}PSD,subobj=require(\"PSDToolKit\").PSDState.init(obj,o)?>") .. "\r\n" .. [[
+font=]] .. (jp and [[黑体]] or [[微软雅黑]]) .. "\r\n" .. [[
+text=]] .. GCMZDrops.encodeexotext("<?-- " .. filename .. " \r\n\r\no={ -- 选项设定\r\nlipsync = 0    ,-- 对口型预备图层编号\r\nmpslider = 0    ,-- 眼部组件滑块图层编号\r\nscene = 0    ,-- 次合成编号\r\ntag = " .. tag .. "    ,-- 识别用标签\r\nsendguard = 1    ,-- “传送”误发送保护\r\n\r\n-- 对口型预备默认设定\r\nls_locut = 100    ,-- 低切\r\nls_hicut = 1000    ,-- 高切\r\nls_threshold = 20    ,-- 阈值\r\nls_sensitivity = 1    ,-- 敏感度\r\n\r\n-- 请勿更改以下字符串\r\nptkf=" .. P.encodelua(filepath) .. ",ptkl=\"\"}PSD,subobj=require(\"PSDToolKit\").PSDState.init(obj,o)?>") .. "\r\n" .. [[
 [0.1]
-_name=]] .. (jp and [[傾僯儊乕僔儑儞岠壥]] or [[Animation effect]]) .. "\r\n" .. [[
+_name=]] .. (jp and [[动画效果]] or [[Animation effect]]) .. "\r\n" .. [[
 track0=-1.00
 track1=100.00
 track2=0.00
@@ -104,24 +104,24 @@ track3=0.00
 check0=100
 type=0
 filter=2
-name=昤夋@PSD
+name=描画@PSD
 param=
 [0.2]
-_name=]] .. (jp and [[昗弨昤夋]] or [[Standard drawing]]) .. "\r\n" .. [[
+_name=]] .. (jp and [[标准属性]] or [[Standard drawing]]) .. "\r\n" .. [[
 X=0.0
 Y=0.0
 Z=0.0
-]] .. (jp and [[奼戝棪]] or [[Zoom%]]) .. [[=100.00
-]] .. (jp and [[摟柧搙]] or [[Clearness]]) .. [[=0.0
-]] .. (jp and [[夞揮\]] or [[Rotation]]) .. [[=0.00
+]] .. (jp and [[缩放率]] or [[Zoom%]]) .. [[=100.00
+]] .. (jp and [[透明度]] or [[Clearness]]) .. [[=0.0
+]] .. (jp and [[旋转\]] or [[Rotation]]) .. [[=0.00
 blend=0
 ]]
 
-      -- PSDToolKit 僂傿儞僪僂偵僪儘僢僾偝傟偨僼傽僀儖傪捛壛偡傞
-      -- 堦帪揑偵 package.cpath 傪彂偒姺偊 PSDToolKitBridge.dll 傪撉傒崬傫偱 addfile 傪屇傇
+      -- PSDToolKit ウィンドウにドロップされたファイルを追加する
+      -- 一時的に package.cpath を書き換え PSDToolKitBridge.dll を読み込んで addfile を呼ぶ
       local origcpath = package.cpath
       package.cpath = GCMZDrops.scriptdir() .. "..\\script\\PSDToolKit\\?.dll"
-      require('PSDToolKitBridge').addfile(GCMZDrops.convertencoding(filepath, "sjis", "utf8"), tag)
+      require('PSDToolKitBridge').addfile(GCMZDrops.convertencoding(filepath, "gbk", "utf8"), tag)
       package.cpath = origcpath
 
       local filepath = GCMZDrops.createtempfile("psd", ".exo")
@@ -131,11 +131,11 @@ blend=0
       end
       f:write(exo)
       f:close()
-      debug_print("["..P.name.."] 偑 " .. v.filepath .. " 傪 exo 僼傽僀儖偵嵎偟懼偊傑偟偨丅尦偺僼傽僀儖偼 orgfilepath 偱庢摼偱偒傑偡丅")
+      debug_print("["..P.name.."] 用exo文件替换了 " .. v.filepath .. " 。原文件可以通过orgfilepath获取。")
       files[i] = {filepath=filepath, orgfilepath=v.filepath}
     end
   end
-  -- 懠偺僀儀儞僩僴儞僪儔乕偵傕張棟傪偝偣偨偄偺偱偙偙偼忢偵 false
+  -- 他のイベントハンドラーにも処理をさせたいのでここは常に false
   return false
 end
 

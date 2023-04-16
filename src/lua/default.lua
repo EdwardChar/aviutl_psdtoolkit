@@ -1,18 +1,18 @@
 -- ============================================================
--- ¡’ˆÓ¡
+-- â– æ³¨æ„â– 
 -- ============================================================
 --
--- ‚±‚Ìƒtƒ@ƒCƒ‹‚É‚Íİ’è‚ÌƒfƒtƒHƒ‹ƒg’l‚ª‘‚¢‚Ä‚ ‚è‚Ü‚·‚ªA
--- ‚±‚ê‚Íƒ†[ƒU[‚ª‘‚«Š·‚¦‚é‚½‚ß‚Ìƒtƒ@ƒCƒ‹‚Å‚Í‚ ‚è‚Ü‚¹‚ñB
+-- ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«ã¯è¨­å®šã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ãŒæ›¸ã„ã¦ã‚ã‚Šã¾ã™ãŒã€
+-- ã“ã‚Œã¯ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒæ›¸ãæ›ãˆã‚‹ãŸã‚ã®ãƒ•ã‚¡ã‚¤ãƒ«ã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
 -- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--- İ’è‚ğ•ÏX‚µ‚½‚¢‚Í‚±‚Ìƒtƒ@ƒCƒ‹‚ğ‘‚«Š·‚¦‚é‚Ì‚Å‚Í‚È‚­A
--- `setting.lua-template` ‚Ìƒtƒ@ƒCƒ‹–¼‚ğ `setting.lua` ‚É•ÏX‚µA
--- `setting.lua` “à‚É•K—v‚Èİ’è‚Ì‚İ‚ğ‘‚«‚Ş‚±‚Æ‚Åİ’è‚µ‚Ä‚­‚¾‚³‚¢B
+-- è¨­å®šã‚’å¤‰æ›´ã—ãŸã„æ™‚ã¯ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãæ›ãˆã‚‹ã®ã§ã¯ãªãã€
+-- `setting.lua-template` ã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ `setting.lua` ã«å¤‰æ›´ã—ã€
+-- `setting.lua` å†…ã«å¿…è¦ãªè¨­å®šã®ã¿ã‚’æ›¸ãè¾¼ã‚€ã“ã¨ã§è¨­å®šã—ã¦ãã ã•ã„ã€‚
 --
--- ã‹L‚Ìè‡‚Ì’Ê‚è‚És‚¤‚±‚Æ‚ÅAPSDToolKit ‚ğƒo[ƒWƒ‡ƒ“ƒAƒbƒv‚·‚é‚É
--- İ’è‚ªã‘‚«‚³‚ê‚é‚Ì‚ğ–h‚®‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+-- ä¸Šè¨˜ã®æ‰‹é †ã®é€šã‚Šã«è¡Œã†ã“ã¨ã§ã€PSDToolKit ã‚’ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚¢ãƒƒãƒ—ã™ã‚‹æ™‚ã«
+-- è¨­å®šãŒä¸Šæ›¸ãã•ã‚Œã‚‹ã®ã‚’é˜²ãã“ã¨ãŒã§ãã¾ã™ã€‚
 --
--- g‚¢•û‚ÌÚ‚µ‚¢‰ğà‚Í•t‘®‚Ìƒ}ƒjƒ…ƒAƒ‹‚ğQÆ‚µ‚Ä‚­‚¾‚³‚¢B
+-- ä½¿ã„æ–¹ã®è©³ã—ã„è§£èª¬ã¯ä»˜å±ã®ãƒãƒ‹ãƒ¥ã‚¢ãƒ«ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚
 --
 -- ============================================================
 
@@ -40,7 +40,7 @@ P.wav_subtitle = 0
 P.wav_subtitle_group = 1
 P.wav_subtitle_margin_left = 0
 P.wav_subtitle_margin_right = 0
-P.wav_subtitle_encoding = "sjis"
+P.wav_subtitle_encoding = "gbk"
 function P:wav_subtitle_replacer(s) return s end
 function P:wav_subtitle_scripter(s)
   if s:sub(-2) ~= "\r\n" then
@@ -80,7 +80,7 @@ function P:wav_examodifler_mpslider(exa, values, modifiers)
   local mpsidx = 0
   for i = 0, self.wav_mpslider-1 do
     local key = "vo." .. i
-    exa:set(key, "_name", i == 0 and (jp and "ƒJƒXƒ^ƒ€ƒIƒuƒWƒFƒNƒg" or "Custom object") or (jp and "ƒAƒjƒ[ƒVƒ‡ƒ“Œø‰Ê" or "Animation effect"))
+    exa:set(key, "_name", i == 0 and (jp and "è‡ªå®šä¹‰ç‰©ä»¶" or "Custom object") or (jp and "åŠ¨ç”»æ•ˆæœ" or "Animation effect"))
     exa:set(key, "track0", slidervalue(mpslidervalues[mpsidx+1]) or "0.00,0.00,3")
     exa:set(key, "track1", slidervalue(mpslidervalues[mpsidx+2]) or "0.00,0.00,3")
     exa:set(key, "track2", slidervalue(mpslidervalues[mpsidx+3]) or "0.00,0.00,3")
@@ -89,17 +89,17 @@ function P:wav_examodifler_mpslider(exa, values, modifiers)
     exa:set(key, "check0", "0")
     exa:set(key, "type", "0")
     exa:set(key, "filter", "2")
-    exa:set(key, "name", "‘½–Ú“IƒXƒ‰ƒCƒ_[@PSDToolKit")
+    exa:set(key, "name", "çœ¼éƒ¨ç»„ä»¶æ»‘å—@PSDToolKit")
     exa:set(key, "param", "")
   end
   local key = "vo." .. self.wav_mpslider
-  exa:set(key, "_name", jp and "•W€•`‰æ" or "Standard drawing")
+  exa:set(key, "_name", jp and "æ ‡å‡†å±æ€§" or "Standard drawing")
   exa:set(key, "X", "0.0")
   exa:set(key, "Y", "0.0")
   exa:set(key, "Z", "0.0")
-  exa:set(key, jp and "Šg‘å—¦" or "Zoom%", "100.00")
-  exa:set(key, jp and "“§–¾“x" or "Clearness", "100.0")
-  exa:set(key, jp and "‰ñ“]" or "Rotation", "0.00")
+  exa:set(key, jp and "ç¼©æ”¾ç‡" or "Zoom%", "100.00")
+  exa:set(key, jp and "é€æ˜åº¦" or "Clearness", "100.0")
+  exa:set(key, jp and "æ—‹è½¬" or "Rotation", "0.00")
   exa:set(key, "blend", "0")
 end
 function P:wav_examodifler_subtitle(exa, values, modifiers)
@@ -107,7 +107,7 @@ function P:wav_examodifler_subtitle(exa, values, modifiers)
   exa:set("vo", "end", values.SUBTITLE_END)
   exa:set("vo", "group", self.wav_subtitle_group)
   local text = values.SUBTITLE_TEXT
-  -- wav_subtitle ‚ª 2 ‚Ì‚ÍƒeƒLƒXƒg‚ğƒXƒNƒŠƒvƒg‚Æ‚µ‚Ä®Œ`‚·‚é
+  -- wav_subtitle ãŒ 2 ã®æ™‚ã¯ãƒ†ã‚­ã‚¹ãƒˆã‚’ã‚¹ã‚¯ãƒªãƒ—ãƒˆã¨ã—ã¦æ•´å½¢ã™ã‚‹
   if self.wav_subtitle == 2 then
     text = self:wav_subtitle_scripter(text)
   end
@@ -120,12 +120,12 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
   exa:set("vo", "group", "1")
   local idx = 0
   local key = "vo." .. idx
-  exa:set(key, "_name", jp and "ƒeƒLƒXƒg" or "Text")
-  exa:set(key, jp and "ƒTƒCƒY" or "Size", "1")
-  exa:set(key, jp and "•\\¦‘¬“x" or "vDisplay", "0.0")
-  exa:set(key, jp and "•¶š–ˆ‚ÉŒÂ•ÊƒIƒuƒWƒFƒNƒg" or "1char1obj", "0")
-  exa:set(key, jp and "ˆÚ“®À•Wã‚É•\\¦‚·‚é" or "Show on motion coordinate", "0")
-  exa:set(key, jp and "©“®ƒXƒNƒ[ƒ‹" or "Automatic scrolling", "0")
+  exa:set(key, "_name", jp and "æ–‡æœ¬" or "Text")
+  exa:set(key, jp and "å¤§å°" or "Size", "1")
+  exa:set(key, jp and "æ˜¾ç¤ºé€Ÿåº¦" or "vDisplay", "0.0")
+  exa:set(key, jp and "æ–‡å­—å•ä¸€ç‹¬ç«‹" or "1char1obj", "0")
+  exa:set(key, jp and "æ²¿è·¯å¾„æ’åˆ—" or "Show on motion coordinate", "0")
+  exa:set(key, jp and "è‡ªåŠ¨æ»šåŠ¨" or "Automatic scrolling", "0")
   exa:set(key, "B", "0")
   exa:set(key, "I", "0")
   exa:set(key, "type", "0")
@@ -138,7 +138,7 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
   exa:set(key, "precision", "0")
   exa:set(key, "color", "ffffff")
   exa:set(key, "color2", "000000")
-  exa:set(key, "font", jp and "MS UI Gothic" or "Segoe UI")
+  exa:set(key, "font", jp and "é»‘ä½“" or "ç­‰çº¿")
   exa:set(key, "text", modifiers.ENCODE_TEXT(self:wav_mergedprep_scripter(self.wav_subtitle == 2 and values.SUBTITLE_TEXT or "", {
     st_mgl = values.SUBTITLE_START - 1,
     st_mgr = endlen - values.SUBTITLE_END,
@@ -151,7 +151,7 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
 
   if self.wav_lipsync == 1 and values.LIPSYNC_PATH ~= nil then
     key = "vo." .. idx
-    exa:set(key, "_name", jp and "ƒAƒjƒ[ƒVƒ‡ƒ“Œø‰Ê" or "Animation effect")
+    exa:set(key, "_name", jp and "åŠ¨ç”»æ•ˆæœ" or "Animation effect")
     exa:set(key, "track0", "0.00")
     exa:set(key, "track1", "0.00")
     exa:set(key, "track2", "0.00")
@@ -159,7 +159,7 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
     exa:set(key, "check0", "0")
     exa:set(key, "type", "0")
     exa:set(key, "filter", "2")
-    exa:set(key, "name", "ŒûƒpƒN€”õ@PSDToolKit")
+    exa:set(key, "name", "å¯¹å£å‹åŒæ­¥@PSDToolKit")
     exa:set(key, "param", "file=" .. modifiers.ENCODE_LUA_STRING(values.LIPSYNC_PATH))
     idx = idx + 1
   end
@@ -168,7 +168,7 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
   local mpsidx = 0
   for i = 0, self.wav_mpslider-1 do
     key = "vo." .. idx
-    exa:set(key, "_name", jp and "ƒAƒjƒ[ƒVƒ‡ƒ“Œø‰Ê" or "Animation effect")
+    exa:set(key, "_name", jp and "åŠ¨ç”»æ•ˆæœ" or "Animation effect")
     exa:set(key, "track0", slidervalue(mpslidervalues[mpsidx+1]) or "0.00,0.00,3")
     exa:set(key, "track1", slidervalue(mpslidervalues[mpsidx+2]) or "0.00,0.00,3")
     exa:set(key, "track2", slidervalue(mpslidervalues[mpsidx+3]) or "0.00,0.00,3")
@@ -177,18 +177,18 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
     exa:set(key, "check0", "0")
     exa:set(key, "type", "0")
     exa:set(key, "filter", "2")
-    exa:set(key, "name", "‘½–Ú“IƒXƒ‰ƒCƒ_[@PSDToolKit")
+    exa:set(key, "name", "çœ¼éƒ¨ç»„ä»¶æ»‘å—@PSDToolKit")
     exa:set(key, "param", "")
     idx = idx + 1
   end
   key = "vo." .. idx
-  exa:set(key, "_name", jp and "•W€•`‰æ" or "Standard drawing")
+  exa:set(key, "_name", jp and "æ ‡å‡†å±æ€§" or "Standard drawing")
   exa:set(key, "X", "0.0")
   exa:set(key, "Y", "0.0")
   exa:set(key, "Z", "0.0")
-  exa:set(key, jp and "Šg‘å—¦" or "Zoom%", "100.00")
-  exa:set(key, jp and "“§–¾“x" or "Clearness", "100.0")
-  exa:set(key, jp and "‰ñ“]" or "Rotation", "0.00")
+  exa:set(key, jp and "ç¼©æ”¾ç‡" or "Zoom%", "100.00")
+  exa:set(key, jp and "é€æ˜åº¦" or "Clearness", "100.0")
+  exa:set(key, jp and "æ—‹è½¬" or "Rotation", "0.00")
   exa:set(key, "blend", "0")
 end
 

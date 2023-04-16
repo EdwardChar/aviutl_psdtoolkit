@@ -1,8 +1,8 @@
-@岥僷僋弨旛
---track0:儘乕僇僢僩,0,16000,0,1
---track1:僴僀僇僢僩,0,16000,0,1
---track2:偟偒偄抣,0,2000,0,1
---track3:姶搙,0,15,0,1
+@对口型预备
+--track0:低切,0,16000,0,1
+--track1:高切,0,16000,0,1
+--track2:阈值,0,2000,0,1
+--track3:灵敏度,0,15,0,1
 --file:
 tonumber(nil)
 if file ~= nil and file ~= "" then
@@ -14,7 +14,7 @@ if file ~= nil and file ~= "" then
   file = nil
 end
 
-@懡栚揑僗儔僀僟乕
+@眼部组件滑块
 --track0:,0,100,0,1
 --track1:,0,100,0,1
 --track2:,0,100,0,1
@@ -25,70 +25,70 @@ if o ~= nil then
   PSDToolKit.valueholder:set(o.layer, {obj.track0, obj.track1, obj.track2, obj.track3}, o)
 end
 
-@悂偒弌偟
---track0:摟柧搙,0,100,0,0.01
---dialog:怓/col,local col=0xffffff;梋敀 廲,local mtb=12;梋敀 墶,local mlr=24;妏娵,local corner=16;攝抲(0-8),local pos=7;偟偭傐(0-12),local tailpos=8;偟偭傐X,local tx=0;偟偭傐Y,local ty=0;偟偭傐暆,local tw=12;偟偭傐崅偝,local th=12;偟偭傐愭X,local ex=0;偟偭傐愭Y,local ey=0
+@气泡框
+--track0:透明度,0,100,0,0.01
+--dialog:颜色/col,local col=0xffffff;余白 垂直,local mtb=12;余白 水平,local mlr=24;圆角,local corner=16;配置(0-8),local pos=7;框尾(0-12),local tailpos=8;框尾X,local tx=0;框尾Y,local ty=0;框尾宽度,local tw=12;框尾高度,local th=12;框尾尖X,local ex=0;框尾尖Y,local ey=0
 if not subobj.notfound then
-  -- 儅乕僕儞傪妋曐偟側偑傜揾傝偮傇偟偰妏娵張棟
+  -- マージンを確保しながら塗りつぶして角丸処理
   local w, h = obj.w/2 + mlr, obj.h/2 + mtb
   obj.copybuffer("cache:text", "obj")
   obj.setoption("drawtarget", "tempbuffer", w*2, h*2)
-  obj.load("figure", "巐妏宍", col, 1)
+  obj.load("figure", "四边形", col, 1)
   obj.drawpoly(-w, -h, 0, w, -h, 0, w, h, 0, -w, h, 0)
   obj.load("tempbuffer")
-  obj.effect("嫬奅傏偐偟", "斖埻", corner)
-  obj.effect("墢庢傝", "僒僀僘", 1, "傏偐偟", 0, "color", col)
-  obj.effect("墢庢傝", "僒僀僘", 1, "傏偐偟", 0, "color", col)
+  obj.effect("边缘模糊", "范围", corner)
+  obj.effect("描边", "大小", 1, "模糊", 0, "color", col)
+  obj.effect("描边", "大小", 1, "模糊", 0, "color", col)
 
   local textx, texty = 0, 0
 
-  -- 偟偭傐
+  -- しっぽ
   if tailpos ~= 0 then
     tw, th = tw/2, th/2
     local x, y, ext
     if tailpos == 1 then
-      x, y, ext = -w + tw, -h, "忋"
+      x, y, ext = -w + tw, -h, "上"
     elseif tailpos == 2 then
-      x, y, ext = 0, -h, "忋"
+      x, y, ext = 0, -h, "上"
     elseif tailpos == 3 then
-      x, y, ext = w - tw, -h, "忋"
+      x, y, ext = w - tw, -h, "上"
     elseif tailpos == 4 then
-      x, y, ext = w, -h + th, "塃"
+      x, y, ext = w, -h + th, "右"
     elseif tailpos == 5 then
-      x, y, ext = w, 0, "塃"
+      x, y, ext = w, 0, "右"
     elseif tailpos == 6 then
-      x, y, ext = w, h - th, "塃"
+      x, y, ext = w, h - th, "右"
     elseif tailpos == 7 then
-      x, y, ext = w - tw, h, "壓"
+      x, y, ext = w - tw, h, "下"
     elseif tailpos == 8 then
-      x, y, ext = 0, h, "壓"
+      x, y, ext = 0, h, "下"
     elseif tailpos == 9 then
-      x, y, ext = -w + tw, h, "壓"
+      x, y, ext = -w + tw, h, "下"
     elseif tailpos == 10 then
-      x, y, ext = -w, h - th, "嵍"
+      x, y, ext = -w, h - th, "左"
     elseif tailpos == 11 then
-      x, y, ext = -w, 0, "嵍"
+      x, y, ext = -w, 0, "左"
     elseif tailpos == 12 then
-      x, y, ext = -w, -h + th, "嵍"
+      x, y, ext = -w, -h + th, "左"
     end
     x, y = x + tx, y + ty
-    if ext == "嵍" or ext == "塃" then
-      obj.effect("椞堟奼挘", ext, tw*2)
+    if ext == "左" or ext == "右" then
+      obj.effect("区域扩展", ext, tw*2)
     else
-      obj.effect("椞堟奼挘", ext, th*2)
+      obj.effect("区域扩展", ext, th*2)
     end
     obj.copybuffer("tmp", "obj")
-    obj.load("figure", "巐妏宍", col, 1)
-    if ext == "嵍" then
+    obj.load("figure", "四边形", col, 1)
+    if ext == "左" then
       obj.drawpoly(x - tw + ex, y + ey, 0, x + tw, y - th, 0, x + tw, y, 0, x + tw, y + th, 0)
       textx, texty = tw, 0
-    elseif ext == "壓" then
+    elseif ext == "下" then
       obj.drawpoly(x - tw, y - th, 0, x, y - th, 0, x + tw, y - th, 0, x + ex, y + th + ey, 0)
       textx, texty = 0, -th
-    elseif ext == "塃" then
+    elseif ext == "右" then
       obj.drawpoly(x - tw, y - th, 0, x + tw + ex, y + ey, 0, x - tw, y + th, 0, x - tw, y, 0)
       textx, texty = -tw, 0
-    elseif ext == "忋" then
+    elseif ext == "上" then
       obj.drawpoly(x - tw, y + th, 0, x + ex, y - th + ey, 0, x + tw, y + th, 0, x, y + th, 0)
       textx, texty = 0, th
     end
@@ -105,7 +105,7 @@ if not subobj.notfound then
 
   obj.load("tempbuffer")
 
-  -- 攝抲
+  -- 配置
   if pos == 0 or pos == 3 or pos == 6 then
     obj.cx = -obj.w/2
   elseif pos == 2 or pos == 5 or pos == 8 then

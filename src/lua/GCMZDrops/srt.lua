@@ -1,6 +1,6 @@
 local P = {}
 
-P.name = "SRT 僼傽僀儖傪僀儞億乕僩"
+P.name = "导入SRT文件"
 
 P.priority = 0
 
@@ -9,7 +9,7 @@ local wavP = require("psdtoolkit_wav")
 function P.ondragenter(files, state)
   for i, v in ipairs(files) do
     if v.filepath:match("[^.]+$"):lower() == "srt" then
-      -- 僼傽僀儖偺奼挘巕偑 srt 偺僼傽僀儖偑偁偭偨傜張棟偱偒偦偆側偺偱 true
+      -- ファイルの拡張子が srt のファイルがあったら処理できそうなので true
       return true
     end
   end
@@ -17,7 +17,7 @@ function P.ondragenter(files, state)
 end
 
 function P.ondragover(files, state)
-  -- ondragenter 偱張棟偱偒偦偆側傕偺偼 ondragover 偱傕張棟偱偒偦偆側偺偱挷傋偢 true
+  -- ondragenter で処理できそうなものは ondragover でも処理できそうなので調べず true
   return true
 end
 
@@ -81,7 +81,7 @@ function P.parse(filepath)
       endf = nil
     end
   end
-  -- 懡暘昁梫側偄偗偳丄帪娫幉傪柍帇偟偨攝抲傕偱偒傞偺偱堦墳懳嶔
+  -- 多分必要ないけど、時間軸を無視した配置もできるので一応対策
   table.sort(r, function(a, b)
     return a.s < b.s
   end)
@@ -91,11 +91,11 @@ end
 function P.ondrop(files, state)
   local setting = wavP.loadsetting()
   for i, v in ipairs(files) do
-    -- 僼傽僀儖偺奼挘巕偑 srt 側傜
+    -- ファイルの拡張子が srt なら
     if v.filepath:match("[^.]+$"):lower() == "srt" then
-      -- 僾儘僕僃僋僩偺忣曬傪庢摼偡傞
+      -- プロジェクトの情報を取得する
       local proj = GCMZDrops.getexeditfileinfo()
-      -- SRT 僼傽僀儖傪夝愅
+      -- SRT ファイルを解析
       local srt, len = P.parse(v.filepath)
 
       local oini = GCMZDrops.inistring("")
@@ -107,9 +107,9 @@ function P.ondrop(files, state)
       oini:set("exedit", "audio_rate", proj.audio_rate)
       oini:set("exedit", "audio_ch", proj.audio_ch)
       
-      -- SRT 偺撪梕偵廬偭偰僥僉僗僩僆僽僕僃僋僩傪憓擖偟偰偄偔
-      -- 傕偟昞帵偑旐傞応崌偼昞帵愭偺儗僀儎乕傕曄偊傞
-      -- 偨偩丄憓擖儌乕僪1偩偲寢嬊惓偟偔埖偊側偄偺偱偁傑傝堄枴偼側偄偐傕
+      -- SRT の内容に従ってテキストオブジェクトを挿入していく
+      -- もし表示が被る場合は表示先のレイヤーも変える
+      -- ただ、挿入モード1だと結局正しく扱えないのであまり意味はないかも
       local textbase = tostring(wavP.exaread(wavP.resolvepath(v.filepath, setting.srt_exafinder, setting), "srt"))
       local values = {
         START = 0,
@@ -125,9 +125,9 @@ function P.ondrop(files, state)
       local n = 0
       for i, t in ipairs(srt) do
         local subtitle = t.subtitle
-        -- 抲姺梡張棟傪屇傃弌偡
+        -- 置換用処理を呼び出す
         subtitle = setting:wav_subtitle_replacer(subtitle)
-        -- 憓擖儌乕僪偑 1 偺帪偼僥僉僗僩傪僗僋儕僾僩偲偟偰惍宍偡傞
+        -- 挿入モードが 1 の時はテキストをスクリプトとして整形する
         if setting.srt_insertmode == 1 then
           subtitle = setting:srt_subtitle_scripter(subtitle)
         end
@@ -161,11 +161,11 @@ function P.ondrop(files, state)
       end
       exo:write(tostring(oini))
       exo:close()
-      debug_print("["..P.name.."] 偑 " .. v.filepath .. " 傪 exo 僼傽僀儖偵嵎偟懼偊傑偟偨丅尦偺僼傽僀儖偼 orgfilepath 偱庢摼偱偒傑偡丅")
+      debug_print("["..P.name.."] 用exo文件替换了 " .. v.filepath .. " 。原文件可以通过orgfilepath获取。")
       files[i] = {filepath=filepath, orgfilepath=v.filepath}
     end
   end
-  -- 懠偺僀儀儞僩僴儞僪儔乕偵傕張棟傪偝偣偨偄偺偱偙偙偼忢偵 false
+  -- 他のイベントハンドラーにも処理をさせたいのでここは常に false
   return false
 end
 
