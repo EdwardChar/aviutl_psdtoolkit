@@ -1,69 +1,69 @@
 //----------------------------------------------------------------------------------
-//	フィルタプラグイン ヘッダーファイル for AviUtl version 0.99k 以降
-//	By ＫＥＮくん
+//	�ե��륿�ץ饰���� �إå��`�ե����� for AviUtl version 0.99k �Խ�
+//	By �ˣţΤ���
 //----------------------------------------------------------------------------------
 
-//	YC構造体
+//	YC������
 typedef	struct {
-	short	y;					//	画素(輝度    )データ (     0 ～ 4096 )
-	short	cb;					//	画素(色差(青))データ ( -2048 ～ 2048 )
-	short	cr;					//	画素(色差(赤))データ ( -2048 ～ 2048 )
-								//	画素データは範囲外に出ていることがあります
-								//	また範囲内に収めなくてもかまいません
+	short	y;					//	����(�x��    )�ǩ`�� (     0 �� 4096 )
+	short	cb;					//	����(ɫ��(��))�ǩ`�� ( -2048 �� 2048 )
+	short	cr;					//	����(ɫ��(��))�ǩ`�� ( -2048 �� 2048 )
+								//	���إǩ`���Ϲ�����˳��Ƥ��뤳�Ȥ�����ޤ�
+								//	�ޤ������ڤ˅���ʤ��Ƥ⤫�ޤ��ޤ���
 } PIXEL_YC;
 
-//	PIXEL構造体
+//	PIXEL������
 typedef	struct {
-	unsigned char	b,g,r;		//	画素(RGB)データ (0～255)
+	unsigned char	b,g,r;		//	����(RGB)�ǩ`�� (0��255)
 } PIXEL;
 
-//	フィルタPROC用構造体
+//	�ե��륿PROC�Ø�����
 typedef struct {
-	int			flag;			//	フィルタのフラグ
-								//	FILTER_PROC_INFO_FLAG_INVERT_FIELD_ORDER	: フィールドオーダーを標準と逆に扱う ( 標準はボトム->トップになっています )
-								//	FILTER_PROC_INFO_FLAG_INVERT_INTERLACE		: 解除方法を反転する ( インターレース解除フィルタのみ )
-	PIXEL_YC	*ycp_edit;		//	画像データへのポインタ ( ycp_editとycp_tempは入れ替えれます )
-	PIXEL_YC	*ycp_temp;		//	テンポラリ領域へのポインタ
-	int			w,h;			//	現在の画像のサイズ ( 画像サイズは変更出来ます )
-	int			max_w,max_h;	//	画像領域のサイズ
-	int			frame;			//	現在のフレーム番号( 番号は0から )
-	int			frame_n;		//	総フレーム数
-	int			org_w,org_h;	//	元の画像のサイズ
-	short		*audiop;		//	オーディオデータへのポインタ ( オーディオフィルタの時のみ )
-								//	オーディオ形式はPCM16bitです ( 1サンプルは mono = 2byte , stereo = 4byte )
-	int			audio_n;		//	オーディオサンプルの総数
-	int			audio_ch;		//	オーディオチャンネル数
-	PIXEL		*pixelp;		//	現在は使用されていません
-	void		*editp;			//	エディットハンドル
-	int			yc_size;		//	画像領域の画素のバイトサイズ
-	int			line_size;		//	画像領域の幅のバイトサイズ
-	int			reserve[8];		//	拡張用に予約されてます
+	int			flag;			//	�ե��륿�Υե饰
+								//	FILTER_PROC_INFO_FLAG_INVERT_FIELD_ORDER	: �ե��`��ɥ��`���`��˜ʤ���˒Q�� ( �˜ʤϥܥȥ�->�ȥåפˤʤäƤ��ޤ� )
+								//	FILTER_PROC_INFO_FLAG_INVERT_INTERLACE		: ���������ܞ���� ( ���󥿩`��`������ե��륿�Τ� )
+	PIXEL_YC	*ycp_edit;		//	����ǩ`���ؤΥݥ��� ( ycp_edit��ycp_temp������椨��ޤ� )
+	PIXEL_YC	*ycp_temp;		//	�ƥ�ݥ���I��ؤΥݥ���
+	int			w,h;			//	�F�ڤλ���Υ����� ( ���񥵥����ω�������ޤ� )
+	int			max_w,max_h;	//	�����I��Υ�����
+	int			frame;			//	�F�ڤΥե�`�෬��( ���Ť�0���� )
+	int			frame_n;		//	�t�ե�`����
+	int			org_w,org_h;	//	Ԫ�λ���Υ�����
+	short		*audiop;		//	���`�ǥ����ǩ`���ؤΥݥ��� ( ���`�ǥ����ե��륿�Εr�Τ� )
+								//	���`�ǥ�����ʽ��PCM16bit�Ǥ� ( 1����ץ�� mono = 2byte , stereo = 4byte )
+	int			audio_n;		//	���`�ǥ�������ץ�ξt��
+	int			audio_ch;		//	���`�ǥ��������ͥ���
+	PIXEL		*pixelp;		//	�F�ڤ�ʹ�ä���Ƥ��ޤ���
+	void		*editp;			//	���ǥ��åȥϥ�ɥ�
+	int			yc_size;		//	�����I��λ��ؤΥХ��ȥ�����
+	int			line_size;		//	�����I��η��ΥХ��ȥ�����
+	int			reserve[8];		//	�����ä���s����Ƥޤ�
 } FILTER_PROC_INFO;
 #define	FILTER_PROC_INFO_FLAG_INVERT_FIELD_ORDER	0x00010000
 #define	FILTER_PROC_INFO_FLAG_INVERT_INTERLACE		0x00020000
-//	※インターレース解除フィルタ時はycp_editに初期画像データが入っていません。
-//	※インターレース解除フィルタ時はycp_edit,ycp_temp,w,hを変更できません。
+//	�����󥿩`��`������ե��륿�r��ycp_edit�˳��ڻ���ǩ`������äƤ��ޤ���
+//	�����󥿩`��`������ե��륿�r��ycp_edit,ycp_temp,w,h�����Ǥ��ޤ���
 
-//	フレームステータス構造体
+//	�ե�`�ॹ�Ʃ`����������
 typedef struct {
-	int		video;			//	実際の映像データ番号
-	int		audio;			//	実際の音声データ番号
-	int		inter;			//	フレームのインターレース
-							//	FRAME_STATUS_INTER_NORMAL	: 標準
-							//	FRAME_STATUS_INTER_REVERSE	: 反転
-							//	FRAME_STATUS_INTER_ODD		: 奇数
-							//	FRAME_STATUS_INTER_EVEN		: 偶数
-							//	FRAME_STATUS_INTER_MIX		: 二重化
-							//	FRAME_STATUS_INTER_AUTO		: 自動
-	int		index24fps;		//	現在は使用されていません
-	int		config;			//	フレームのプロファイル環境の番号
-	int		vcm;			//	フレームの圧縮設定の番号
-	int		edit_flag;		//	編集フラグ
-							//	EDIT_FRAME_EDIT_FLAG_KEYFRAME	: キーフレーム
-							//	EDIT_FRAME_EDIT_FLAG_MARKFRAME	: マークフレーム
-							//	EDIT_FRAME_EDIT_FLAG_DELFRAME	: 優先間引きフレーム
-							//	EDIT_FRAME_EDIT_FLAG_NULLFRAME	: コピーフレーム
-	int		reserve[9];		//	拡張用に予約されてます
+	int		video;			//	�g�H��ӳ��ǩ`������
+	int		audio;			//	�g�H�������ǩ`������
+	int		inter;			//	�ե�`��Υ��󥿩`��`��
+							//	FRAME_STATUS_INTER_NORMAL	: �˜�
+							//	FRAME_STATUS_INTER_REVERSE	: ��ܞ
+							//	FRAME_STATUS_INTER_ODD		: ����
+							//	FRAME_STATUS_INTER_EVEN		: ż��
+							//	FRAME_STATUS_INTER_MIX		: ���ػ�
+							//	FRAME_STATUS_INTER_AUTO		: �Ԅ�
+	int		index24fps;		//	�F�ڤ�ʹ�ä���Ƥ��ޤ���
+	int		config;			//	�ե�`��Υץ��ե�����h���η���
+	int		vcm;			//	�ե�`��ΈR�s�O���η���
+	int		edit_flag;		//	�����ե饰
+							//	EDIT_FRAME_EDIT_FLAG_KEYFRAME	: ���`�ե�`��
+							//	EDIT_FRAME_EDIT_FLAG_MARKFRAME	: �ީ`���ե�`��
+							//	EDIT_FRAME_EDIT_FLAG_DELFRAME	: �����g�����ե�`��
+							//	EDIT_FRAME_EDIT_FLAG_NULLFRAME	: ���ԩ`�ե�`��
+	int		reserve[9];		//	�����ä���s����Ƥޤ�
 } FRAME_STATUS;
 #define	FRAME_STATUS_INTER_NORMAL		0
 #define	FRAME_STATUS_INTER_REVERSE		1
@@ -76,550 +76,550 @@ typedef struct {
 #define	EDIT_FRAME_EDIT_FLAG_DELFRAME		4
 #define	EDIT_FRAME_EDIT_FLAG_NULLFRAME		8
 
-//	ファイルインフォメーション構造体
+//	�ե����륤��ե���`���������
 typedef struct {
-	int		flag;					//	ファイルのフラグ
-									//	FILE_INFO_FLAG_VIDEO	: 映像が存在する
-									//	FILE_INFO_FLAG_AUDIO	: 音声が存在する
-	LPSTR	name;					//	ファイル名 ( avi_file_open()ではNULLになります )
-	int		w,h;					//	元のサイズ
-	int		video_rate,video_scale;	//	フレームレート
-	int		audio_rate;				//	音声サンプリングレート
-	int		audio_ch;				//	音声チャンネル数
-	int		frame_n;				//	総フレーム数
-	DWORD	video_decode_format;	//	ビデオ展開形式
-	int		video_decode_bit;		//	ビデオ展開形式のビット数
-	int		audio_n;				//	音声の総サンプル数 ( avi_file_open()の時のみ設定されます )
-	int		reserve[4];				//	拡張用に予約されてます
+	int		flag;					//	�ե�����Υե饰
+									//	FILE_INFO_FLAG_VIDEO	: ӳ�񤬴��ڤ���
+									//	FILE_INFO_FLAG_AUDIO	: ���������ڤ���
+	LPSTR	name;					//	�ե������� ( avi_file_open()�Ǥ�NULL�ˤʤ�ޤ� )
+	int		w,h;					//	Ԫ�Υ�����
+	int		video_rate,video_scale;	//	�ե�`���`��
+	int		audio_rate;				//	��������ץ�󥰥�`��
+	int		audio_ch;				//	���������ͥ���
+	int		frame_n;				//	�t�ե�`����
+	DWORD	video_decode_format;	//	�ӥǥ�չ�_��ʽ
+	int		video_decode_bit;		//	�ӥǥ�չ�_��ʽ�Υӥå���
+	int		audio_n;				//	�����ξt����ץ��� ( avi_file_open()�Εr�Τ��O������ޤ� )
+	int		reserve[4];				//	�����ä���s����Ƥޤ�
 } FILE_INFO;
 #define FILE_INFO_FLAG_VIDEO	1
 #define FILE_INFO_FLAG_AUDIO	2
 
-//	システムインフォメーション構造体
+//	�����ƥ।��ե���`���������
 typedef struct {
-	int		flag;					//	システムフラグ
-									//	SYS_INFO_FLAG_EDIT		: 編集中
-									//	SYS_INFO_FLAG_VFAPI		: VFAPI動作時
-									//	SYS_INFO_FLAG_USE_SSE	: SSE使用
-									//	SYS_INFO_FLAG_USE_SSE2	: SSE2使用
-	LPSTR	info;					//	バージョン情報
-	int		filter_n;				//	登録されてるフィルタの数
-	int		min_w,min_h;			//	編集出来る最小画像サイズ
-	int		max_w,max_h;			//	編集出来る最大画像サイズ
-	int		max_frame;				//	編集出来る最大フレーム数
-	LPSTR	edit_name;				//	編集ファイル名 (ファイル名が決まっていない時は何も入っていません)
-	LPSTR	project_name;			//	プロジェクトファイル名 (ファイル名が決まっていない時は何も入っていません)
-	LPSTR	output_name;			//	出力ファイル名 (ファイル名が決まっていない時は何も入っていません)
-	int		vram_w,vram_h;			//	編集用画像領域のサイズ
-	int		vram_yc_size;			//	編集用画像領域の画素のバイト数
-	int		vram_line_size;			//	編集用画像領域の幅のバイト数
-	HFONT	hfont;					//	フィルタ設定ウィンドウで使用しているフォントのハンドル
-	int		build;					//	ビルド番号 (新しいバージョンになるほど大きな値になります)
-	int		reserve[2];				//	拡張用に予約されてます
+	int		flag;					//	�����ƥ�ե饰
+									//	SYS_INFO_FLAG_EDIT		: ������
+									//	SYS_INFO_FLAG_VFAPI		: VFAPI�����r
+									//	SYS_INFO_FLAG_USE_SSE	: SSEʹ��
+									//	SYS_INFO_FLAG_USE_SSE2	: SSE2ʹ��
+	LPSTR	info;					//	�Щ`��������
+	int		filter_n;				//	���h����Ƥ�ե��륿����
+	int		min_w,min_h;			//	������������С���񥵥���
+	int		max_w,max_h;			//	��������������񥵥���
+	int		max_frame;				//	�������������ե�`����
+	LPSTR	edit_name;				//	�����ե������� (�ե����������Q�ޤäƤ��ʤ��r�ϺΤ���äƤ��ޤ���)
+	LPSTR	project_name;			//	�ץ��������ȥե������� (�ե����������Q�ޤäƤ��ʤ��r�ϺΤ���äƤ��ޤ���)
+	LPSTR	output_name;			//	�����ե������� (�ե����������Q�ޤäƤ��ʤ��r�ϺΤ���äƤ��ޤ���)
+	int		vram_w,vram_h;			//	�����û����I��Υ�����
+	int		vram_yc_size;			//	�����û����I��λ��ؤΥХ�����
+	int		vram_line_size;			//	�����û����I��η��ΥХ�����
+	HFONT	hfont;					//	�ե��륿�O��������ɥ���ʹ�ä��Ƥ���ե���ȤΥϥ�ɥ�
+	int		build;					//	�ӥ�ɷ��� (�¤����Щ`�����ˤʤ�ۤɴ󤭤ʂ��ˤʤ�ޤ�)
+	int		reserve[2];				//	�����ä���s����Ƥޤ�
 } SYS_INFO;
 #define SYS_INFO_FLAG_EDIT		1
 #define SYS_INFO_FLAG_VFAPI		2
 #define SYS_INFO_FLAG_USE_SSE	4
 #define SYS_INFO_FLAG_USE_SSE2	8
 
-//	マルチスレッド関数用の定義
+//	�ޥ������å��v���äζ��x
 typedef void (*MULTI_THREAD_FUNC)( int thread_id,int thread_num,void *param1,void *param2 );
-								//	thread_id	: スレッド番号 ( 0 ～ thread_num-1 )
-								//	thread_num	: スレッド数 ( 1 ～ )
-								//	param1		: 汎用パラメータ
-								//	param2		: 汎用パラメータ
+								//	thread_id	: ����åɷ��� ( 0 �� thread_num-1 )
+								//	thread_num	: ����å��� ( 1 �� )
+								//	param1		: ���åѥ��`��
+								//	param2		: ���åѥ��`��
 
-//	AVI入力ファイルハンドル
+//	AVI�����ե�����ϥ�ɥ�
 typedef void*	AVI_FILE_HANDLE;
 
-//	外部関数構造体
+//	�ⲿ�v��������
 typedef struct {
 	void		(*get_ycp_ofs)( void *editp,int n,int ofs );
-								//	※出来るだけget_ycp_source_cache()の方を使用するようにしてください
-								//	指定したフレームのAVIファイル上でのオフセット分移動した
-								//	フレームの画像データのポインタを取得します
-								//	データはフィルタ前のものです
-								//	editp 	: エディットハンドル
-								//	n	 	: フレーム番号
-								//	ofs	 	: フレームからのオフセット
-								//  戻り値	: 画像データへのポインタ (NULLなら失敗)
-								//			  画像データポインタの内容は次に外部関数を使うかメインに処理を戻すまで有効
+								//	�����������get_ycp_source_cache()�η���ʹ�ä���褦�ˤ��Ƥ�������
+								//	ָ�������ե�`���AVI�ե������ϤǤΥ��ե��åȷ��ƄӤ���
+								//	�ե�`��λ���ǩ`���Υݥ��󥿤�ȡ�ä��ޤ�
+								//	�ǩ`���ϥե��륿ǰ�Τ�ΤǤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n	 	: �ե�`�෬��
+								//	ofs	 	: �ե�`�फ��Υ��ե��å�
+								//  ���ꂎ	: ����ǩ`���ؤΥݥ��� (NULL�ʤ�ʧ��)
+								//			  ����ǩ`���ݥ��󥿤����ݤϴΤ��ⲿ�v����ʹ�����ᥤ��˄I��������ޤ��Є�
 	void		*(*get_ycp)( void *editp,int n );
-								//	※出来るだけget_ycp_source_cache()の方を使用するようにしてください
-								//	指定したフレームの画像データのポインタを取得します
-								//	データはフィルタ前のものです
-								//	editp 	: エディットハンドル
-								//	n	 	: フレーム番号
-								//  戻り値	: 画像データへのポインタ (NULLなら失敗)
-								//			  画像データポインタの内容は次に外部関数を使うかメインに処理を戻すまで有効
+								//	�����������get_ycp_source_cache()�η���ʹ�ä���褦�ˤ��Ƥ�������
+								//	ָ�������ե�`��λ���ǩ`���Υݥ��󥿤�ȡ�ä��ޤ�
+								//	�ǩ`���ϥե��륿ǰ�Τ�ΤǤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n	 	: �ե�`�෬��
+								//  ���ꂎ	: ����ǩ`���ؤΥݥ��� (NULL�ʤ�ʧ��)
+								//			  ����ǩ`���ݥ��󥿤����ݤϴΤ��ⲿ�v����ʹ�����ᥤ��˄I��������ޤ��Є�
 	void		*(*get_pixelp)( void *editp,int n );
-								//	指定したフレームのDIB形式(RGB24bit)の画像データのポインタを取得します
-								//	データはフィルタ前のものです
-								//	editp 	: エディットハンドル
-								//	n		: フレーム番号
-								//  戻り値	: DIB形式データへのポインタ (NULLなら失敗)
-								//			  画像データポインタの内容は次に外部関数を使うかメインに処理を戻すまで有効
+								//	ָ�������ե�`���DIB��ʽ(RGB24bit)�λ���ǩ`���Υݥ��󥿤�ȡ�ä��ޤ�
+								//	�ǩ`���ϥե��륿ǰ�Τ�ΤǤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n		: �ե�`�෬��
+								//  ���ꂎ	: DIB��ʽ�ǩ`���ؤΥݥ��� (NULL�ʤ�ʧ��)
+								//			  ����ǩ`���ݥ��󥿤����ݤϴΤ��ⲿ�v����ʹ�����ᥤ��˄I��������ޤ��Є�
 	int			(*get_audio)( void *editp,int n,void *buf );
-								//	指定したフレームのオーディオデータを読み込みます
-								//	データはフィルタ前のものです
-								//	editp 	: エディットハンドル
-								//	n		: フレーム番号
-								//	buf 	: 格納するバッファ (NULLならサンプル数の取得のみ)
-								//  戻り値	: 読み込んだサンプル数
+								//	ָ�������ե�`��Υ��`�ǥ����ǩ`�����i���z�ߤޤ�
+								//	�ǩ`���ϥե��륿ǰ�Τ�ΤǤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n		: �ե�`�෬��
+								//	buf 	: ��{����Хåե� (NULL�ʤ饵��ץ�����ȡ�äΤ�)
+								//  ���ꂎ	: �i���z�������ץ���
 	BOOL		(*is_editing)( void *editp );
-								//	現在編集中か調べます
-								//	editp 	: エディットハンドル
-								//  戻り値	: TRUEなら編集中
+								//	�F�ھ����Ф��{�٤ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  ���ꂎ	: TRUE�ʤ龎����
 	BOOL		(*is_saving)( void *editp );
-								//	現在保存中か調べます
-								//	editp 	: エディットハンドル
-								//  戻り値	: TRUEなら保存中
+								//	�F�ڱ����Ф��{�٤ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  ���ꂎ	: TRUE�ʤ鱣����
 	int			(*get_frame)( void *editp );
-								//	現在の表示フレームを取得します
-								//	editp 	: エディットハンドル
-								//  戻り値	: 現在のフレーム番号
+								//	�F�ڤα�ʾ�ե�`���ȡ�ä��ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  ���ꂎ	: �F�ڤΥե�`�෬��
 	int			(*get_frame_n)( void *editp );
-								//	総フレーム数を取得します
-								//	editp 	: エディットハンドル
-								//  戻り値	: 現在の総フレーム数
+								//	�t�ե�`������ȡ�ä��ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  ���ꂎ	: �F�ڤξt�ե�`����
 	BOOL		(*get_frame_size)( void *editp,int *w,int *h );
-								//	フィルタ前のフレームのサイズを取得します
-								//	editp 	: エディットハンドル
-								//	w,h 	: 画像サイズの格納ポインタ
-								//  戻り値	: TRUEなら成功
+								//	�ե��륿ǰ�Υե�`��Υ�������ȡ�ä��ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	w,h 	: ���񥵥����θ�{�ݥ���
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	int			(*set_frame)( void *editp,int n );
-								//	現在の表示フレームを変更します
-								//	editp 	: エディットハンドル
-								//  n		: フレーム番号
-								//  戻り値	: 設定されたフレーム番号
+								//	�F�ڤα�ʾ�ե�`��������ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  n		: �ե�`�෬��
+								//  ���ꂎ	: �O�����줿�ե�`�෬��
 	int			(*set_frame_n)( void *editp,int n );
-								//	総フレーム数を変更します
-								//	editp 	: エディットハンドル
-								//  n		: フレーム数
-								//  戻り値	: 設定された総フレーム数
+								//	�t�ե�`�����������ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  n		: �ե�`����
+								//  ���ꂎ	: �O�����줿�t�ե�`����
 	BOOL		(*copy_frame)( void *editp,int d,int s );
-								//	フレームを他のフレームにコピーします
-								//	editp 	: エディットハンドル
-								//	d	 	: コピー先フレーム番号
-								//	s	 	: コピー元フレーム番号
-								//  戻り値	: TRUEなら成功
+								//	�ե�`������Υե�`��˥��ԩ`���ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	d	 	: ���ԩ`�ȥե�`�෬��
+								//	s	 	: ���ԩ`Ԫ�ե�`�෬��
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*copy_video)( void *editp,int d,int s );
-								//	フレームの映像だけを他のフレームにコピーします
-								//	editp 	: エディットハンドル
-								//	d	 	: コピー先フレーム番号
-								//	s	 	: コピー元フレーム番号
-								//  戻り値	: TRUEなら成功
+								//	�ե�`���ӳ����������Υե�`��˥��ԩ`���ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	d	 	: ���ԩ`�ȥե�`�෬��
+								//	s	 	: ���ԩ`Ԫ�ե�`�෬��
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*copy_audio)( void *editp,int d,int s );
-								//	フレームの音声だけを他のフレームにコピーします
-								//	editp 	: エディットハンドル
-								//	d	 	: コピー先フレーム番号
-								//	s	 	: コピー元フレーム番号
-								//  戻り値	: TRUEなら成功
+								//	�ե�`����������������Υե�`��˥��ԩ`���ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	d	 	: ���ԩ`�ȥե�`�෬��
+								//	s	 	: ���ԩ`Ԫ�ե�`�෬��
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*copy_clip)( HWND hwnd,void *pixelp,int w,int h );
-								//	クリップボードにDIB形式(RGB24bit)の画像をコピーします
-								//	hwnd 	: ウィンドウハンドル
-								//	pixelp	: DIB形式データへのポインタ
-								//	w,h 	: 画像サイズ
-								//  戻り値	: TRUEなら成功
+								//	����åץܩ`�ɤ�DIB��ʽ(RGB24bit)�λ���򥳥ԩ`���ޤ�
+								//	hwnd 	: ������ɥ��ϥ�ɥ�
+								//	pixelp	: DIB��ʽ�ǩ`���ؤΥݥ���
+								//	w,h 	: ���񥵥���
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*paste_clip)( HWND hwnd,void *editp,int n );
-								//	クリップボードから画像を張りつけます
-								//	hwnd 	: ウィンドウハンドル
-								//	editp 	: エディットハンドル
-								//  n		: フレーム番号
-								//  戻り値	: TRUEなら成功
+								//	����åץܩ`�ɤ��黭��򏈤�Ĥ��ޤ�
+								//	hwnd 	: ������ɥ��ϥ�ɥ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  n		: �ե�`�෬��
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*get_frame_status)( void *editp,int n,FRAME_STATUS *fsp );
-								//	フレームのステータスを取得します
-								//	editp 	: エディットハンドル
-								//  n		: フレーム番号
-								//  fps		: フレームステータスへのポインタ
-								//  戻り値	: TRUEなら成功
+								//	�ե�`��Υ��Ʃ`������ȡ�ä��ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  n		: �ե�`�෬��
+								//  fps		: �ե�`�ॹ�Ʃ`�����ؤΥݥ���
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*set_frame_status)( void *editp,int n,FRAME_STATUS *fsp );
-								//	フレームのステータスを変更します
-								//	editp 	: エディットハンドル
-								//  n		: フレーム番号
-								//  fps		: フレームステータスへのポインタ
-								//  戻り値	: TRUEなら成功
+								//	�ե�`��Υ��Ʃ`�����������ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  n		: �ե�`�෬��
+								//  fps		: �ե�`�ॹ�Ʃ`�����ؤΥݥ���
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*is_saveframe)( void *editp,int n );
-								//	実際に保存されるフレームか調べます
-								//	editp 	: エディットハンドル
-								//  n		: フレーム番号
-								//  戻り値	: TRUEなら保存されます
+								//	�g�H�˱��椵���ե�`�फ�{�٤ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  n		: �ե�`�෬��
+								//  ���ꂎ	: TRUE�ʤ鱣�椵��ޤ�
 	BOOL		(*is_keyframe)( void *editp,int n );
-								//	キーフレームかどうか調べます
-								//	editp 	: エディットハンドル
-								//  n		: フレーム番号
-								//  戻り値	: TRUEならキーフレーム
+								//	���`�ե�`�फ�ɤ����{�٤ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  n		: �ե�`�෬��
+								//  ���ꂎ	: TRUE�ʤ饭�`�ե�`��
 	BOOL		(*is_recompress)( void *editp,int n );
-								//	再圧縮が必要か調べます
-								//	editp 	: エディットハンドル
-								//  n		: フレーム番号
-								//  戻り値	: TRUEなら再圧縮が必要
+								//	�وR�s����Ҫ���{�٤ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  n		: �ե�`�෬��
+								//  ���ꂎ	: TRUE�ʤ��وR�s����Ҫ
 	BOOL		(*filter_window_update)( void *fp );
-								//	設定ウィンドウのトラックバーとチェックボックスを再描画します
-								//	fp	 	: フィルタ構造体のポインタ
-								//  戻り値	: TRUEなら成功
+								//	�O��������ɥ��Υȥ�å��Щ`�ȥ����å��ܥå��������軭���ޤ�
+								//	fp	 	: �ե��륿������Υݥ���
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*is_filter_window_disp)( void *fp );
-								//	設定ウィンドウが表示されているか調べます
-								//	fp	 	: フィルタ構造体のポインタ
-								//  戻り値	: TRUEなら表示されている
+								//	�O��������ɥ�����ʾ����Ƥ��뤫�{�٤ޤ�
+								//	fp	 	: �ե��륿������Υݥ���
+								//  ���ꂎ	: TRUE�ʤ��ʾ����Ƥ���
 	BOOL		(*get_file_info)( void *editp,FILE_INFO *fip );
-								//	編集ファイルの情報を取得します
-								//	editp 	: エディットハンドル
-								//  fip		: ファイルインフォメーション構造体へのポインタ
-								//  戻り値	: TRUEなら成功
+								//	�����ե����������ȡ�ä��ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  fip		: �ե����륤��ե���`���������ؤΥݥ���
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	LPSTR		(*get_config_name)( void *editp,int n );
-								//	現在のプロファイルの名前を取得します
-								//	editp 	: エディットハンドル
-								//  n		: プロファイル環境の番号
-								//  戻り値	: プロファイルの名前へのポインタ (NULLなら失敗)
+								//	�F�ڤΥץ��ե��������ǰ��ȡ�ä��ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  n		: �ץ��ե�����h���η���
+								//  ���ꂎ	: �ץ��ե��������ǰ�ؤΥݥ��� (NULL�ʤ�ʧ��)
 	BOOL		(*is_filter_active)( void *fp );
-								//	フィルタが有効になっているか調べます
-								//	fp	 	: フィルタ構造体のポインタ
-								//  戻り値	: TRUEならフィルタ有効
+								//	�ե��륿���Є��ˤʤäƤ��뤫�{�٤ޤ�
+								//	fp	 	: �ե��륿������Υݥ���
+								//  ���ꂎ	: TRUE�ʤ�ե��륿�Є�
 	BOOL		(*get_pixel_filtered)( void *editp,int n,void *pixelp,int *w,int *h );
-								//	指定したフレームのDIB形式(RGB24bit)の画像データを読み込みます
-								//	データはフィルタ後のものです
-								//	editp 	: エディットハンドル
-								//	n		: フレーム番号
-								//  pixelp	: DIB形式データを格納するポインタ (NULLなら画像サイズだけを返します)
-								//	w,h		: 画像のサイズ (NULLならDIB形式データだけを返します)
-								//  戻り値	: TRUEなら成功
+								//	ָ�������ե�`���DIB��ʽ(RGB24bit)�λ���ǩ`�����i���z�ߤޤ�
+								//	�ǩ`���ϥե��륿��Τ�ΤǤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n		: �ե�`�෬��
+								//  pixelp	: DIB��ʽ�ǩ`�����{����ݥ��� (NULL�ʤ黭�񥵥��������򷵤��ޤ�)
+								//	w,h		: ����Υ����� (NULL�ʤ�DIB��ʽ�ǩ`�������򷵤��ޤ�)
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	int			(*get_audio_filtered)( void *editp,int n,void *buf );
-								//	指定したフレームのオーディオデータを読み込みます
-								//	データはフィルタ後のものです
-								//	editp* 	: エディットハンドル
-								//	n		: フレーム番号
-								//	buf 	: 格納するバッファ (NULLならサンプル数の取得のみ)
-								//  戻り値	: 読み込んだサンプル数
+								//	ָ�������ե�`��Υ��`�ǥ����ǩ`�����i���z�ߤޤ�
+								//	�ǩ`���ϥե��륿��Τ�ΤǤ�
+								//	editp* 	: ���ǥ��åȥϥ�ɥ�
+								//	n		: �ե�`�෬��
+								//	buf 	: ��{����Хåե� (NULL�ʤ饵��ץ�����ȡ�äΤ�)
+								//  ���ꂎ	: �i���z�������ץ���
 	BOOL		(*get_select_frame)( void *editp,int *s,int *e );
-								//	選択開始終了フレームを取得します
-								//	editp 	: エディットハンドル
-								//	s		: 選択開始フレーム
-								//	e		: 選択終了フレーム
-								//  戻り値	: TRUEなら成功
+								//	�x�k�_ʼ�K�˥ե�`���ȡ�ä��ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	s		: �x�k�_ʼ�ե�`��
+								//	e		: �x�k�K�˥ե�`��
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*set_select_frame)( void *editp,int s,int e );
-								//	選択開始終了フレームを設定します
-								//	editp 	: エディットハンドル
-								//	s		: 選択開始フレーム
-								//	e		: 選択終了フレーム
-								//  戻り値	: TRUEなら成功
+								//	�x�k�_ʼ�K�˥ե�`����O�����ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	s		: �x�k�_ʼ�ե�`��
+								//	e		: �x�k�K�˥ե�`��
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*rgb2yc)( PIXEL_YC *ycp,PIXEL *pixelp,int w );
-								//	PIXELからPIXEL_YCに変換します
-								//	ycp		: PIXEL_YC構造体へのポインタ
-								//	pixelp 	: PIXEL構造体へのポインタ
-								//	w		: 構造体の数
-								//  戻り値	: TRUEなら成功
+								//	PIXEL����PIXEL_YC�ˉ�Q���ޤ�
+								//	ycp		: PIXEL_YC������ؤΥݥ���
+								//	pixelp 	: PIXEL������ؤΥݥ���
+								//	w		: ���������
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*yc2rgb)( PIXEL *pixelp,PIXEL_YC *ycp,int w );
-								//	PIXEL_YCからPIXELに変換します
-								//	pixelp 	: PIXEL構造体へのポインタ
-								//	ycp		: PIXEL_YC構造体へのポインタ
-								//	w		: 構造体の数
-								//  戻り値	: TRUEなら成功
+								//	PIXEL_YC����PIXEL�ˉ�Q���ޤ�
+								//	pixelp 	: PIXEL������ؤΥݥ���
+								//	ycp		: PIXEL_YC������ؤΥݥ���
+								//	w		: ���������
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*dlg_get_load_name)( LPSTR name,LPSTR filter,LPSTR def );
-								//	ファイルダイアログを使って読み込むファイル名を取得します
-								//	name	: ファイル名を格納するポインタ
-								//	filter	: ファイルフィルタ
-								//  def		: デフォルトのファイル名
-								//  戻り値	: TRUEなら成功 FALSEならキャンセル
+								//	�ե����������������ʹ�ä��i���z��ե���������ȡ�ä��ޤ�
+								//	name	: �ե����������{����ݥ���
+								//	filter	: �ե�����ե��륿
+								//  def		: �ǥե���ȤΥե�������
+								//  ���ꂎ	: TRUE�ʤ�ɹ� FALSE�ʤ饭��󥻥�
 	BOOL		(*dlg_get_save_name)( LPSTR name,LPSTR filter,LPSTR def );
-								//	ファイルダイアログを使って書き込むファイル名を取得します
-								//	name	: ファイル名を格納するポインタ
-								//	filter	: ファイルフィルタ
-								//  def		: デフォルトのファイル名
-								//  戻り値	: TRUEなら成功 FALSEならキャンセル
+								//	�ե����������������ʹ�äƕ����z��ե���������ȡ�ä��ޤ�
+								//	name	: �ե����������{����ݥ���
+								//	filter	: �ե�����ե��륿
+								//  def		: �ǥե���ȤΥե�������
+								//  ���ꂎ	: TRUE�ʤ�ɹ� FALSE�ʤ饭��󥻥�
 	int			(*ini_load_int)( void *fp,LPSTR key,int n );
-								//	INIファイルから数値を読み込む
-								//	fp	 	: フィルタ構造体のポインタ
-								//	key		: アクセス用のキーの名前
-								//  n		: デフォルトの数値
-								//  戻り値	: 読み込んだ数値
+								//	INI�ե����뤫���������i���z��
+								//	fp	 	: �ե��륿������Υݥ���
+								//	key		: ���������äΥ��`����ǰ
+								//  n		: �ǥե���Ȥ�����
+								//  ���ꂎ	: �i���z�������
 	int			(*ini_save_int)( void *fp,LPSTR key,int n );
-								//	INIファイルに数値を書き込む
-								//	fp	 	: フィルタ構造体のポインタ
-								//	key		: アクセス用のキーの名前
-								//  n		: 書き込む数値
-								//  戻り値	: 書き込んだ数値
+								//	INI�ե����������������z��
+								//	fp	 	: �ե��륿������Υݥ���
+								//	key		: ���������äΥ��`����ǰ
+								//  n		: �����z������
+								//  ���ꂎ	: �����z�������
 	BOOL		(*ini_load_str)( void *fp,LPSTR key,LPSTR str,LPSTR def );
-								//	INIファイルから文字列を読み込む
-								//	fp	 	: フィルタ構造体のポインタ
-								//	key		: アクセス用のキーの名前
-								//  str		: 文字列を読み込むバッファ
-								//  def		: デフォルトの文字列
-								//  戻り値	: TRUEなら成功
+								//	INI�ե����뤫�������Ф��i���z��
+								//	fp	 	: �ե��륿������Υݥ���
+								//	key		: ���������äΥ��`����ǰ
+								//  str		: �����Ф��i���z��Хåե�
+								//  def		: �ǥե���Ȥ�������
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*ini_save_str)( void *fp,LPSTR key,LPSTR str );
-								//	INIファイルに文字列を書き込む
-								//	fp	 	: フィルタ構造体のポインタ
-								//	key		: アクセス用のキーの名前
-								//  n		: 書き込む文字列
-								//  戻り値	: TRUEなら成功
+								//	INI�ե�����������Ф�����z��
+								//	fp	 	: �ե��륿������Υݥ���
+								//	key		: ���������äΥ��`����ǰ
+								//  n		: �����z��������
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*get_source_file_info)( void *editp,FILE_INFO *fip,int source_file_id );
-								//	指定したファイルIDのファイルの情報を取得します
-								//	editp 	: エディットハンドル
-								//  fip		: ファイルインフォメーション構造体へのポインタ
+								//	ָ�������ե�����ID�Υե����������ȡ�ä��ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  fip		: �ե����륤��ե���`���������ؤΥݥ���
 								//	souce_file_id
-								//			: ファイルID
-								//  戻り値	: TRUEなら成功
+								//			: �ե�����ID
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*get_source_video_number)( void *editp,int n,int *source_file_id,int *source_video_number );
-								//	指定したフレームのソースのファイルIDとフレーム番号を取得します
-								//	editp 	: エディットハンドル
-								//	n		: フレーム番号
+								//	ָ�������ե�`��Υ��`���Υե�����ID�ȥե�`�෬�Ť�ȡ�ä��ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n		: �ե�`�෬��
 								//	souce_file_id
-								//			: ファイルIDを格納するポインタ
+								//			: �ե�����ID���{����ݥ���
 								//	souce_video_number
-								//			: フレーム番号を格納するポインタ
-								//  戻り値	: TRUEなら成功
+								//			: �ե�`�෬�Ť��{����ݥ���
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*get_sys_info)( void *editp,SYS_INFO *sip );
-								//	システムの情報を取得します
-								//	editp 	: エディットハンドル (NULLならsipの編集中のフラグとすべてのファイル名が無効になります)
-								//  sip		: システムインフォメーション構造体へのポインタ
-								//  戻り値	: TRUEなら成功
+								//	�����ƥ������ȡ�ä��ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ� (NULL�ʤ�sip�ξ����ФΥե饰�Ȥ��٤ƤΥե����������o���ˤʤ�ޤ�)
+								//  sip		: �����ƥ।��ե���`���������ؤΥݥ���
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	void 		*(*get_filterp)( int filter_id );
-								//	指定のフィルタIDのフィルタ構造体へのポインタを取得します
+								//	ָ���Υե��륿ID�Υե��륿������ؤΥݥ��󥿤�ȡ�ä��ޤ�
 								//	filter_id
-								//		 	: フィルタID (0～登録されてるフィルタの数-1までの値)
-								//  戻り値	: フィルタ構造体へのポインタ (NULLなら失敗)
+								//		 	: �ե��륿ID (0�����h����Ƥ�ե��륿����-1�ޤǤ΂�)
+								//  ���ꂎ	: �ե��륿������ؤΥݥ��� (NULL�ʤ�ʧ��)
 	void		*(*get_ycp_filtering)( void *fp,void *editp,int n,void *reserve );
-								//	※出来るだけget_ycp_filtering_cache_ex()の方を使用するようにしてください
-								//	指定したフレームの画像データのポインタを取得します
-								//	データは自分のフィルタの直前までフィルタしたものです
-								//	fp	 	: フィルタ構造体のポインタ
-								//	editp 	: エディットハンドル
-								//	n	 	: フレーム番号
-								//	reserve	: NULLを指定してください
-								//  戻り値	: 画像データへのポインタ (NULLなら失敗)
-								//			  画像データポインタの内容は次に外部関数を使うかメインに処理を戻すまで有効
+								//	�����������get_ycp_filtering_cache_ex()�η���ʹ�ä���褦�ˤ��Ƥ�������
+								//	ָ�������ե�`��λ���ǩ`���Υݥ��󥿤�ȡ�ä��ޤ�
+								//	�ǩ`�����Է֤Υե��륿��ֱǰ�ޤǥե��륿������ΤǤ�
+								//	fp	 	: �ե��륿������Υݥ���
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n	 	: �ե�`�෬��
+								//	reserve	: NULL��ָ�����Ƥ�������
+								//  ���ꂎ	: ����ǩ`���ؤΥݥ��� (NULL�ʤ�ʧ��)
+								//			  ����ǩ`���ݥ��󥿤����ݤϴΤ��ⲿ�v����ʹ�����ᥤ��˄I��������ޤ��Є�
 	int			(*get_audio_filtering)( void *fp,void *editp,int n,void *buf );
-								//	指定したフレームのオーディオデータを読み込みます
-								//	データは自分のフィルタの直前までフィルタしたものです
-								//	fp	 	: フィルタ構造体のポインタ
-								//	editp 	: エディットハンドル
-								//	n		: フレーム番号
-								//	buf 	: 格納するバッファ (NULLならサンプル数の取得のみ)
-								//  戻り値	: 読み込んだサンプル数
+								//	ָ�������ե�`��Υ��`�ǥ����ǩ`�����i���z�ߤޤ�
+								//	�ǩ`�����Է֤Υե��륿��ֱǰ�ޤǥե��륿������ΤǤ�
+								//	fp	 	: �ե��륿������Υݥ���
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n		: �ե�`�෬��
+								//	buf 	: ��{����Хåե� (NULL�ʤ饵��ץ�����ȡ�äΤ�)
+								//  ���ꂎ	: �i���z�������ץ���
 	BOOL		(*set_ycp_filtering_cache_size)( void *fp,int w,int h,int d,int flag );
-								//	get_ycp_filtering_cache_ex()のキャッシュの設定をします
-								//	設定値が変わった時のみキャッシュ領域を再確保します
-								//	キャッシュ領域はフィルタがアクティブの時のみ確保されます
-								//	fp	 	: フィルタ構造体のポインタ
-								//	w	 	: キャッシュ領域の幅
-								//	h	 	: キャッシュ領域の高さ
-								//	d	 	: キャッシュするフレーム数
-								//	flag 	: NULLを指定してください
-								//  戻り値	: TRUEなら成功
+								//	get_ycp_filtering_cache_ex()�Υ���å�����O���򤷤ޤ�
+								//	�O���������ä��r�Τߥ���å����I����ٴ_�����ޤ�
+								//	����å����I��ϥե��륿�������ƥ��֤Εr�Τߴ_������ޤ�
+								//	fp	 	: �ե��륿������Υݥ���
+								//	w	 	: ����å����I��η�
+								//	h	 	: ����å����I��θߤ�
+								//	d	 	: ����å��夹��ե�`����
+								//	flag 	: NULL��ָ�����Ƥ�������
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	void		*(*get_ycp_filtering_cache)( void *fp,void *editp,int n );
-								//	※出来るだけget_ycp_filtering_cache_ex()の方を使用するようにしてください
-								//	指定したフレームの画像データのキャッシュポインタを取得します
-								//	set_ycp_filtering_cache_size()の設定にしたがってキャッシュされます
-								//	データは自分のフィルタの直前までフィルタしたものです
-								//	fp	 	: フィルタ構造体のポインタ
-								//	editp 	: エディットハンドル
-								//	n	 	: フレーム番号
-								//  戻り値	: 画像データへのキャッシュポインタ (NULLなら失敗)
-								//			  画像データポインタの内容はキャッシュから破棄されるまで有効
+								//	�����������get_ycp_filtering_cache_ex()�η���ʹ�ä���褦�ˤ��Ƥ�������
+								//	ָ�������ե�`��λ���ǩ`���Υ���å���ݥ��󥿤�ȡ�ä��ޤ�
+								//	set_ycp_filtering_cache_size()���O���ˤ������äƥ���å��夵��ޤ�
+								//	�ǩ`�����Է֤Υե��륿��ֱǰ�ޤǥե��륿������ΤǤ�
+								//	fp	 	: �ե��륿������Υݥ���
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n	 	: �ե�`�෬��
+								//  ���ꂎ	: ����ǩ`���ؤΥ���å���ݥ��� (NULL�ʤ�ʧ��)
+								//			  ����ǩ`���ݥ��󥿤����ݤϥ���å��夫���Ɨ������ޤ��Є�
 	void		*(*get_ycp_source_cache)( void *editp,int n,int ofs );
-								//	指定したフレームの画像データのポインタを取得します
-								//	データはフィルタ前のものです
-								//	editp 	: エディットハンドル
-								//	n	 	: フレーム番号
-								//	ofs	 	: 元のAVI上でのフレームのオフセット
-								//  戻り値	: 画像データへのポインタ (NULLなら失敗)
-								//			  画像データポインタの内容はキャッシュから破棄されるまで有効
+								//	ָ�������ե�`��λ���ǩ`���Υݥ��󥿤�ȡ�ä��ޤ�
+								//	�ǩ`���ϥե��륿ǰ�Τ�ΤǤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n	 	: �ե�`�෬��
+								//	ofs	 	: Ԫ��AVI�ϤǤΥե�`��Υ��ե��å�
+								//  ���ꂎ	: ����ǩ`���ؤΥݥ��� (NULL�ʤ�ʧ��)
+								//			  ����ǩ`���ݥ��󥿤����ݤϥ���å��夫���Ɨ������ޤ��Є�
 	void		*(*get_disp_pixelp)( void *editp,DWORD format );
-								//	表示されているフレームの画像データのポインタを取得します
-								//	データはフィルタ後のものです
-								//	表示フィルタのみ使用可能です。
-								//	editp 	: エディットハンドル
-								//	format	: 画像フォーマット( NULL = RGB24bit / 'Y''U''Y''2' = YUY2 )
-								//  戻り値	: 画像データへのポインタ (NULLなら失敗)
-								//			  画像データポインタの内容は次に外部関数を使うかメインに処理を戻すまで有効
+								//	��ʾ����Ƥ���ե�`��λ���ǩ`���Υݥ��󥿤�ȡ�ä��ޤ�
+								//	�ǩ`���ϥե��륿��Τ�ΤǤ�
+								//	��ʾ�ե��륿�Τ�ʹ�ÿ��ܤǤ���
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	format	: ����ե��`�ޥå�( NULL = RGB24bit / 'Y''U''Y''2' = YUY2 )
+								//  ���ꂎ	: ����ǩ`���ؤΥݥ��� (NULL�ʤ�ʧ��)
+								//			  ����ǩ`���ݥ��󥿤����ݤϴΤ��ⲿ�v����ʹ�����ᥤ��˄I��������ޤ��Є�
 	BOOL		(*get_pixel_source)( void *editp,int n,void *pixelp,DWORD format );
-								//	指定したフレームの画像データを読み込みます
-								//	データはフィルタ前のものです
-								//	editp 	: エディットハンドル
-								//	n	 	: フレーム番号
-								//  pixelp	: DIB形式データを格納するポインタ
-								//	format	: 画像フォーマット( NULL = RGB24bit / 'Y''U''Y''2' = YUY2 )
-								//  戻り値	: TRUEなら成功
+								//	ָ�������ե�`��λ���ǩ`�����i���z�ߤޤ�
+								//	�ǩ`���ϥե��륿ǰ�Τ�ΤǤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n	 	: �ե�`�෬��
+								//  pixelp	: DIB��ʽ�ǩ`�����{����ݥ���
+								//	format	: ����ե��`�ޥå�( NULL = RGB24bit / 'Y''U''Y''2' = YUY2 )
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*get_pixel_filtered_ex)( void *editp,int n,void *pixelp,int *w,int *h,DWORD format );
-								//	指定したフレームの画像データを読み込みます
-								//	データはフィルタ後のものです
-								//	editp 	: エディットハンドル
-								//	n	 	: フレーム番号
-								//  pixelp	: DIB形式データを格納するポインタ (NULLなら画像サイズだけを返します)
-								//	w,h		: 画像のサイズ (NULLならDIB形式データだけを返します)
-								//	format	: 画像フォーマット( NULL = RGB24bit / 'Y''U''Y''2' = YUY2 )
-								//  戻り値	: TRUEなら成功
+								//	ָ�������ե�`��λ���ǩ`�����i���z�ߤޤ�
+								//	�ǩ`���ϥե��륿��Τ�ΤǤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n	 	: �ե�`�෬��
+								//  pixelp	: DIB��ʽ�ǩ`�����{����ݥ��� (NULL�ʤ黭�񥵥��������򷵤��ޤ�)
+								//	w,h		: ����Υ����� (NULL�ʤ�DIB��ʽ�ǩ`�������򷵤��ޤ�)
+								//	format	: ����ե��`�ޥå�( NULL = RGB24bit / 'Y''U''Y''2' = YUY2 )
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	PIXEL_YC	*(*get_ycp_filtering_cache_ex)( void *fp,void *editp,int n,int *w,int *h );
-								//	指定したフレームの画像データのキャッシュポインタを取得します
-								//	set_ycp_filtering_cache_size()の設定にしたがってキャッシュされます
-								//	データは自分のフィルタの直前までフィルタしたものです
-								//	fp	 	: フィルタ構造体のポインタ
-								//	editp 	: エディットハンドル
-								//	n	 	: フレーム番号
-								//	w,h		: 取得した画像のサイズ (NULLなら無視されます)
-								//  戻り値	: 画像データへのキャッシュポインタ (NULLなら失敗)
-								//			  画像データポインタの内容はキャッシュから破棄されるまで有効
+								//	ָ�������ե�`��λ���ǩ`���Υ���å���ݥ��󥿤�ȡ�ä��ޤ�
+								//	set_ycp_filtering_cache_size()���O���ˤ������äƥ���å��夵��ޤ�
+								//	�ǩ`�����Է֤Υե��륿��ֱǰ�ޤǥե��륿������ΤǤ�
+								//	fp	 	: �ե��륿������Υݥ���
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	n	 	: �ե�`�෬��
+								//	w,h		: ȡ�ä�������Υ����� (NULL�ʤ�oҕ����ޤ�)
+								//  ���ꂎ	: ����ǩ`���ؤΥ���å���ݥ��� (NULL�ʤ�ʧ��)
+								//			  ����ǩ`���ݥ��󥿤����ݤϥ���å��夫���Ɨ������ޤ��Є�
 	BOOL		(*exec_multi_thread_func)( MULTI_THREAD_FUNC func,void *param1,void *param2 );
-								//	指定した関数をシステムの設定値に応じたスレッド数で呼び出します
-								//	呼び出された関数内からWin32APIや外部関数(rgb2yc,yc2rgbは除く)を使用しないでください
-								//	func	: マルチスレッドで呼び出す関数
-								//	param1 	: 呼び出す関数に渡す汎用パラメータ
-								//	param2 	: 呼び出す関数に渡す汎用パラメータ
-								//  戻り値	: TRUEなら成功
+								//	ָ�������v���򥷥��ƥ���O�����ˏꤸ������å����Ǻ��ӳ����ޤ�
+								//	���ӳ����줿�v���ڤ���Win32API���ⲿ�v��(rgb2yc,yc2rgb�ϳ���)��ʹ�ä��ʤ��Ǥ�������
+								//	func	: �ޥ������åɤǺ��ӳ����v��
+								//	param1 	: ���ӳ����v���˶ɤ����åѥ��`��
+								//	param2 	: ���ӳ����v���˶ɤ����åѥ��`��
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	PIXEL_YC	*(*create_yc)( void );
-								//	空のフレーム画像データ領域を作成します
-								//	ycp_editと同様に外部関数で使用できますが
-								//	FILTER_PROC_INFOのycp_edit,ycp_tempと入れ替えることは出来ません
-								//  戻り値	: 作成したフレーム画像データへのポインタ (NULLなら失敗)
+								//	�դΥե�`�໭��ǩ`���I������ɤ��ޤ�
+								//	ycp_edit��ͬ�����ⲿ�v����ʹ�äǤ��ޤ���
+								//	FILTER_PROC_INFO��ycp_edit,ycp_temp������椨�뤳�Ȥϳ����ޤ���
+								//  ���ꂎ	: ���ɤ����ե�`�໭��ǩ`���ؤΥݥ��� (NULL�ʤ�ʧ��)
 	void		(*delete_yc)( PIXEL_YC *ycp );
-								//	create_ycで作成した領域を削除します
+								//	create_yc�����ɤ����I����������ޤ�
 	BOOL 		(*load_image)( PIXEL_YC *ycp,LPSTR file,int *w,int *h,int flag );
-								//	フレーム画像データにBMPファイルから画像を読み込みます
-								//	ycp     : 画像を読み込むフレーム画像へのポインタ (NULLなら描画をせずにサイズを返します)
-								//	file	: 読み込むBMPファイル名
-								//	w,h		: 読み込んだ画像のサイズ (NULLを指定できます)
-								//	flag 	: NULLを指定してください
-								//  戻り値	: TRUEなら成功
+								//	�ե�`�໭��ǩ`����BMP�ե����뤫�黭����i���z�ߤޤ�
+								//	ycp     : ������i���z��ե�`�໭��ؤΥݥ��� (NULL�ʤ��軭�򤻤��˥������򷵤��ޤ�)
+								//	file	: �i���z��BMP�ե�������
+								//	w,h		: �i���z�������Υ����� (NULL��ָ���Ǥ��ޤ�)
+								//	flag 	: NULL��ָ�����Ƥ�������
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	void		(*resize_yc)( PIXEL_YC *ycp,int w,int h,PIXEL_YC *ycp_src,int sx,int sy,int sw,int sh );
-								//	フレーム画像データをリサイズします
-								//	元画像の任意の画像領域をリサイズすることも出来ます
-								//	ycp     : リサイズ後のフレーム画像を格納するポインタ
-								//	w,h     : リサイズの解像度
-								//	ycp_src	: 元画像のフレーム画像へのポインタ(NULLならycpと同じ)
-								//	sx,sy	: 元画像のリサイズ対象領域の左上の座標
-								//	sw,sh	: 元画像のリサイズ対象領域のサイズ
+								//	�ե�`�໭��ǩ`����ꥵ�������ޤ�
+								//	Ԫ���������λ����I���ꥵ�������뤳�Ȥ�����ޤ�
+								//	ycp     : �ꥵ������Υե�`�໭����{����ݥ���
+								//	w,h     : �ꥵ�����ν����
+								//	ycp_src	: Ԫ����Υե�`�໭��ؤΥݥ���(NULL�ʤ�ycp��ͬ��)
+								//	sx,sy	: Ԫ����Υꥵ���������I������Ϥ�����
+								//	sw,sh	: Ԫ����Υꥵ���������I��Υ�����
 	void 		(*copy_yc)( PIXEL_YC *ycp,int x,int y,PIXEL_YC *ycp_src,int sx,int sy,int sw,int sh,int tr );
-								//	フレーム画像データの任意の領域をコピーします
-								//	描画の際は最大画像サイズの領域に収まるようにクリッピングをします
-								//	コピー元とコピー先の領域は重ならないようにしてください
-								//	ycp     : コピー先のフレーム画像へのポインタ
-								//	x,y		: コピー先の左上の座標
-								//	ycp_src	: コピー元のフレーム画像へのポインタ
-								//	sx,sy	: コピー元の左上の座標
-								//	sw,sh	: コピー元のサイズ
-								//	tr      : コピー元の透明度 (0～4096)
+								//	�ե�`�໭��ǩ`����������I��򥳥ԩ`���ޤ�
+								//	�軭���H������񥵥������I��˅��ޤ�褦�˥���åԥ󥰤򤷤ޤ�
+								//	���ԩ`Ԫ�ȥ��ԩ`�Ȥ��I����ؤʤ�ʤ��褦�ˤ��Ƥ�������
+								//	ycp     : ���ԩ`�ȤΥե�`�໭��ؤΥݥ���
+								//	x,y		: ���ԩ`�Ȥ����Ϥ�����
+								//	ycp_src	: ���ԩ`Ԫ�Υե�`�໭��ؤΥݥ���
+								//	sx,sy	: ���ԩ`Ԫ�����Ϥ�����
+								//	sw,sh	: ���ԩ`Ԫ�Υ�����
+								//	tr      : ���ԩ`Ԫ��͸���� (0��4096)
 	void 		(*draw_text)( PIXEL_YC *ycp,int x,int y,LPSTR text,int r,int g,int b,int tr,HFONT hfont,int *w,int *h );
-								//	フレーム画像データにテキストを描画します
-								//	描画の際は最大画像サイズの領域に収まるようにクリッピングをします
-								//	ycp     : 描画するフレーム画像データへのポインタ (NULLなら描画をせずにサイズを返します)
-								//	x,y		: 描画する左上の座標
-								//	text	: 描画するテキストの内容
-								//	r,g,b	: 描画色 (0～255)
-								//	tr      : 透明度 (0～4096)
-								//	hfont	: 描画で使用するフォント (NULLならデフォルトのフォント)
-								//	w,h		: 描画したテキスト領域のサイズ (NULLを指定できます)
+								//	�ե�`�໭��ǩ`���˥ƥ����Ȥ��軭���ޤ�
+								//	�軭���H������񥵥������I��˅��ޤ�褦�˥���åԥ󥰤򤷤ޤ�
+								//	ycp     : �軭����ե�`�໭��ǩ`���ؤΥݥ��� (NULL�ʤ��軭�򤻤��˥������򷵤��ޤ�)
+								//	x,y		: �軭�������Ϥ�����
+								//	text	: �軭����ƥ����Ȥ�����
+								//	r,g,b	: �軭ɫ (0��255)
+								//	tr      : ͸���� (0��4096)
+								//	hfont	: �軭��ʹ�ä���ե���� (NULL�ʤ�ǥե���ȤΥե����)
+								//	w,h		: �軭�����ƥ������I��Υ����� (NULL��ָ���Ǥ��ޤ�)
 	AVI_FILE_HANDLE (*avi_file_open)( LPSTR file,FILE_INFO *fip,int flag );
-								//	AVIファイルをオープンしてavi_file_read_video(),avi_file_read_audio()で
-								//	データを読み込む為のハンドルを取得します。
-								//	※編集中のファイルとフォーマット(fpsやサンプリングレート等)が異なる場合があるので注意してください。
-								//	file    : 読み込むAVIファイル名 (入力プラグインで読み込めるファイルも指定できます)
-								//  fip		: ファイルインフォメーション構造体へのポインタ (読み込んだファイルの情報が入ります)
-								//	flag 	: 読み込みフラグ
-								//	AVI_FILE_OPEN_FLAG_ONLY_YUY2		: YUY2 で展開するようにします
-								//	AVI_FILE_OPEN_FLAG_ONLY_RGB24		: RGB24で展開するようにします
-								//	AVI_FILE_OPEN_FLAG_ONLY_RGB32		: RGB32で展開するようにします
-								//	AVI_FILE_OPEN_FLAG_VIDEO_ONLY		: ビデオのみ読み込むようにします
-								//	AVI_FILE_OPEN_FLAG_AUDIO_ONLY		: オーディオのみ読み込むようにします
-								//  戻り値	: AVIファイルハンドル (NULLなら失敗)
+								//	AVI�ե�����򥪩`�ץ󤷤�avi_file_read_video(),avi_file_read_audio()��
+								//	�ǩ`�����i���z����Υϥ�ɥ��ȡ�ä��ޤ���
+								//	�������ФΥե�����ȥե��`�ޥå�(fps�䥵��ץ�󥰥�`�ȵ�)�����ʤ���Ϥ�����Τ�ע�⤷�Ƥ���������
+								//	file    : �i���z��AVI�ե������� (�����ץ饰������i���z���ե������ָ���Ǥ��ޤ�)
+								//  fip		: �ե����륤��ե���`���������ؤΥݥ��� (�i���z����ե������������ޤ�)
+								//	flag 	: �i���z�ߥե饰
+								//	AVI_FILE_OPEN_FLAG_ONLY_YUY2		: YUY2 ��չ�_����褦�ˤ��ޤ�
+								//	AVI_FILE_OPEN_FLAG_ONLY_RGB24		: RGB24��չ�_����褦�ˤ��ޤ�
+								//	AVI_FILE_OPEN_FLAG_ONLY_RGB32		: RGB32��չ�_����褦�ˤ��ޤ�
+								//	AVI_FILE_OPEN_FLAG_VIDEO_ONLY		: �ӥǥ��Τ��i���z��褦�ˤ��ޤ�
+								//	AVI_FILE_OPEN_FLAG_AUDIO_ONLY		: ���`�ǥ����Τ��i���z��褦�ˤ��ޤ�
+								//  ���ꂎ	: AVI�ե�����ϥ�ɥ� (NULL�ʤ�ʧ��)
 	void 		(*avi_file_close)( AVI_FILE_HANDLE afh );
-								//	AVIファイルをクローズします
-								//	afh		: AVIファイルハンドル
+								//	AVI�ե�����򥯥��`�����ޤ�
+								//	afh		: AVI�ե�����ϥ�ɥ�
 	BOOL 		(*avi_file_read_video)( AVI_FILE_HANDLE afh,PIXEL_YC *ycp,int n );
-								//	フレーム画像データにAVIファイルから画像データを読み込みます
-								//	afh		: AVIファイルハンドル
-								//	ycp     : 画像データを読み込むフレーム画像へのポインタ
-								//	n		: フレーム番号
-								//  戻り値	: TRUEなら成功
+								//	�ե�`�໭��ǩ`����AVI�ե����뤫�黭��ǩ`�����i���z�ߤޤ�
+								//	afh		: AVI�ե�����ϥ�ɥ�
+								//	ycp     : ����ǩ`�����i���z��ե�`�໭��ؤΥݥ���
+								//	n		: �ե�`�෬��
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	int 		(*avi_file_read_audio)( AVI_FILE_HANDLE afh,void *buf,int n );
-								//	AVIファイルから音声データを読み込みます
-								//	afh		: AVIファイルハンドル
-								//	buf     : 音声を読み込むバッファへのポインタ
-								//	n		: フレーム番号
-								//  戻り値	: 読み込んだサンプル数
+								//	AVI�ե����뤫�������ǩ`�����i���z�ߤޤ�
+								//	afh		: AVI�ե�����ϥ�ɥ�
+								//	buf     : �������i���z��Хåե��ؤΥݥ���
+								//	n		: �ե�`�෬��
+								//  ���ꂎ	: �i���z�������ץ���
 	void 		*(*avi_file_get_video_pixelp)( AVI_FILE_HANDLE afh,int n );
-								//	AVIファイルから読み込んだDIB形式の画像データのポインタを取得します
-								//	取得できる画像データのフォーマットはavi_file_open()で取得した
-								//	FILE_INFOのビデオ展開形式になります。
-								//	afh		: AVIファイルハンドル
-								//	n		: フレーム番号
-								//  戻り値	: DIB形式データへのポインタ (NULLなら失敗)
-								//			  画像データポインタの内容は次に外部関数を使うかメインに処理を戻すまで有効
+								//	AVI�ե����뤫���i���z���DIB��ʽ�λ���ǩ`���Υݥ��󥿤�ȡ�ä��ޤ�
+								//	ȡ�äǤ��뻭��ǩ`���Υե��`�ޥåȤ�avi_file_open()��ȡ�ä���
+								//	FILE_INFO�Υӥǥ�չ�_��ʽ�ˤʤ�ޤ���
+								//	afh		: AVI�ե�����ϥ�ɥ�
+								//	n		: �ե�`�෬��
+								//  ���ꂎ	: DIB��ʽ�ǩ`���ؤΥݥ��� (NULL�ʤ�ʧ��)
+								//			  ����ǩ`���ݥ��󥿤����ݤϴΤ��ⲿ�v����ʹ�����ᥤ��˄I��������ޤ��Є�
 	LPSTR		(*get_avi_file_filter)( int type );
-								//	avi_file_open()で読み込めるファイルのファイルフィルタを取得します
-								//	type	: ファイルの種類
-								//	GET_AVI_FILE_FILTER_TYPE_VIDEO	: ビデオル
-								//	GET_AVI_FILE_FILTER_TYPE_AUDIO	: オーディオ
-								//  戻り値	: ファイルフィルタへのポインタ
+								//	avi_file_open()���i���z���ե�����Υե�����ե��륿��ȡ�ä��ޤ�
+								//	type	: �ե�����ηN�
+								//	GET_AVI_FILE_FILTER_TYPE_VIDEO	: �ӥǥ���
+								//	GET_AVI_FILE_FILTER_TYPE_AUDIO	: ���`�ǥ���
+								//  ���ꂎ	: �ե�����ե��륿�ؤΥݥ���
 	int			(*avi_file_read_audio_sample)( AVI_FILE_HANDLE afh,int start,int length,void *buf );
-								//	AVIファイルから音声データを読み込みます
-								//	afh		: AVIファイルハンドル
-								//	start   : 読み込み開始サンプル番号
-								//	length	: 読み込むサンプル数
-								//	buf		: データを読み込むバッファへのポインタ
-								//  戻り値	: 読み込んだサンプル数
+								//	AVI�ե����뤫�������ǩ`�����i���z�ߤޤ�
+								//	afh		: AVI�ե�����ϥ�ɥ�
+								//	start   : �i���z���_ʼ����ץ뷬��
+								//	length	: �i���z�ॵ��ץ���
+								//	buf		: �ǩ`�����i���z��Хåե��ؤΥݥ���
+								//  ���ꂎ	: �i���z�������ץ���
 	int			(*avi_file_set_audio_sample_rate)( AVI_FILE_HANDLE afh,int audio_rate,int audio_ch );
-								//	avi_file_read_audio_sample()で読み込む音声のサンプリングレート等を変更します
-								//	afh		: AVIファイルハンドル
-								//	audio_rate	: 音声サンプリングレート
-								//	audio_ch	: 音声チャンネル数
-								//  戻り値	: 変更したサンプリングレートでの総サンプル数
+								//	avi_file_read_audio_sample()���i���z�������Υ���ץ�󥰥�`�ȵȤ������ޤ�
+								//	afh		: AVI�ե�����ϥ�ɥ�
+								//	audio_rate	: ��������ץ�󥰥�`��
+								//	audio_ch	: ���������ͥ���
+								//  ���ꂎ	: �����������ץ�󥰥�`�ȤǤξt����ץ���
 	BYTE		*(*get_frame_status_table)( void *editp,int type );
-								//	フレームのステータスが格納されているバッファへのポインタを取得します
-								//	editp 	: エディットハンドル
-								//  type	: ステータスの種類
-								//	FARME_STATUS_TYPE_EDIT_FLAG	: 編集フラグ
-								//	FARME_STATUS_TYPE_INTER		: インターレース
-								//  戻り値	: バッファへのポインタ
-								//			  バッファへのポインタの内容は編集ファイルがクローズされるまで有効
+								//	�ե�`��Υ��Ʃ`��������{����Ƥ���Хåե��ؤΥݥ��󥿤�ȡ�ä��ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  type	: ���Ʃ`�����ηN�
+								//	FARME_STATUS_TYPE_EDIT_FLAG	: �����ե饰
+								//	FARME_STATUS_TYPE_INTER		: ���󥿩`��`��
+								//  ���ꂎ	: �Хåե��ؤΥݥ���
+								//			  �Хåե��ؤΥݥ��󥿤����ݤϾ����ե����뤬�����`�������ޤ��Є�
 	BOOL		(*set_undo)( void *editp );
-								//	現在の編集状況をアンドゥバッファに設定します
-								//	editp 	: エディットハンドル
-								//  戻り値	: TRUEなら成功
+								//	�F�ڤξ���״�r�򥢥�ɥ��Хåե����O�����ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL		(*add_menu_item)( void *fp,LPSTR name,HWND hwnd,int id,int def_key,int flag );
-								//	メインウィンドウの設定メニュー項目を追加します
-								//	メニューが選択された時にhwndで指定したウィンドウに
-								//	WM_FILTER_COMMANDのメッセージを送ります
-								//	※必ずfunc_init()かWM_FILTER_INITから呼び出すようにしてください。
-								//	fp	 	: フィルタ構造体のポインタ
-								//	name 	: メニューの名前
-								//	hwnd 	: WM_FILTER_COMMANDを送るウィンドウハンドル
-								//	id	 	: WM_FILTER_COMMANDのWPARAM
-								//	def_key	: 標準のショートカットキーの仮想キーコード (NULLなら無し)
-								//	flag	: フラグ
-								//	ADD_MENU_ITEM_FLAG_KEY_SHIFT	: 標準のショートカットキーをSHIFT+キーにする
-								//	ADD_MENU_ITEM_FLAG_KEY_CTRL		: 標準のショートカットキーをCTRL+キーにする
-								//	ADD_MENU_ITEM_FLAG_KEY_ALT		: 標準のショートカットキーをALT+キーにする
-								//  戻り値	: TRUEなら成功
+								//	�ᥤ�󥦥���ɥ����O����˥�`�Ŀ��׷�Ӥ��ޤ�
+								//	��˥�`���x�k���줿�r��hwnd��ָ������������ɥ���
+								//	WM_FILTER_COMMAND�Υ�å��`�����ͤ�ޤ�
+								//	���ؤ�func_init()��WM_FILTER_INIT������ӳ����褦�ˤ��Ƥ���������
+								//	fp	 	: �ե��륿������Υݥ���
+								//	name 	: ��˥�`����ǰ
+								//	hwnd 	: WM_FILTER_COMMAND���ͤ륦����ɥ��ϥ�ɥ�
+								//	id	 	: WM_FILTER_COMMAND��WPARAM
+								//	def_key	: �˜ʤΥ���`�ȥ��åȥ��`�΁��륭�`���`�� (NULL�ʤ�o��)
+								//	flag	: �ե饰
+								//	ADD_MENU_ITEM_FLAG_KEY_SHIFT	: �˜ʤΥ���`�ȥ��åȥ��`��SHIFT+���`�ˤ���
+								//	ADD_MENU_ITEM_FLAG_KEY_CTRL		: �˜ʤΥ���`�ȥ��åȥ��`��CTRL+���`�ˤ���
+								//	ADD_MENU_ITEM_FLAG_KEY_ALT		: �˜ʤΥ���`�ȥ��åȥ��`��ALT+���`�ˤ���
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL 		(*edit_open)( void *editp,LPSTR file,int flag );
-								//	編集ファイルを開きます
-								//	editp 	: エディットハンドル
-								//	file 	: ファイル名
-								//	flag 	: フラグ
-								//	EDIT_OPEN_FLAG_ADD			: 追加読み込みをします
-								//	EDIT_OPEN_FLAG_AUDIO		: 音声読み込みをします
-								//	EDIT_OPEN_FLAG_PROJECT		: プロジェクトファイルを開きます
-								//	EDIT_OPEN_FLAG_DIALOG		: 読み込みダイアログを表示します
-								//  戻り値	: TRUEなら成功
+								//	�����ե�������_���ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	file 	: �ե�������
+								//	flag 	: �ե饰
+								//	EDIT_OPEN_FLAG_ADD			: ׷���i���z�ߤ򤷤ޤ�
+								//	EDIT_OPEN_FLAG_AUDIO		: �����i���z�ߤ򤷤ޤ�
+								//	EDIT_OPEN_FLAG_PROJECT		: �ץ��������ȥե�������_���ޤ�
+								//	EDIT_OPEN_FLAG_DIALOG		: �i���z�ߥ������������ʾ���ޤ�
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL 		(*edit_close)( void *editp );
-								//	編集ファイルを閉じます
-								//	editp 	: エディットハンドル
-								//  戻り値	: TRUEなら成功
+								//	�����ե�������]���ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL 		(*edit_output)( void *editp,LPSTR file,int flag,LPSTR type );
-								//	編集データをAVI出力します
-								//	WAV出力やプラグイン出力も出来ます
-								//	editp 	: エディットハンドル
-								//	file 	: 出力ファイル名
-								//	flag	: フラグ
-								//	EDIT_OUTPUT_FLAG_NO_DIALOG	: 出力ダイアログを表示しません
-								//	EDIT_OUTPUT_FLAG_WAV		: WAV出力をします
-								//	type	: 出力プラグインの名前 (NULLならAVI/WAV出力)
-								//  戻り値	: TRUEなら成功
+								//	�����ǩ`����AVI�������ޤ�
+								//	WAV������ץ饰�������������ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//	file 	: �����ե�������
+								//	flag	: �ե饰
+								//	EDIT_OUTPUT_FLAG_NO_DIALOG	: �����������������ʾ���ޤ���
+								//	EDIT_OUTPUT_FLAG_WAV		: WAV�����򤷤ޤ�
+								//	type	: �����ץ饰�������ǰ (NULL�ʤ�AVI/WAV����)
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	BOOL 		(*set_config)( void *editp,int n,LPSTR name );
-								//	プロファイルを設定します
-								//	editp 	: エディットハンドル
-								//  n		: プロファイル環境の番号
-								//  name	: プロファイルの名前
-								//  戻り値	: TRUEなら成功
+								//	�ץ��ե�������O�����ޤ�
+								//	editp 	: ���ǥ��åȥϥ�ɥ�
+								//  n		: �ץ��ե�����h���η���
+								//  name	: �ץ��ե��������ǰ
+								//  ���ꂎ	: TRUE�ʤ�ɹ�
 	int			reserve[7];
 } EXFUNC;
 #define	AVI_FILE_OPEN_FLAG_VIDEO_ONLY		16
@@ -641,138 +641,138 @@ typedef struct {
 #define	EDIT_OUTPUT_FLAG_NO_DIALOG			2
 #define	EDIT_OUTPUT_FLAG_WAV				4
 
-//	フィルタ構造体
+//	�ե��륿������
 typedef struct {
-	int		flag;				//	フィルタのフラグ
-								//	FILTER_FLAG_ALWAYS_ACTIVE		: フィルタを常にアクティブにします
-								//	FILTER_FLAG_CONFIG_POPUP		: 設定をポップアップメニューにします
-								//	FILTER_FLAG_CONFIG_CHECK		: 設定をチェックボックスメニューにします
-								//	FILTER_FLAG_CONFIG_RADIO		: 設定をラジオボタンメニューにします
-								//	FILTER_FLAG_EX_DATA				: 拡張データを保存出来るようにします
-								//	FILTER_FLAG_PRIORITY_HIGHEST	: フィルタのプライオリティを常に最上位にします
-								//	FILTER_FLAG_PRIORITY_LOWEST		: フィルタのプライオリティを常に最下位にします
-								//	FILTER_FLAG_WINDOW_THICKFRAME	: サイズ変更可能なウィンドウを作ります
-								//	FILTER_FLAG_WINDOW_SIZE			: 設定ウィンドウのサイズを指定出来るようにします
-								//	FILTER_FLAG_DISP_FILTER			: 表示フィルタにします
-								//	FILTER_FLAG_REDRAW				: 再描画をplugin側で処理するようにします
-								//	FILTER_FLAG_EX_INFORMATION		: フィルタの拡張情報を設定できるようにします
-								//	FILTER_FLAG_INFORMATION			: FILTER_FLAG_EX_INFORMATION を使うようにして下さい
-								//	FILTER_FLAG_NO_CONFIG			: 設定ウィンドウを表示しないようにします
-								//	FILTER_FLAG_AUDIO_FILTER		: オーディオフィルタにします
-								//	FILTER_FLAG_RADIO_BUTTON		: チェックボックスをラジオボタンにします
-								//	FILTER_FLAG_WINDOW_HSCROLL		: 水平スクロールバーを持つウィンドウを作ります
-								//	FILTER_FLAG_WINDOW_VSCROLL		: 垂直スクロールバーを持つウィンドウを作ります
-								//	FILTER_FLAG_INTERLACE_FILTER	: インターレース解除フィルタにします
-								//	FILTER_FLAG_NO_INIT_DATA		: func_proc()の画像の初期データを作成しないようにします
-								//	FILTER_FLAG_IMPORT				: インポートメニューを作ります
-								//	FILTER_FLAG_EXPORT				: エクスポートメニューを作ります
-								//	FILTER_FLAG_MAIN_MESSAGE		: func_WndProc()にWM_FILTER_MAIN_???のメッセージを送るようにします
-	int		x,y;				//	設定ウインドウのサイズ (FILTER_FLAG_WINDOW_SIZEが立っている時に有効)
-								//	設定値に FILTER_WINDOW_SIZE_CLIENT をORして設定するとクライアント領域でのサイズ指定になります。
-								//	設定値に FILTER_WINDOW_SIZE_ADD をORして設定すると標準のサイズからの追加分の指定になります。
-	TCHAR	*name;				//	フィルタの名前
-	int		track_n;			//	トラックバーの数
-	TCHAR	**track_name;		//	トラックバーの名前郡へのポインタ(トラックバー数が0ならNULLでよい)
-	int		*track_default;		//	トラックバーの初期値郡へのポインタ(トラックバー数が0ならNULLでよい)
-	int		*track_s,*track_e;	//	トラックバーの数値の下限上限 (NULLなら全て0～256)
-	int		check_n;			//	チェックボックスの数
-	TCHAR	**check_name;		//	チェックボックスの名前郡へのポインタ(チェックボックス数が0ならNULLでよい)
-	int		*check_default;		//	チェックボックスの初期値郡へのポインタ(チェックボックス数が0ならNULLでよい)
-								//	初期値がマイナス値の場合はボタンになります。ボタンを押したときにWM_COMMAND( WPARAM = MID_FILTER_BUTTON + n )のウィンドウメッセージが送られます
+	int		flag;				//	�ե��륿�Υե饰
+								//	FILTER_FLAG_ALWAYS_ACTIVE		: �ե��륿�򳣤˥����ƥ��֤ˤ��ޤ�
+								//	FILTER_FLAG_CONFIG_POPUP		: �O����ݥåץ��åץ�˥�`�ˤ��ޤ�
+								//	FILTER_FLAG_CONFIG_CHECK		: �O��������å��ܥå�����˥�`�ˤ��ޤ�
+								//	FILTER_FLAG_CONFIG_RADIO		: �O����饸���ܥ����˥�`�ˤ��ޤ�
+								//	FILTER_FLAG_EX_DATA				: �����ǩ`���򱣴������褦�ˤ��ޤ�
+								//	FILTER_FLAG_PRIORITY_HIGHEST	: �ե��륿�Υץ饤����ƥ��򳣤�����λ�ˤ��ޤ�
+								//	FILTER_FLAG_PRIORITY_LOWEST		: �ե��륿�Υץ饤����ƥ��򳣤�����λ�ˤ��ޤ�
+								//	FILTER_FLAG_WINDOW_THICKFRAME	: ������������ܤʥ�����ɥ�������ޤ�
+								//	FILTER_FLAG_WINDOW_SIZE			: �O��������ɥ��Υ�������ָ��������褦�ˤ��ޤ�
+								//	FILTER_FLAG_DISP_FILTER			: ��ʾ�ե��륿�ˤ��ޤ�
+								//	FILTER_FLAG_REDRAW				: ���軭��plugin�ȤǄI������褦�ˤ��ޤ�
+								//	FILTER_FLAG_EX_INFORMATION		: �ե��륿�Β��������O���Ǥ���褦�ˤ��ޤ�
+								//	FILTER_FLAG_INFORMATION			: FILTER_FLAG_EX_INFORMATION ��ʹ���褦�ˤ����¤���
+								//	FILTER_FLAG_NO_CONFIG			: �O��������ɥ����ʾ���ʤ��褦�ˤ��ޤ�
+								//	FILTER_FLAG_AUDIO_FILTER		: ���`�ǥ����ե��륿�ˤ��ޤ�
+								//	FILTER_FLAG_RADIO_BUTTON		: �����å��ܥå�����饸���ܥ���ˤ��ޤ�
+								//	FILTER_FLAG_WINDOW_HSCROLL		: ˮƽ�������`��Щ`��֤ĥ�����ɥ�������ޤ�
+								//	FILTER_FLAG_WINDOW_VSCROLL		: ��ֱ�������`��Щ`��֤ĥ�����ɥ�������ޤ�
+								//	FILTER_FLAG_INTERLACE_FILTER	: ���󥿩`��`������ե��륿�ˤ��ޤ�
+								//	FILTER_FLAG_NO_INIT_DATA		: func_proc()�λ���γ��ڥǩ`�������ɤ��ʤ��褦�ˤ��ޤ�
+								//	FILTER_FLAG_IMPORT				: ����ݩ`�ȥ�˥�`������ޤ�
+								//	FILTER_FLAG_EXPORT				: �������ݩ`�ȥ�˥�`������ޤ�
+								//	FILTER_FLAG_MAIN_MESSAGE		: func_WndProc()��WM_FILTER_MAIN_???�Υ�å��`�����ͤ�褦�ˤ��ޤ�
+	int		x,y;				//	�O��������ɥ��Υ����� (FILTER_FLAG_WINDOW_SIZE�����äƤ���r���Є�)
+								//	�O������ FILTER_WINDOW_SIZE_CLIENT ��OR�����O������ȥ��饤������I��ǤΥ�����ָ���ˤʤ�ޤ���
+								//	�O������ FILTER_WINDOW_SIZE_ADD ��OR�����O������Ș˜ʤΥ����������׷�ӷ֤�ָ���ˤʤ�ޤ���
+	TCHAR	*name;				//	�ե��륿����ǰ
+	int		track_n;			//	�ȥ�å��Щ`����
+	TCHAR	**track_name;		//	�ȥ�å��Щ`����ǰ���ؤΥݥ���(�ȥ�å��Щ`����0�ʤ�NULL�Ǥ褤)
+	int		*track_default;		//	�ȥ�å��Щ`�γ��ڂ����ؤΥݥ���(�ȥ�å��Щ`����0�ʤ�NULL�Ǥ褤)
+	int		*track_s,*track_e;	//	�ȥ�å��Щ`���������������� (NULL�ʤ�ȫ��0��256)
+	int		check_n;			//	�����å��ܥå�������
+	TCHAR	**check_name;		//	�����å��ܥå�������ǰ���ؤΥݥ���(�����å��ܥå�������0�ʤ�NULL�Ǥ褤)
+	int		*check_default;		//	�����å��ܥå����γ��ڂ����ؤΥݥ���(�����å��ܥå�������0�ʤ�NULL�Ǥ褤)
+								//	���ڂ����ޥ��ʥ����Έ��Ϥϥܥ���ˤʤ�ޤ����ܥ����Ѻ�����Ȥ���WM_COMMAND( WPARAM = MID_FILTER_BUTTON + n )�Υ�����ɥ���å��`�����ͤ��ޤ�
 	BOOL	(*func_proc)( void *fp,FILTER_PROC_INFO *fpip );
-								//	フィルタ処理関数へのポインタ (NULLなら呼ばれません)
+								//	�ե��륿�I���v���ؤΥݥ��� (NULL�ʤ���Ф�ޤ���)
 	BOOL	(*func_init)( void *fp );
-								//	開始時に呼ばれる関数へのポインタ (NULLなら呼ばれません)
+								//	�_ʼ�r�˺��Ф���v���ؤΥݥ��� (NULL�ʤ���Ф�ޤ���)
 	BOOL	(*func_exit)( void *fp );
-								//	終了時に呼ばれる関数へのポインタ (NULLなら呼ばれません)
+								//	�K�˕r�˺��Ф���v���ؤΥݥ��� (NULL�ʤ���Ф�ޤ���)
 	BOOL	(*func_update)( void *fp,int status );
-								//	自分の設定が変更されたときに呼ばれる関数へのポインタ (NULLなら呼ばれません)
-								//	FILTER_UPDATE_STATUS_ALL		: 全項目が変更された
-								//	FILTER_UPDATE_STATUS_TRACK + n	: n番目のトラックバーが変更された
-								//	FILTER_UPDATE_STATUS_CHECK + n	: n番目のチェックボックスが変更された
+								//	�Է֤��O����������줿�Ȥ��˺��Ф���v���ؤΥݥ��� (NULL�ʤ���Ф�ޤ���)
+								//	FILTER_UPDATE_STATUS_ALL		: ȫ�Ŀ��������줿
+								//	FILTER_UPDATE_STATUS_TRACK + n	: n��Ŀ�Υȥ�å��Щ`��������줿
+								//	FILTER_UPDATE_STATUS_CHECK + n	: n��Ŀ�Υ����å��ܥå�����������줿
 	BOOL 	(*func_WndProc)( HWND hwnd,UINT message,WPARAM wparam,LPARAM lparam,void *editp,void *fp );
-								//	設定ウィンドウにウィンドウメッセージが来た時に呼ばれる関数へのポインタ (NULLなら呼ばれません)
-								//	VFAPI動作時には呼ばれません
-								//	通常のメッセージ以外に以下の拡張メッセージが送られます
-								//	WM_FILTER_UPDATE		: 各フィルタ設定や編集内容が変更された直後に送られます
-								//	WM_FILTER_FILE_OPEN		: 編集ファイルがオープンされた直後に送られます
-								//	WM_FILTER_FILE_UPDATE	: 編集ファイルの更新(追加や音声読み込み等)があった直後に送られます
-								//	WM_FILTER_FILE_CLOSE	: 編集ファイルがクローズされる直前に送られます
-								//	WM_FILTER_INIT			: 開始直後に送られます
-								//	WM_FILTER_EXIT			: 終了直前に送られます
-								//	WM_FILTER_SAVE_START	: セーブが開始される直前に送られます
-								//	WM_FILTER_SAVE_END		: セーブが終了された直後に送られます
-								//	WM_FILTER_IMPORT		: インポートが選択された直後に送られます
-								//	WM_FILTER_EXPORT		: エクスポートが選択された直後に送られます
-								//	WM_FILTER_CHANGE_ACTIVE	: フィルタの有効/無効が変更された直後に送られます
-								//	WM_FILTER_CHANGE_WINDOW	: フィルタウィンドウの表示/非表示が変更された直後に送られます
-								//	WM_FILTER_CHANGE_PARAM	: 自分のフィルタの設定が変更された直後に送られます
-								//	WM_FILTER_CHANGE_EDIT	: 編集中/非編集中が変更された直後に送られます
-								//	これ以降のメッセージはFILTER_FLAG_MAIN_MESSAGE設定時のみ送られます
-								//	WM_FILTER_MAIN_MOUSE_DOWN	: メインウィンドウでマウスの左ボタンが押された時に送られます
-								//	WM_FILTER_MAIN_MOUSE_UP		: メインウィンドウでマウスが移動した時に送られます
-								//	WM_FILTER_MAIN_MOUSE_MOVE	: メインウィンドウでマウスの左ボタンが離された時に送られます
-								//	WM_FILTER_MAIN_MOUSE_DBLCLK	: メインウィンドウでマウスの左ボタンがダブルクリックされた時に送られます
-								//	WM_FILTER_MAIN_MOUSE_R_DOWN	: メインウィンドウでマウスの右ボタンが押された時に送られます
-								//	WM_FILTER_MAIN_MOUSE_R_UP	: メインウィンドウでマウスの右ボタンが離された時に送られます
-								//	WM_FILTER_MAIN_MOUSE_WHEEL	: メインウィンドウでマウスのホイールが回転した時に送られます
-								//	WM_FILTER_MAIN_KEY_DOWN		: メインウィンドウでキーが押された時に送られます
-								//	WM_FILTER_MAIN_KEY_UP		: メインウィンドウでキーが離された時に送られます
-								//	WM_FILTER_MAIN_MOVESIZE		: メインウィンドウの位置やサイズが変更された時に送られます
-								//	WM_FILTER_MAIN_CONTEXTMENU	: メインウィンドウでコンテキストメニューが表示される時に送られます
-								//	WM_FILTER_MAIN_MOUSE_???のlparamには編集画像上での座標が入ります(編集中以外は0になります)
-								//	WM_FILTER_MAIN_MOUSE_WHEELのwparamの上位ワードにホイールの回転量が入ります
-								//	WM_FILTER_MAIN_KEY_???のwparamには仮想キーコードが入ります
-								//	WM_FILTER_MAIN_MOVESIZEのlparamにはメインウィンドウのウィンドウハンドルが入ります
-								//	WM_FILTER_MAIN_CONTEXTMENUのlparamにはスクリーン座標が入ります
-								//	WM_FILTER_MAIN_CONTEXTMENUでメニューを表示した時は戻り値をTRUEにしてください(再描画はされません)
-								//	戻り値をTRUEにすると編集内容が更新されたとして全体が再描画されます
-	int		*track;				//	トラックバーの設定値郡へのポインタ (AviUtl側で設定されます)
-	int		*check;				//	チェックボックスの設定値郡へのポインタ (AviUtl側で設定されます)
-	void	*ex_data_ptr;		//	拡張データ領域へのポインタ (FILTER_FLAG_EX_DATAが立っている時に有効)
-	int		ex_data_size;		//	拡張データサイズ (FILTER_FLAG_EX_DATAが立っている時に有効)
-	TCHAR	*information;		//	フィルタ情報へのポインタ (FILTER_FLAG_EX_INFORMATIONが立っている時に有効)
+								//	�O��������ɥ��˥�����ɥ���å��`���������r�˺��Ф���v���ؤΥݥ��� (NULL�ʤ���Ф�ޤ���)
+								//	VFAPI�����r�ˤϺ��Ф�ޤ���
+								//	ͨ���Υ�å��`����������¤Β�����å��`�����ͤ��ޤ�
+								//	WM_FILTER_UPDATE		: ���ե��륿�O���侎�����ݤ�������줿ֱ����ͤ��ޤ�
+								//	WM_FILTER_FILE_OPEN		: �����ե����뤬���`�ץ󤵤줿ֱ����ͤ��ޤ�
+								//	WM_FILTER_FILE_UPDATE	: �����ե�����θ���(׷�Ӥ������i���z�ߵ�)�����ä�ֱ����ͤ��ޤ�
+								//	WM_FILTER_FILE_CLOSE	: �����ե����뤬�����`�������ֱǰ���ͤ��ޤ�
+								//	WM_FILTER_INIT			: �_ʼֱ����ͤ��ޤ�
+								//	WM_FILTER_EXIT			: �K��ֱǰ���ͤ��ޤ�
+								//	WM_FILTER_SAVE_START	: ���`�֤��_ʼ�����ֱǰ���ͤ��ޤ�
+								//	WM_FILTER_SAVE_END		: ���`�֤��K�ˤ��줿ֱ����ͤ��ޤ�
+								//	WM_FILTER_IMPORT		: ����ݩ`�Ȥ��x�k���줿ֱ����ͤ��ޤ�
+								//	WM_FILTER_EXPORT		: �������ݩ`�Ȥ��x�k���줿ֱ����ͤ��ޤ�
+								//	WM_FILTER_CHANGE_ACTIVE	: �ե��륿���Є�/�o����������줿ֱ����ͤ��ޤ�
+								//	WM_FILTER_CHANGE_WINDOW	: �ե��륿������ɥ��α�ʾ/�Ǳ�ʾ��������줿ֱ����ͤ��ޤ�
+								//	WM_FILTER_CHANGE_PARAM	: �Է֤Υե��륿���O����������줿ֱ����ͤ��ޤ�
+								//	WM_FILTER_CHANGE_EDIT	: ������/�Ǿ����Ф�������줿ֱ����ͤ��ޤ�
+								//	�����Խ��Υ�å��`����FILTER_FLAG_MAIN_MESSAGE�O���r�Τ��ͤ��ޤ�
+								//	WM_FILTER_MAIN_MOUSE_DOWN	: �ᥤ�󥦥���ɥ��ǥޥ�������ܥ���Ѻ���줿�r���ͤ��ޤ�
+								//	WM_FILTER_MAIN_MOUSE_UP		: �ᥤ�󥦥���ɥ��ǥޥ������ƄӤ����r���ͤ��ޤ�
+								//	WM_FILTER_MAIN_MOUSE_MOVE	: �ᥤ�󥦥���ɥ��ǥޥ�������ܥ����x���줿�r���ͤ��ޤ�
+								//	WM_FILTER_MAIN_MOUSE_DBLCLK	: �ᥤ�󥦥���ɥ��ǥޥ�������ܥ��󤬥��֥륯��å����줿�r���ͤ��ޤ�
+								//	WM_FILTER_MAIN_MOUSE_R_DOWN	: �ᥤ�󥦥���ɥ��ǥޥ������ҥܥ���Ѻ���줿�r���ͤ��ޤ�
+								//	WM_FILTER_MAIN_MOUSE_R_UP	: �ᥤ�󥦥���ɥ��ǥޥ������ҥܥ����x���줿�r���ͤ��ޤ�
+								//	WM_FILTER_MAIN_MOUSE_WHEEL	: �ᥤ�󥦥���ɥ��ǥޥ����Υۥ��`�뤬��ܞ�����r���ͤ��ޤ�
+								//	WM_FILTER_MAIN_KEY_DOWN		: �ᥤ�󥦥���ɥ��ǥ��`��Ѻ���줿�r���ͤ��ޤ�
+								//	WM_FILTER_MAIN_KEY_UP		: �ᥤ�󥦥���ɥ��ǥ��`���x���줿�r���ͤ��ޤ�
+								//	WM_FILTER_MAIN_MOVESIZE		: �ᥤ�󥦥���ɥ���λ�ä䥵������������줿�r���ͤ��ޤ�
+								//	WM_FILTER_MAIN_CONTEXTMENU	: �ᥤ�󥦥���ɥ��ǥ���ƥ����ȥ�˥�`����ʾ�����r���ͤ��ޤ�
+								//	WM_FILTER_MAIN_MOUSE_???��lparam�ˤϾ��������ϤǤ����ˤ����ޤ�(�����������0�ˤʤ�ޤ�)
+								//	WM_FILTER_MAIN_MOUSE_WHEEL��wparam����λ��`�ɤ˥ۥ��`��λ�ܞ�������ޤ�
+								//	WM_FILTER_MAIN_KEY_???��wparam�ˤρ��륭�`���`�ɤ����ޤ�
+								//	WM_FILTER_MAIN_MOVESIZE��lparam�ˤϥᥤ�󥦥���ɥ��Υ�����ɥ��ϥ�ɥ뤬���ޤ�
+								//	WM_FILTER_MAIN_CONTEXTMENU��lparam�ˤϥ�����`�����ˤ����ޤ�
+								//	WM_FILTER_MAIN_CONTEXTMENU�ǥ�˥�`���ʾ�����r�ϑ��ꂎ��TRUE�ˤ��Ƥ�������(���軭�Ϥ���ޤ���)
+								//	���ꂎ��TRUE�ˤ���Ⱦ������ݤ����¤��줿�Ȥ���ȫ�夬���軭����ޤ�
+	int		*track;				//	�ȥ�å��Щ`���O�������ؤΥݥ��� (AviUtl�Ȥ��O������ޤ�)
+	int		*check;				//	�����å��ܥå������O�������ؤΥݥ��� (AviUtl�Ȥ��O������ޤ�)
+	void	*ex_data_ptr;		//	�����ǩ`���I��ؤΥݥ��� (FILTER_FLAG_EX_DATA�����äƤ���r���Є�)
+	int		ex_data_size;		//	�����ǩ`�������� (FILTER_FLAG_EX_DATA�����äƤ���r���Є�)
+	TCHAR	*information;		//	�ե��륿���ؤΥݥ��� (FILTER_FLAG_EX_INFORMATION�����äƤ���r���Є�)
 	BOOL	(*func_save_start)( void *fp,int s,int e,void *editp );
-								//	セーブが開始される直前に呼ばれる関数へのポインタ (NULLなら呼ばれません)
-								//	s	 	: セーブする先頭フレーム
-								//	e 		: セーブする最終フレーム
-								//  戻り値	: 成功ならTRUE
+								//	���`�֤��_ʼ�����ֱǰ�˺��Ф���v���ؤΥݥ��� (NULL�ʤ���Ф�ޤ���)
+								//	s	 	: ���`�֤������^�ե�`��
+								//	e 		: ���`�֤�����K�ե�`��
+								//  ���ꂎ	: �ɹ��ʤ�TRUE
 	BOOL	(*func_save_end)( void *fp,void *editp );
-								//	セーブが終了した直前に呼ばれる関数へのポインタ (NULLなら呼ばれません)
-	EXFUNC	*exfunc;			//	外部関数テーブルへのポインタ (AviUtl側で設定されます)
-	HWND	hwnd;				//	ウィンドウハンドル (AviUtl側で設定されます)
-	HINSTANCE	dll_hinst;		//	DLLのインスタンスハンドル (AviUtl側で設定されます)
-	void	*ex_data_def;		//	拡張データの初期値データ領域へのポインタ (NULLなら初期化されません)
+								//	���`�֤��K�ˤ���ֱǰ�˺��Ф���v���ؤΥݥ��� (NULL�ʤ���Ф�ޤ���)
+	EXFUNC	*exfunc;			//	�ⲿ�v���Ʃ`�֥�ؤΥݥ��� (AviUtl�Ȥ��O������ޤ�)
+	HWND	hwnd;				//	������ɥ��ϥ�ɥ� (AviUtl�Ȥ��O������ޤ�)
+	HINSTANCE	dll_hinst;		//	DLL�Υ��󥹥��󥹥ϥ�ɥ� (AviUtl�Ȥ��O������ޤ�)
+	void	*ex_data_def;		//	�����ǩ`���γ��ڂ��ǩ`���I��ؤΥݥ��� (NULL�ʤ���ڻ�����ޤ���)
 	BOOL	(*func_is_saveframe)( void *fp,void *editp,int saveno,int frame,int fps,int edit_flag,int inter );
-								//	インターレース解除フィルタで保存するフレームを決める時に呼ばれる関数へのポインタ (NULLなら呼ばれません)
-								//	saveno		: セーブする範囲の先頭からのフレーム番号
-								//	frame		: 編集フレーム番号
-								//	fps			: フレームレートの変更の設定値 (30,24,20,15,10)
-								//	edit_flag	: 編集フラグ
-								//	inter		: フレームのインターレース
-								//	戻り値		: TRUEを返すと保存フレーム、FALSEを返すと間引きフレームになります。
+								//	���󥿩`��`������ե��륿�Ǳ��椹��ե�`���Q���r�˺��Ф���v���ؤΥݥ��� (NULL�ʤ���Ф�ޤ���)
+								//	saveno		: ���`�֤��빠������^����Υե�`�෬��
+								//	frame		: �����ե�`�෬��
+								//	fps			: �ե�`���`�ȤΉ�����O���� (30,24,20,15,10)
+								//	edit_flag	: �����ե饰
+								//	inter		: �ե�`��Υ��󥿩`��`��
+								//	���ꂎ		: TRUE�򷵤��ȱ���ե�`�ࡢFALSE�򷵤����g�����ե�`��ˤʤ�ޤ���
 	BOOL	(*func_project_load)( void *fp,void *editp,void *data,int size );
-								//	プロジェクトファイルからデータを読み込んだ時に呼ばれる関数へのポインタ (NULLなら呼ばれません)
-								//	プロジェクトファイルに保存したデータが無い場合は呼ばれません
-								//	data 	: プロジェクトから読み込んだデータへのポインタ
-								//	size 	: プロジェクトから読み込んだデータのバイト数
-								//  戻り値	: 成功ならTRUE
+								//	�ץ��������ȥե����뤫��ǩ`�����i���z����r�˺��Ф���v���ؤΥݥ��� (NULL�ʤ���Ф�ޤ���)
+								//	�ץ��������ȥե�����˱��椷���ǩ`�����o�����ϤϺ��Ф�ޤ���
+								//	data 	: �ץ��������Ȥ����i���z����ǩ`���ؤΥݥ���
+								//	size 	: �ץ��������Ȥ����i���z����ǩ`���ΥХ�����
+								//  ���ꂎ	: �ɹ��ʤ�TRUE
 	BOOL	(*func_project_save)( void *fp,void *editp,void *data,int *size );
-								//	プロジェクトファイルをセーブしている時に呼ばれる関数へのポインタ (NULLなら呼ばれません)
-								//	プロジェクトファイルにフィルタのデータを保存します
-								//	※AviUtlからは始めに保存サイズ取得の為にdataがNULLで呼び出され、続けて実際のデータを取得する為に呼び出されます。
-								//	data 	: プロジェクトに書き込むデータを格納するバッファへのポインタ (NULLの場合はデータのバイト数のみ返す)
-								//	size 	: プロジェクトに書き込むデータのバイト数を返すポインタ
-								//  戻り値	: 保存するデータがあるならTRUE
+								//	�ץ��������ȥե�����򥻩`�֤��Ƥ���r�˺��Ф���v���ؤΥݥ��� (NULL�ʤ���Ф�ޤ���)
+								//	�ץ��������ȥե�����˥ե��륿�Υǩ`���򱣴椷�ޤ�
+								//	��AviUtl�����ʼ��˱��極����ȡ�äΞ��data��NULL�Ǻ��ӳ����졢�A���ƌg�H�Υǩ`����ȡ�ä����˺��ӳ�����ޤ���
+								//	data 	: �ץ��������Ȥ˕����z��ǩ`�����{����Хåե��ؤΥݥ��� (NULL�Έ��Ϥϥǩ`���ΥХ������Τ߷���)
+								//	size 	: �ץ��������Ȥ˕����z��ǩ`���ΥХ������򷵤��ݥ���
+								//  ���ꂎ	: ���椹��ǩ`��������ʤ�TRUE
 	BOOL	(*func_modify_title)( void *fp,void *editp,int frame,LPSTR title,int max_title );
-								//	メインウィンドウのタイトルバーを表示する時に呼ばれる関数へのポインタ (NULLなら呼ばれません)
-								//	タイトルバーの文字列を変更できます (未編集時、出力時は呼ばれません)
-								//	frame		: 編集フレーム番号
-								//	title 		: 表示するタイトルバーの文字列
-								//	max_title 	: titleのバッファサイズ
-								//  戻り値	: 成功ならTRUE
-	TCHAR	*dll_path;			//	PluginsディレクトリのサブディレクトリにDLLがある時のみ、サブディレクトリ名が入ります。
-	int		reserve[2];			//	拡張用に予約されてます。NULLにしてください。
+								//	�ᥤ�󥦥���ɥ��Υ����ȥ�Щ`���ʾ����r�˺��Ф���v���ؤΥݥ��� (NULL�ʤ���Ф�ޤ���)
+								//	�����ȥ�Щ`�������Ф����Ǥ��ޤ� (δ�����r�������r�Ϻ��Ф�ޤ���)
+								//	frame		: �����ե�`�෬��
+								//	title 		: ��ʾ���륿���ȥ�Щ`��������
+								//	max_title 	: title�ΥХåե�������
+								//  ���ꂎ	: �ɹ��ʤ�TRUE
+	TCHAR	*dll_path;			//	Plugins�ǥ��쥯�ȥ�Υ��֥ǥ��쥯�ȥ��DLL������r�Τߡ����֥ǥ��쥯�ȥ��������ޤ���
+	int		reserve[2];			//	�����ä���s����Ƥޤ���NULL�ˤ��Ƥ���������
 
 } FILTER;
 #define	FILTER_FLAG_ACTIVE				1
@@ -831,7 +831,7 @@ typedef struct {
 #define	FILTER_WINDOW_SIZE_CLIENT		0x10000000
 #define	FILTER_WINDOW_SIZE_ADD			0x30000000
 
-//	フィルタDLL用構造体
+//	�ե��륿DLL�Ø�����
 typedef struct {
 	int			flag;
 	int			x,y;

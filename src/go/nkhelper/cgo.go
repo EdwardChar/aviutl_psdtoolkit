@@ -12,10 +12,10 @@ package nkhelper
 #include "nuklear.h"
 #include <stdio.h>
 
-#include "jprange.h"
-void set_japanese_glyph_ranges(void *p) {
+#include "cnrange.h"
+void set_chinese_glyph_ranges(void *p) {
 	struct nk_font_config *fc = p;
-	fc->range = &nk_font_japanese_glyph_ranges[0];
+	fc->range = &nk_font_chinese_glyph_ranges[0];
 }
 
 void *style_text_color(void *p) {
