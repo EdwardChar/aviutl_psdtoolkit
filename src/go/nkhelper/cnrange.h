@@ -1,6 +1,6 @@
 #ifndef CNRANGE_H____
 #define CNRANGE_H____
-const nk_rune nk_font_chinese_glyph_ranges[] = {
+const nk_rune nk_font_japanese_glyph_ranges[] = {
 0x0020, 0x0080,
 0x00a1, 0x00a1,
 0x00a4, 0x00aa,

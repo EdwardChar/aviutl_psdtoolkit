@@ -13,9 +13,9 @@ package nkhelper
 #include <stdio.h>
 
 #include "cnrange.h"
-void set_chinese_glyph_ranges(void *p) {
+void set_japanese_glyph_ranges(void *p) {
 	struct nk_font_config *fc = p;
-	fc->range = &nk_font_chinese_glyph_ranges[0];
+	fc->range = &nk_font_japanese_glyph_ranges[0];
 }
 
 void *style_text_color(void *p) {
@@ -92,7 +92,7 @@ import (
 )
 
 func SetChineseGlyphRanges(fc *nk.FontConfig) {
-	C.set_chinese_glyph_ranges(unsafe.Pointer(fc.Ref()))
+	C.set_japanese_glyph_ranges(unsafe.Pointer(fc.Ref()))
 }
 
 func GetStyleTextColorPtr(ctx *nk.Context) *nk.Color {

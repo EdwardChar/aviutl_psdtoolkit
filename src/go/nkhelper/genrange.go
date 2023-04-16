@@ -15,7 +15,7 @@ import (
 
 var source = `#ifndef CNRANGE_H____
 #define CNRANGE_H____
-const nk_rune nk_font_chinese_glyph_ranges[] = {
+const nk_rune nk_font_japanese_glyph_ranges[] = {
 {{range .ranges}}{{printf "0x%04x, 0x%04x,\n" (index . 0) (index . 1)}}{{end}}0
 };
 #endif
