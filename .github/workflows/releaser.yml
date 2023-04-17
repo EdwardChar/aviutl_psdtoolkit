@@ -100,10 +100,6 @@ jobs:
           cp -r ../bin64/* bin/
           cp -r ../bin32/* bin/
           cd bin && zip -r ../../assets.zip * && cd ..
-          rm -rf CMakeCache.txt && cmake -GNinja -DBUILD_DOCS=1 -DBUILD_PACKAGE=1 -DCMAKE_BUILD_TYPE=Release -DEXPORT_DIR_NAME=bin_en -DEXA_SUFFIX=_en.exa .. && cmake --build . --target make_doc --target make_package
-          cp -r ../bin64/* bin_en/
-          cp -r ../bin32/* bin_en/
-          cd bin_en && zip -r ../../assets_en.zip * && cd ..
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -168,14 +164,4 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./assets.zip
           asset_name: psdtoolkit_${{ steps.get_version.outputs.tag }}.zip
-          asset_content_type: application/zip
-      - name: Upload Release English patched Asset
-        id: upload-release-enpatched-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./assets_en.zip
-          asset_name: psdtoolkit_${{ steps.get_version.outputs.tag }}_enpatched.zip
           asset_content_type: application/zip
