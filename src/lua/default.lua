@@ -159,7 +159,7 @@ function P:wav_examodifler_mergedprep(exa, values, modifiers)
     exa:set(key, "check0", "0")
     exa:set(key, "type", "0")
     exa:set(key, "filter", "2")
-    exa:set(key, "name", "对口型同步@PSDToolKit")
+    exa:set(key, "name", "对口型预备@PSDToolKit")
     exa:set(key, "param", "file=" .. modifiers.ENCODE_LUA_STRING(values.LIPSYNC_PATH))
     idx = idx + 1
   end

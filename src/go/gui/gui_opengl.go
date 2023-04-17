@@ -21,7 +21,7 @@ func (g *GUI) initFont(mainFont, symbolFont []byte) error {
 	atlas := nk.NewFontAtlas()
 	nk.NkFontStashBegin(&atlas)
 	fc := nk.NkFontConfig(15)
-	nkhelper.SetChineseGlyphRanges(&fc)
+	nkhelper.SetJapaneseGlyphRanges(&fc)
 	g.font.Main = &font{nk.NkFontAtlasAddFromBytes(atlas, mainFont, 20, &fc)}
 	g.font.Symbol = &font{nk.NkFontAtlasAddFromBytes(atlas, symbolFont, 14, nil)}
 	nk.NkFontStashEnd()

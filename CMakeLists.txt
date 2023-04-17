@@ -53,7 +53,7 @@ if("${BUILD_PACKAGE}" STREQUAL "1")
   )
   add_custom_target(extract_cachetext COMMAND
     ${CMAKE_COMMAND}
-    -Dcharset="sjis"
+    -Dcharset="gbk"
     -Dlocal_dir="${PROJECT_BINARY_DIR}"
     -Durl="https://github.com/oov/aviutl_cachetext/releases/download/v0.8/CacheText20210119.zip"
     -Ddir="cachetext"

@@ -33,7 +33,7 @@ NODISCARD static error get_ptk_message(int const code, struct NATIVE_STR *const 
   case err_ptk_lua:
     return scpy(message, NSTR("Lua脚本运行时出错。"));
   }
-  return scpy(message, NSTR("未知的错误。"));
+  return scpy(message, NSTR("未知错误。"));
 }
 
 error error_ptk_init(void) {
