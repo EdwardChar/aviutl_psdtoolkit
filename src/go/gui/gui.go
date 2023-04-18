@@ -268,7 +268,7 @@ func (g *GUI) update() {
 					g.sendEditingImage()
 				}
 				nk.NkLayoutRowPush(ctx, 0.3)
-				if nk.NkButtonLabel(ctx, "接收") != 0 {
+				if nk.NkButtonLabel(ctx, "收取") != 0 {
 					modified = g.loadEditingImage() || modified
 				}
 				nk.NkLayoutRowPush(ctx, 0.2)
